@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.jasmine.goalideatracker.AddGoal">
+
+
+    
+    <item
+        android:id="@+id/action_settings_done"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/goal_done_icon"
+        app:showAsAction="always"
+        />
+
+
+
+
+
+</menu>

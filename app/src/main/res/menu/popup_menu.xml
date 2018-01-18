@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.jasmine.goalideatracker.AddGoal"
+    >
+    <item
+        android:id="@+id/delete"
+        android:orderInCategory="100"
+        android:title="@string/delete" />
+
+    <item
+        android:id="@+id/share"
+        android:orderInCategory="101"
+        android:title="@string/share"></item>
+
+
+</menu>
