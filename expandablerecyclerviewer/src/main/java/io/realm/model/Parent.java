@@ -2,6 +2,7 @@ package io.realm.model;
 
 import io.realm.RealmList;
 import io.realm.RealmModel;
+import io.realm.RealmObject;
 
 /**
  * Interface for implementing required methods in a parent.
@@ -24,4 +25,7 @@ public interface Parent<C extends Child> extends RealmModel {
      * @return true if expanded, false if not
      */
     boolean isExpanded();
+
+
+
 }

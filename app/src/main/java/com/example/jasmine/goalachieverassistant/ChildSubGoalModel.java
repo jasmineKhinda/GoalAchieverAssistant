@@ -2,6 +2,7 @@ package com.example.jasmine.goalachieverassistant;
 
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 import io.realm.annotations.Required;
 import io.realm.model.Child;
 
@@ -9,6 +10,7 @@ import io.realm.model.Child;
  * Created by jasmine on 17/01/18.
  */
 
+@RealmClass
 public class ChildSubGoalModel implements RealmModel,Child {
     @Required
     @PrimaryKey
@@ -29,7 +31,7 @@ public class ChildSubGoalModel implements RealmModel,Child {
         return subGoal;
     }
 
-    public void setGoal(SubGoalModel goal) {
+    public void setSubGoal(SubGoalModel goal) {
         this.subGoal = goal;
     }
 
@@ -61,7 +63,7 @@ public class ChildSubGoalModel implements RealmModel,Child {
         this.name = name;
     }
 
-    public boolean isDone() {
+    public boolean getDone() {
         return done;
     }
 

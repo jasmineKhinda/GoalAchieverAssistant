@@ -36,7 +36,7 @@ public class SubGoalListAdapter extends RealmBaseAdapter<SubGoalModel> implement
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.sub_goal_row, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.taskName = (TextView) convertView.findViewById(R.id.task_item_name);
+            viewHolder.taskName = (TextView) convertView.findViewById(R.id.child_subGoal_textview);
             viewHolder.isTaskDone = (CheckBox) convertView.findViewById(R.id.task_item_done);
             viewHolder.isTaskDone.setOnClickListener(listener);
             convertView.setTag(viewHolder);
@@ -47,7 +47,7 @@ public class SubGoalListAdapter extends RealmBaseAdapter<SubGoalModel> implement
         if (adapterData != null) {
             SubGoalModel task = adapterData.get(position);
             viewHolder.taskName.setText(task.getName());
-            viewHolder.isTaskDone.setChecked(task.isDone());
+            viewHolder.isTaskDone.setChecked(task.getDone());
             viewHolder.isTaskDone.setTag(position);
         }
 

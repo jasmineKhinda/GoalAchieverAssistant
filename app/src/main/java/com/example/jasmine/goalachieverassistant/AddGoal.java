@@ -5,31 +5,41 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.UUID;
 import android.app.AlertDialog;
 
+import com.example.jasmine.goalachieverassistant.FragmentIdea.Adapters.CustomPagerFragmentAdapter;
+import com.example.jasmine.goalachieverassistant.recyclerview.adapter.SubGoalAdapter;
+
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
+import io.realm.RealmExpandableRecyclerAdapter;
 import io.realm.RealmResults;
+
 
 public class AddGoal extends AppCompatActivity {
 
@@ -39,6 +49,12 @@ public class AddGoal extends AppCompatActivity {
     private static String selectedDate;
     private static EditText taskDueDate;
     String selectedDueDate;
+    private SubGoalAdapter adapter;
+    RealmResults<SubGoalModel> subgoalsForThisGoal;
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
     //public final String subGoalUUID = UUID.randomUUID().toString();
 
 
@@ -48,83 +64,250 @@ public class AddGoal extends AppCompatActivity {
         setContentView(R.layout.activity_add_goal);
         final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
 
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        getSupportActionBar().setTitle(R.string.goal_edit_title_toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        setupViewPager(viewPager);
+//
+//        tabLayout = (TabLayout) findViewById(R.id.tbl_pages);
+//        tabLayout.setupWithViewPager(viewPager);
+
+//        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        final ActionBar actionBar=getSupportActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(false);
+
+
+//        getSupportActionBar().hide();
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+//        toolbar.setTitle(R.string.goal_title_toolbar);
+
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
+//        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_action_navigation_more_vert));
+//
+//        toolbar.inflateMenu(R.menu.menu_add_goal);
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                return onOptionsItemSelected(item);
+//            }
+//        });
+//
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //What to do on back clicked
+//                if (onSupportNavigateUp()){
+//                    Intent addGoalIntent = new Intent(AddGoal.this, GoalListActivity.class);
+//                    startActivity(addGoalIntent);
+//                }
+//
+//            }
+//        });
+
+
+
+
+//        ViewPager viewPager=(ViewPager)findViewById(R.id.viewpager);
+//
+//        setUpViewPager(viewPager);
+
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tbl_pages);
+//        tabLayout.addTab(tabLayout.newTab().setText("Details"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Tasks"));
+//        tabLayout.setupWithViewPager(viewPager);
+
+
+
+
+
+
  //       final CollapsingToolbarLayout mCollapsingToolbarLayout =(CollapsingToolbarLayout) findViewById(R.id.collapsing_tool_bar_layout);
  //       mCollapsingToolbarLayout.setTitle("Title");
 //        AppBarLayout appBarLayout =(AppBarLayout) findViewById(R.id.app_bar_layout);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        getSupportActionBar().setTitle(R.string.goal_title_toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+ //       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+
+//
+//        getSupportActionBar().setTitle(R.string.goal_title_toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+
+//        getSupportActionBar().hide();
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//
+////        toolbar.setTitle(R.string.goal_title_toolbar);
+//
+//        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp));
+//        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_action_navigation_more_vert));
+//
+//        toolbar.inflateMenu(R.menu.menu_add_goal);
+//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                return onOptionsItemSelected(item);
+//            }
+//        });
+//
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //What to do on back clicked
+//                 if (onSupportNavigateUp()){
+//                    Intent addGoalIntent = new Intent(AddGoal.this, GoalListActivity.class);
+//                    startActivity(addGoalIntent);
+//                }
+//
+//            }
+//        });
+
+//        TabLayout tabLayout =(TabLayout)findViewById(R.id.tbl_pages) ;
+//        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.tab1)));
+//        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.tab2)));
+//        tabLayout.addTab(tabLayout.newTab().setText(getResources().getString(R.string.tab3)));
+
+
+        //tab tabBar = (Toolbar) findViewById(R.id.tbl_pages);
+
+
+
+
+        // Specify that tabs should be displayed in the action bar.
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 //        getSupportActionBar().hide();
 
 
-//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            boolean isShow = false;
-//            int scrollRange = -1;
-//
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                if (scrollRange == -1) {
-//                    scrollRange = appBarLayout.getTotalScrollRange();
-//                }
-//                if (scrollRange + verticalOffset == 0) {
-//                    mCollapsingToolbarLayout.setTitle(" "); // Careful! There should be a space between double quote. Otherwise it won't work.
-//                    isShow = false;
-//                } else if (!isShow) {
-//                    mCollapsingToolbarLayout.setTitle("Title");
-//                    isShow = true;
-//                }
-//            }
-//        });
+
+
+
         realm = Realm.getDefaultInstance();
-        RealmResults<SubGoalModel> tasks = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAll();
-        final SubGoalListAdapter adapter = new SubGoalListAdapter(this, tasks);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText taskEditText = new EditText(AddGoal.this);
+                AlertDialog dialog = new AlertDialog.Builder(AddGoal.this)
+                        .setTitle("Add Task")
+                        .setView(taskEditText)
+                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
-//
-//        ExpandableListView mListView = (ExpandableListView) findViewById(R.id.subgoal_list);
-//     //   ExpandableListAdapter adapterExpandable = new ExpandableListAdapter(this, tasks.);
-//
-//        mListView.setAdapter(adapterExpandable);
-//        mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-//
-//            @Override
-//            public boolean onGroupClick(ExpandableListView parent, View v,
-//                                        int groupPosition, long id) {
-//                setListViewHeight(parent, groupPosition);
-//                return false;
-//            }
-//        });
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //realm = Realm.getDefaultInstance();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                                                  @Override
+                                                                  public void execute(Realm realm) {
+                                                                      final String uuID = UUID.randomUUID().toString();
+                                                                      realm.createObject(SubGoalModel.class, uuID)
+                                                                              .setName(String.valueOf(taskEditText.getText()));
+                                                                      SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuID).findFirst();
+                                                                      GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
+                                                                      goalModel.getSubgoals().add(sub);
+                                                                      sub.setGoal(goalModel);
+                                                                      Log.d("GOALS", "added subgoal ");
+
+                                                                  }
+                                                              },
+                                        new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                                Log.d("GOALS", "onSuccess: ");
 
 
-//        ListView listView = (ListView) findViewById(R.id.subgoal_list);
-//        listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                final SubGoalModel task = (SubGoalModel) adapterView.getAdapter().getItem(i);
-//                final EditText taskEditText = new EditText(AddGoal.this);
-//                taskEditText.setText(task.getName());
-//                AlertDialog dialog = new AlertDialog.Builder(AddGoal.this)
-//                        .setTitle("Edit Task")
-//                        .setView(taskEditText)
-//                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                // TODO: 5/4/17 Save Edited Task
-//                            }
-//                        })
-//                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                                // TODO: 5/4/17 Delete Task
-//                            }
-//                        })
-//                        .create();
-//                dialog.show();
-//            }
-//        });
+                                            }
+                                        }, new Realm.Transaction.OnError() {
+                                            @Override
+                                            public void onError(Throwable error) {
+                                                Log.d("GOALS", "onError: ");
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
+            }
+        });
+
+
+        //recycler view of all the sub goals and child sub goals
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAll();
+
+        subgoalsForThisGoal.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SubGoalModel>>() {
+            @Override
+            public void onChange(RealmResults<SubGoalModel> persons, OrderedCollectionChangeSet changeset) {
+
+                adapter = new SubGoalAdapter(persons, "id");
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(AddGoal.this));
+                Log.d("GOALS", "onChange!!!!!!!!!!: ");
+
+
+            }
+        });
+
+        adapter = new SubGoalAdapter(subgoalsForThisGoal, "id");
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Log.d("GOALS", "onCreate real data  : "+  subgoalsForThisGoal);
+
+
+
+        //expanding and collapsing each subgoal or child sub goal
+        adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
+            @UiThread
+            @Override
+            public void onParentExpanded(int parentPosition) {
+                SubGoalModel expandedRecipe = adapter.getItem(parentPosition);
+
+                String toastMsg = getResources().getString(R.string.expanded, expandedRecipe.getName());
+//                Toast.makeText(AddGoal.this,
+//                        toastMsg,
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+            }
+
+            @UiThread
+            @Override
+            public void onParentCollapsed(int parentPosition) {
+                SubGoalModel collapsedRecipe = adapter.getItem(parentPosition);
+
+                String toastMsg = getResources().getString(R.string.collapsed, collapsedRecipe.getName());
+//                Toast.makeText(AddGoal.this,
+//                        toastMsg,
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -153,40 +336,13 @@ public class AddGoal extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final EditText taskEditText = new EditText(AddGoal.this);
-                AlertDialog dialog = new AlertDialog.Builder(AddGoal.this)
-                        .setTitle("Add Task")
-                        .setView(taskEditText)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                realm = Realm.getDefaultInstance();
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
-                                        final String uuID= UUID.randomUUID().toString();
-                                        realm.createObject(SubGoalModel.class,uuID)
-                                                .setName(String.valueOf(taskEditText.getText()));
-                                        SubGoalModel sub =realm.where(SubGoalModel.class).equalTo("id", uuID).findFirst();
-                                        GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
-                                        goalModel.getSubgoals().add(sub);
-                                        sub.setGoal(goalModel);
 
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
-            }
-        });
+    }
 
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
 
@@ -196,6 +352,7 @@ public class AddGoal extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_add_goal, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -244,6 +401,7 @@ public class AddGoal extends AppCompatActivity {
  //                   realm.createObject(GoalModel.class, uuId)
  //                           .setName(mGoalName);
                     GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
+                    goalModel.setName(mGoalName);
                     goalModel.setTime(mDateString);
                     Log.d("GOALS", "reason :  " + mReasonGoalText);
                     goalModel.setReason(mReasonGoalText);
@@ -269,7 +427,7 @@ public class AddGoal extends AppCompatActivity {
             @Override
             public void execute(Realm realm) {
                 SubGoalModel task = realm.where(SubGoalModel.class).equalTo("id", taskId).findFirst();
-                task.setDone(!task.isDone());
+                task.setDone(!task.getDone());
             }
         });
     }
@@ -330,4 +488,14 @@ public class AddGoal extends AppCompatActivity {
         listView.requestLayout();
 
     }
-}
+
+
+    @Override
+    protected void onDestroy() {
+        realm.close();
+        super.onDestroy();
+    }
+
+
+
+    }

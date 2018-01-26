@@ -1,11 +1,17 @@
 package com.example.jasmine.goalachieverassistant;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.UiThread;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -16,13 +22,23 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
+import android.content.Context;
 
 
+import com.example.jasmine.goalachieverassistant.recyclerview.LinearLayoutManagerWrapper;
+import com.example.jasmine.goalachieverassistant.recyclerview.adapter.SubGoalAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.UUID;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmExpandableRecyclerAdapter;
+import io.realm.RealmResults;
 
 /**
  * Created by jasmine on 21/12/17.
@@ -37,28 +53,24 @@ public class EditGoal extends AppCompatActivity {
     String selectedSpinnerPriority;
     String selectedSpinnerType;
     private Realm realm;
-
+    private SubGoalAdapter adapter;
 
     private static String selectedDate;
     private static EditText taskDueDate;
     String selectedDueDate;
+    RealmResults<SubGoalModel> subgoalsForThisGoal;
+
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final String mGoals= getResources().getString(R.string.db_parent_Goals);
-        final String mName= getResources().getString(R.string.db_Goal_Name);
-        final String mReason= getResources().getString(R.string.db_Goal_Reason);
-        final String mTime= getResources().getString(R.string.db_Goal_Time);
-        final String mPriority= getResources().getString(R.string.db_Goal_Priority);
-        final String mType= getResources().getString(R.string.db_Goal_Type);
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_goal);
         task_key = getIntent().getExtras().getString("TASK_OBJECT");
-        Log.d("GOALS", "task key: "+task_key );
+        Log.d("GOALS", "task key: " + task_key);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         getSupportActionBar().setTitle(R.string.goal_edit_title_toolbar);
@@ -66,19 +78,8 @@ public class EditGoal extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
-        //mMyRef = FirebaseDatabase.getInstance().getReference().child(mGoals);
-
         mEditGoal = (EditText) findViewById(R.id.editGoal);
         mReasonGoal = (EditText) findViewById(R.id.addReason);
-
-
-//        final Spinner spinner1 = (Spinner) findViewById(R.id.spinnerPriority);
-//        final ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
-//                R.array.priority, android.R.layout.simple_spinner_item);
-//        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner1.setAdapter(adapter1);
-
 
         final Spinner spinner2 = (Spinner) findViewById(R.id.spinnerType);
         final ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
@@ -86,7 +87,7 @@ public class EditGoal extends AppCompatActivity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapter2);
 
-        taskDueDate =(EditText) findViewById(R.id.add_task_ending);
+        taskDueDate = (EditText) findViewById(R.id.add_task_ending);
         taskDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,12 +103,10 @@ public class EditGoal extends AppCompatActivity {
                 mEditGoal.setText(goalModel.getName());
                 taskDueDate.setText(goalModel.getDueDate());
                 mReasonGoal.setText(goalModel.getReason());
- //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
+                //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
                 spinner2.setSelection(adapter2.getPosition(goalModel.getType()));
             }
         });
-
-
 
 
         ImageView addTaskDate = (ImageView) findViewById(R.id.add_task_date);
@@ -117,6 +116,111 @@ public class EditGoal extends AppCompatActivity {
                 new DatePickerFragment().show(getSupportFragmentManager(), "Task Date");
             }
         });
+
+
+// added sample code here
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditText taskEditText = new EditText(EditGoal.this);
+                AlertDialog dialog = new AlertDialog.Builder(EditGoal.this)
+                        .setTitle("Add Task")
+                        .setView(taskEditText)
+                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //realm = Realm.getDefaultInstance();
+                                realm.executeTransactionAsync(new Realm.Transaction() {
+                                                                  @Override
+                                                                  public void execute(Realm realm) {
+                                                                      final String uuID = UUID.randomUUID().toString();
+                                                                      realm.createObject(SubGoalModel.class, uuID)
+                                                                              .setName(String.valueOf(taskEditText.getText()));
+                                                                      SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuID).findFirst();
+                                                                      GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
+                                                                      goalModel.getSubgoals().add(sub);
+                                                                      sub.setGoal(goalModel);
+                                                                      Log.d("GOALS", "added subgoal ");
+
+                                                                  }
+                                                              },
+                                        new Realm.Transaction.OnSuccess() {
+                                            @Override
+                                            public void onSuccess() {
+                                                Log.d("GOALS", "onSuccess: ");
+
+
+                                            }
+                                        }, new Realm.Transaction.OnError() {
+                                            @Override
+                                            public void onError(Throwable error) {
+                                                Log.d("GOALS", "onError: ");
+                                            }
+                                        });
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .create();
+                dialog.show();
+            }
+        });
+
+
+        //recycler view of all the sub goals and child sub goals
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", task_key).findAll();
+
+        subgoalsForThisGoal.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SubGoalModel>>() {
+            @Override
+            public void onChange(RealmResults<SubGoalModel> persons, OrderedCollectionChangeSet changeset) {
+
+                adapter = new SubGoalAdapter(persons, "id");
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(EditGoal.this));
+                Log.d("GOALS", "onChange!!!!!!!!!!: ");
+
+
+            }
+        });
+
+        adapter = new SubGoalAdapter(subgoalsForThisGoal, "id");
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        Log.d("GOALS", "onCreate real data  : "+  subgoalsForThisGoal);
+
+
+
+        //expanding and collapsing each subgoal or child sub goal
+        adapter.setExpandCollapseListener(new RealmExpandableRecyclerAdapter.ExpandCollapseListener() {
+            @UiThread
+            @Override
+            public void onParentExpanded(int parentPosition) {
+                SubGoalModel expandedRecipe = adapter.getItem(parentPosition);
+
+                String toastMsg = getResources().getString(R.string.expanded, expandedRecipe.getName());
+//                Toast.makeText(AddGoal.this,
+//                        toastMsg,
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+            }
+
+            @UiThread
+            @Override
+            public void onParentCollapsed(int parentPosition) {
+                SubGoalModel collapsedRecipe = adapter.getItem(parentPosition);
+
+                String toastMsg = getResources().getString(R.string.collapsed, collapsedRecipe.getName());
+//                Toast.makeText(AddGoal.this,
+//                        toastMsg,
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+            }
+        });
+
+
 
 
 
@@ -218,4 +322,30 @@ public class EditGoal extends AppCompatActivity {
         }
     }
 
+
+
+    @Override
+    protected void onDestroy() {
+        Log.d("GOALS", "onDestroy: ");
+        realm.close();
+        super.onDestroy();
+    }
+
+
+
+
+    @Override
+    protected void onStop() {
+
+        Log.d("GOALS", "onStop: ");
+        subgoalsForThisGoal.removeAllChangeListeners();
+        super.onStop();
+
+    }
+
+
+
+
 }
+
+

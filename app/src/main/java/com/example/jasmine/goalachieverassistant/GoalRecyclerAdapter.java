@@ -42,6 +42,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
 
+        Log.d("GOALS", "WHY AM I COMING IN HERE?");
 
         final GoalModel mTaskModel = getData().get(position);
 
@@ -116,14 +117,19 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
                                             GoalModel goalModel = realm.where(GoalModel.class).equalTo("id",id ).findFirst();
                                             goalModel.deleteFromRealm();
+                                            Log.d("GOALS", "deleted item? ");
+                                      // realm.close();
                                         }
                                     });
+                                    realm.close();
                                     break;
                                 case R.id.share:
                                     //handle menu2 click
                                     break;
+
                             }
                             return false;
+
                         }
                     });
                     //displaying the popup
@@ -134,4 +140,6 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
         }
     }
+
+
 }

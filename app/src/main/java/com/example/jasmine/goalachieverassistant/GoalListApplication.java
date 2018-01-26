@@ -29,14 +29,14 @@ public class GoalListApplication extends Application {
         // Use the config
         Realm realm = Realm.getInstance(realmConfig);
 
-//
-//        try {
-//            Realm.getDefaultInstance();
-//            //Realm file has been deleted.
-//        } catch (Exception ex){
-//            ex.printStackTrace();
-//            //No Realm file to remove.
-//        }
+
+        try {
+            Realm.getDefaultInstance();
+            //Realm file has been deleted.
+        } catch (Exception ex){
+            ex.printStackTrace();
+            //No Realm file to remove.
+        }
 
 
         //TODO take out stetho piece ouf for production
@@ -48,4 +48,7 @@ public class GoalListApplication extends Application {
 
         realm.close();
     }
+
+
+
 }

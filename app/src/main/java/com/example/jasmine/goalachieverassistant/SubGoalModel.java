@@ -1,7 +1,9 @@
 package com.example.jasmine.goalachieverassistant;
 
 import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 import io.realm.annotations.Required;
 
 import io.realm.RealmList;
@@ -11,7 +13,8 @@ import io.realm.model.Parent;
  * Created by jasmine on 17/01/18.
  */
 
-public class SubGoalModel implements RealmModel, Parent {
+@RealmClass
+public class SubGoalModel implements RealmModel, Parent<ChildSubGoalModel> {
     @Required
     @PrimaryKey
     private String id;
@@ -22,11 +25,21 @@ public class SubGoalModel implements RealmModel, Parent {
     private boolean done;
     private boolean isExpand = false;
     GoalModel goal;
+    private boolean expanded;
+
     private RealmList<ChildSubGoalModel> childSubgoals;
 
 
 
-    public RealmList<ChildSubGoalModel> getChildSubgoals() {
+
+    /**
+     * Getter for the list of this parent's child items.
+     * <p>
+     * If list is empty, the parent has no children.
+     *
+     * @return A {@link RealmList} of the children of this {@link Parent}
+     */
+    public RealmList<ChildSubGoalModel> getChildList(){
         return childSubgoals;
     }
 
@@ -74,32 +87,41 @@ public class SubGoalModel implements RealmModel, Parent {
         this.name = name;
     }
 
-    public boolean isDone() {
+    public boolean getDone() {
         return done;
     }
 
-    public void setDone(boolean done) {
+
+
+
+
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    @Override
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public int getChildSubGoalCount() {
+        return childSubgoals.size();
+    }
+
+    public ChildSubGoalModel getChildSubGoal(int position) {
+            return childSubgoals.get(position);
+    }
+
+
+    public void setDone(boolean isDone) {
+        for (int i = 0, size = childSubgoals.size(); i < size; i++) {
+            ChildSubGoalModel ingredient = childSubgoals.get(i);
+            ingredient.setDone(isDone);
+        }
         this.done = done;
     }
 
-    /**
-     * Getter for the list of this parent's child items.
-     * <p>
-     * If list is empty, the parent has no children.
-     *
-     * @return A {@link RealmList} of the children of this {@link Parent}
-     */
-    public RealmList<ChildSubGoalModel> getChildList(){
-        return childSubgoals;
-    }
 
-    /**
-     * Getter used to determine if this {@link Parent}'s
-     * {@link android.view.View} should show up initially as expanded.
-     *
-     * @return true if expanded, false if not
-     */
-    public boolean isExpanded(){
-        return isExpand;
-    }
+
 }

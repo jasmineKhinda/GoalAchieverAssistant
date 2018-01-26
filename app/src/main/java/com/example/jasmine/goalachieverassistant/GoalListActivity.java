@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.jasmine.goalachieverassistant.FragmentIdea.Activities.AddGoalActivity;
+
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -51,7 +53,7 @@ public class GoalListActivity extends AppCompatActivity {
                         Log.d("GOALS", " created the goal with UUID: " + uuId);
                     }
                 });
-                Intent intent = new Intent(GoalListActivity.this, AddGoal.class);
+                Intent intent = new Intent(GoalListActivity.this, AddGoalActivity.class);
                 //pass in the unique UUI id key for the new goal to be added
                 intent.putExtra("GOAL_UUID",uuId);
 
