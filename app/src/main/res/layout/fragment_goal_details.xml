@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FragmentIdea.Fragments.GoalDetailsFragment">
+    tools:context=".FragmentIdea.Fragments.GoalDetailsFragment"
+    android:background="#FFFFFF">
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -58,7 +59,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/add_goal_title"
-            android:textColor="@color/colorPrimary"
+
             android:textStyle="bold"
             android:textSize="12dp" />
 
@@ -74,7 +75,7 @@
             android:singleLine="true"
             android:textCursorDrawable="@null"
             android:padding="10dp"
-            android:background="@drawable/border"
+            android:background="@drawable/border_edit_text"
             android:textSize="12dp" />
 
 
@@ -87,7 +88,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/goal_reason_title"
-            android:textColor="@color/colorPrimary"
             android:textStyle="bold"
             android:textSize="12dp" />
 
@@ -100,10 +100,10 @@
             android:layout_marginRight="10dp"
             android:cursorVisible="true"
             android:hint="@string/goal_reason_hint"
-
+            android:gravity="top|left"
             android:textCursorDrawable="@null"
-
-            android:background="@drawable/border"
+            android:lines="6"
+            android:background="@drawable/border_edit_text"
             android:padding="10dp"
             android:textSize="12dp"/>
 
@@ -137,21 +137,23 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/goal_category_title"
-            android:textColor="@color/colorPrimary"
             android:textSize="12dp"
             android:textStyle="bold" />
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/spinner_border"
+            >
         <Spinner
+            style="@style/Widget.AppCompat.DropDownItem.Spinner"
             android:id="@+id/spinnerType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:tooltipText="Priority"
-            android:textSize="12dp"
-            android:background="@drawable/border"
-            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="0dp"
+            android:tooltipText="Goal Type"
+            android:textSize="10dp"
             android:spinnerMode="dropdown"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,7 +171,7 @@
                 android:layout_weight="4"
                 android:textSize="12dp"
                 android:textIsSelectable="true"
-                android:background="@drawable/border"
+                android:background="@drawable/border_edit_text"
                 android:maxLines="1"
                 android:inputType="none"
                 android:padding="12dp"/>

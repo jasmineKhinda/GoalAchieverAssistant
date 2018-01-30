@@ -24,7 +24,7 @@
             android:padding="10dp">
             />
 
-
+<!--
             <TextView
                 android:id="@+id/goalName"
                 android:layout_width="match_parent"
@@ -35,23 +35,54 @@
                 android:textColor="#000000"
                 android:textSize="15dp"
                 android:text="Goal Name"
-                android:textStyle="bold"/>
+                android:textStyle="bold"/> -->
 
-            <ProgressBar
-                android:id="@+id/progress_limit"
+            <TextView
+                android:id="@+id/goalName"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_toRightOf="@id/progress_layout"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@id/progress_layout"
+                android:layout_toLeftOf="@id/imageButton"
+                android:layout_toStartOf="@id/imageButton"
+                android:text="Goal Name"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold" />
 
-
-                android:layout_width="200dp"
+            <RelativeLayout
+                android:id="@+id/progress_layout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/CustomProgressBar"
-                android:layout_centerVertical="true"
-                android:layout_below="@id/goalName"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:max="100"
-                android:progress="10"
-                android:progressDrawable="@drawable/progress_limit"
-                />
+                android:layout_weight="1">
+
+                <ProgressBar
+                    android:id="@+id/cmll_progrssbar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:indeterminate="false"
+                    android:layoutDirection="rtl"
+                    android:max="100"
+                    android:progress="25"
+                    android:background="@drawable/circle_shape_background"
+                    android:progressDrawable="@drawable/progressbar_circle" />
+
+                <TextView
+                    android:id="@+id/cmll_completed_per"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/cmll_progrssbar"
+                    android:layout_alignLeft="@id/cmll_progrssbar"
+                    android:layout_alignRight="@id/cmll_progrssbar"
+                    android:layout_alignTop="@id/cmll_progrssbar"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="88%" />
+
+            </RelativeLayout>
             <!--
                             style="?android:attr/progressBarStyleHorizontal" !-->
 
@@ -59,8 +90,10 @@
                 android:id="@+id/goalTimeAdded"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/progress_limit"
-
+                android:layout_marginTop="10dp"
+                android:layout_alignLeft="@+id/goalName"
+                android:layout_alignStart="@+id/goalName"
+                android:layout_below="@+id/goalName"
                 android:text="8 April 4:30pm"
                 android:textSize="10dp">
 
@@ -76,8 +109,8 @@
                 android:layout_alignParentTop="true"
                 android:background="@null"
                 android:onClick="showPopup"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
                 android:src="@drawable/ic_action_navigation_more_vert" />
 
 
