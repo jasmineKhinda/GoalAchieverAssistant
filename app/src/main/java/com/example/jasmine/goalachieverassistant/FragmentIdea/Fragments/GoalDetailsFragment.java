@@ -157,6 +157,7 @@ public class GoalDetailsFragment extends Fragment {
             ((EditText) getActivity().findViewById(R.id.add_task_ending)).setText(String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day));
 
         }
+
     }
 
 

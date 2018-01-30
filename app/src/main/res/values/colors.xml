@@ -3,4 +3,8 @@
     <color name="colorPrimary">#643579</color>
     <color name="colorPrimaryDark">#3D1860</color>
     <color name="colorAccent">#757575</color>
+    <color name="colorSecondaryCheckBox">#00dacf</color>
+    <color name="colorPrimaryCheckbox">#757575</color>
+    <color name="border">#757575</color>
+    <color name="colorBlack">#000000</color>
 </resources>

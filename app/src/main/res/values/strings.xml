@@ -8,7 +8,9 @@
     <string name="goal_edit_title_toolbar">Edit Goal</string>
     <string name="home_title_toolbar">Goal List</string>
     <string name="goal_done_icon">done</string>
-    <string name="goal_title_hint">Enter Goal Here</string>
+    <string name="goal_title_hint">Enter goal name</string>
+    <string name="task_title_hint">Enter task name</string>
+    <string name="reward_hint">0 points</string>
     <string name="due_date_hint">Due Date</string>
     <string name="no_due_date">No due date</string>
     <string name="add_goal_title">What\'s your goal?</string>
@@ -32,6 +34,8 @@
     <string name="tab1">Details</string>
     <string name="tab2">Tasks</string>
     <string name="tab3">Stats</string>
+    <string name="dialog_addtask_duedate">Due date</string>
+    <string name="dialog_addtask_reward">Reward Points</string>
 
     <string-array name="priority">
         <item>Immediately</item>

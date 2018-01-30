@@ -22,6 +22,7 @@ public class SubGoalListAdapter extends RealmBaseAdapter<SubGoalModel> implement
     private static class ViewHolder {
         TextView taskName;
         CheckBox isTaskDone;
+
     }
 
     SubGoalListAdapter(AddGoal activity, OrderedRealmCollection<SubGoalModel> data) {

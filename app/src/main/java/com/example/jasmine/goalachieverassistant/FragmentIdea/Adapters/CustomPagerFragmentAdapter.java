@@ -1,6 +1,7 @@
 package com.example.jasmine.goalachieverassistant.FragmentIdea.Adapters;
 
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,7 @@ import com.example.jasmine.goalachieverassistant.R;
  * Created by jasmine on 23/01/18.
  */
 
-public class CustomPagerFragmentAdapter extends FragmentPagerAdapter {
+public class CustomPagerFragmentAdapter extends FragmentStatePagerAdapter {
 
     private Context mContext;
     private String extraInfo;

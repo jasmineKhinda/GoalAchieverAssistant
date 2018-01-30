@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GoalAchieverAssistant.iml" filepath="$PROJECT_DIR$/GoalAchieverAssistant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GoalAchieverAssistantWithTasks.iml" filepath="$PROJECT_DIR$/GoalAchieverAssistantWithTasks.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/expandablerecyclerview/expandablerecyclerview.iml" filepath="$PROJECT_DIR$/expandablerecyclerview/expandablerecyclerview.iml" />
       <module fileurl="file://$PROJECT_DIR$/expandablerecyclerviewer/expandablerecyclerviewer.iml" filepath="$PROJECT_DIR$/expandablerecyclerviewer/expandablerecyclerviewer.iml" />

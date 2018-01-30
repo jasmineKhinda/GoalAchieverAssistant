@@ -1,10 +1,13 @@
 package com.example.jasmine.goalachieverassistant.recyclerview.adapter;
 
+import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import com.example.jasmine.goalachieverassistant.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -39,7 +42,7 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
         View recipeView;
         LayoutInflater mInflater = LayoutInflater.from(parentViewGroup.getContext());
 
-                recipeView = mInflater.inflate(R.layout.sub_goal_row, parentViewGroup, false);
+        recipeView = mInflater.inflate(R.layout.sub_goal_row, parentViewGroup, false);
 
         return new SubGoalViewHolder(recipeView);
     }
@@ -59,7 +62,9 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
     @UiThread
     @Override
     public void onBindParentViewHolder(@NonNull SubGoalViewHolder recipeViewHolder, int parentPosition, @NonNull SubGoalModel recipe) {
+
         recipeViewHolder.bind(recipe);
+
     }
 
     @UiThread
@@ -67,5 +72,7 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
     public void onBindChildViewHolder(@NonNull ChildSubGoalViewHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull ChildSubGoalModel ingredient) {
         ingredientViewHolder.bind(ingredient);
     }
+
+
 
 }

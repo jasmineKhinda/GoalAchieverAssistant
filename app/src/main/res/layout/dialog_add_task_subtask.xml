@@ -1,0 +1,91 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
+    <LinearLayout
+        android:id="@+id/activity_add_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        tools:context="com.inducesmile.androidrealmexample.AddTaskActivity">
+
+        <EditText
+            android:id="@+id/add_task_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:layout_marginTop="12dp"
+            android:inputType="text"
+            android:hint="@string/task_title_hint"
+            android:background="@drawable/border_edit_text"
+            android:maxLines="1"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_addtask_duedate"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/add_task_dueDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textSize="12dp"
+                android:textIsSelectable="true"
+                android:inputType="none"
+                android:background="@drawable/border_edit_text"
+                android:hint="@string/due_date_hint"
+                android:maxLines="1"
+                android:textColor="@color/colorBlack"
+                android:padding="12dp"/>
+            <ImageView
+                android:id="@+id/add_task_date_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:contentDescription="@string/app_name"
+
+                android:src="@drawable/ic_date_range_black_24dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_addtask_reward"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/reward_points"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:layout_marginTop="12dp"
+            android:inputType="number"
+            android:hint="@string/reward_hint"
+            android:background="@drawable/border_edit_text"
+            android:maxLines="1"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp"/>
+
+    </LinearLayout>
+</ScrollView>

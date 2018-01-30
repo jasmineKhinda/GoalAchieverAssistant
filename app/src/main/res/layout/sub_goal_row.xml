@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:theme="@style/CheckboxStyle"
 
     >
 
@@ -13,10 +15,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="3dp"
+        android:layout_margin="2dp"
         app:cardCornerRadius="2dp"
-        app:cardElevation="2dp"
-        app:cardMaxElevation="3dp">
+        app:cardElevation="1dp"
+        app:cardMaxElevation="1dp"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -96,7 +99,7 @@
                 android:layout_height="wrap_content"
 
                 android:layout_alignParentEnd="true"
-
+                android:visibility="invisible"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/subGoal_textview"
 
@@ -118,7 +121,7 @@
                 android:layout_alignLeft="@id/subGoal_textview"
                 android:layout_below="@id/subGoal_textview"
 
-                android:text="Wed, Jan 31"
+                android:text="No Due Date"
                 android:textSize="9dp">
 
             </TextView>

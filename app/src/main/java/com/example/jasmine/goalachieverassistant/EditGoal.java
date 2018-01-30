@@ -26,7 +26,7 @@ import android.widget.Toast;
 import android.content.Context;
 
 
-import com.example.jasmine.goalachieverassistant.recyclerview.LinearLayoutManagerWrapper;
+
 import com.example.jasmine.goalachieverassistant.recyclerview.adapter.SubGoalAdapter;
 
 import java.text.SimpleDateFormat;

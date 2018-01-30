@@ -422,6 +422,7 @@ public class AddGoal extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
     public void changeTaskDone(final String taskId) {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override

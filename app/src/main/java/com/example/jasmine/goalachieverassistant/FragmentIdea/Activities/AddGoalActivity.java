@@ -119,4 +119,7 @@ public class AddGoalActivity extends AppCompatActivity  {
         }
         return super.onOptionsItemSelected(item);
 
-    }}
+    }
+
+
+}

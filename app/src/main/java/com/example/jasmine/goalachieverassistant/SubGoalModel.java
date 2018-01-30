@@ -115,11 +115,11 @@ public class SubGoalModel implements RealmModel, Parent<ChildSubGoalModel> {
 
 
     public void setDone(boolean isDone) {
-        for (int i = 0, size = childSubgoals.size(); i < size; i++) {
-            ChildSubGoalModel ingredient = childSubgoals.get(i);
-            ingredient.setDone(isDone);
-        }
-        this.done = done;
+//        for (int i = 0, size = childSubgoals.size(); i < size; i++) {
+//            ChildSubGoalModel ingredient = childSubgoals.get(i);
+//            ingredient.setDone(isDone);
+//        }
+        this.done = isDone;
     }
 
 
