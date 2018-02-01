@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
-
+        mavenCentral()
         //TODO: take out the following maven line in production
         maven {
             url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'
@@ -15,6 +15,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.0.0'
         //classpath "io.realm:realm-gradle-plugin:3.1.4"
         classpath "io.realm:realm-gradle-plugin:3.3.2"//https://realm.io/docs/java/latest/#installation
+        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
 
         
 //classpath "io.realm:realm-gradle-plugin:3.1.4"

@@ -1,13 +1,11 @@
-package com.example.jasmine.goalachieverassistant.FragmentIdea.Adapters;
+package com.example.jasmine.goalachieverassistant.Fragments.Adapters;
 
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments.GoalDetailsFragment;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments.GoalTasksFragment;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 import com.example.jasmine.goalachieverassistant.R;
 
 

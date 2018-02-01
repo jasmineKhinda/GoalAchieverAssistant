@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Activities.AddGoalActivity;
+import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
 import java.util.UUID;
 
@@ -83,7 +83,7 @@ public class GoalListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_task_list, menu);
+        getMenuInflater().inflate(R.menu.menu_goal_list, menu);
         return true;
     }
 

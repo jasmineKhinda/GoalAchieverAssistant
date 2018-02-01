@@ -1,14 +1,13 @@
-package com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments;
+package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.widget.DatePicker;
-import  	java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -23,7 +22,7 @@ import java.util.Date;
         fragment.setDatePickerListener(listener);
         return fragment;
     }
-        int newYear, newMonth, newDay;
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Calendar c = Calendar.getInstance();

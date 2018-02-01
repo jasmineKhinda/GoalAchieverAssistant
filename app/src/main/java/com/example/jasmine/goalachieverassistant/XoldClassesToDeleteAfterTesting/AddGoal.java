@@ -1,4 +1,4 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -31,8 +31,11 @@ import java.util.Calendar;
 import java.util.UUID;
 import android.app.AlertDialog;
 
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Adapters.CustomPagerFragmentAdapter;
-import com.example.jasmine.goalachieverassistant.recyclerview.adapter.SubGoalAdapter;
+import com.example.jasmine.goalachieverassistant.GoalListActivity;
+import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.R;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
 
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
@@ -61,7 +64,7 @@ public class AddGoal extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_goal);
+        setContentView(R.layout.x_to_delete_activity_add_goal);
         final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
 
 
@@ -392,29 +395,29 @@ public class AddGoal extends AppCompatActivity {
  //           final String uuId = UUID.randomUUID().toString();
 //            final RealmResults<SubGoalModel> realmResultsSubGoal = realm.where(SubGoalModel.class).findAll();
 
-            realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-
-
- //                   realm.createObject(GoalModel.class, uuId)
- //                           .setName(mGoalName);
-                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
-                    goalModel.setName(mGoalName);
-                    goalModel.setTime(mDateString);
-                    Log.d("GOALS", "reason :  " + mReasonGoalText);
-                    goalModel.setReason(mReasonGoalText);
-//                   goalModel.setPriority(selectedPriority);
-                    goalModel.setType(selectedType);
-                    goalModel.setDueDate(selectedDueDate);
-                    goalModel.setTimeStamp(System.currentTimeMillis());
-
-
-                    Log.d("GOALS", " goalModel added id: " + goalUUID + " goalModel name is " + goalModel.getName());
-
-                }
-            });
+//            realm = Realm.getDefaultInstance();
+//            realm.executeTransactionAsync(new Realm.Transaction() {
+//                @Override
+//                public void execute(Realm realm) {
+//
+//
+// //                   realm.createObject(GoalModel.class, uuId)
+// //                           .setName(mGoalName);
+//                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
+//                    goalModel.setName(mGoalName);
+//                    goalModel.setTime(mDateString);
+//                    Log.d("GOALS", "reason :  " + mReasonGoalText);
+//                    goalModel.setReason(mReasonGoalText);
+////                   goalModel.setPriority(selectedPriority);
+//                    goalModel.setType(selectedType);
+//                    goalModel.setDueDate(selectedDueDate);
+//                    goalModel.setTimeStamp(System.currentTimeMillis());
+//
+//
+//                    Log.d("GOALS", " goalModel added id: " + goalUUID + " goalModel name is " + goalModel.getName());
+//
+//                }
+//            });
 
             Intent addGoalIntent = new Intent(AddGoal.this, GoalListActivity.class);
             startActivity(addGoalIntent);

@@ -1,25 +1,17 @@
-package com.example.jasmine.goalachieverassistant.recyclerview.viewHolders;
+package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.example.jasmine.goalachieverassistant.ChildSubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.SubGoalModel;
-
-import java.util.UUID;
 
 import io.realm.ChildViewHolder;
 import io.realm.Realm;

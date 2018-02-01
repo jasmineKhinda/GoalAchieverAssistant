@@ -60,13 +60,13 @@
                 <ProgressBar
                     android:id="@+id/cmll_progrssbar"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:indeterminate="false"
-                    android:layoutDirection="rtl"
+                    android:layoutDirection="ltr"
                     android:max="100"
-                    android:progress="25"
-                    android:background="@drawable/circle_shape_background"
+                    android:progress="0"
+                    android:background="@drawable/progressbar_background"
                     android:progressDrawable="@drawable/progressbar_circle" />
 
                 <TextView
@@ -80,7 +80,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:text="88%" />
+                    android:text="0%" />
 
             </RelativeLayout>
             <!--

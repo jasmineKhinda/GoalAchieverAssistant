@@ -1,4 +1,4 @@
-package com.example.jasmine.goalachieverassistant.recyclerview.viewHolders;
+package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
@@ -24,15 +23,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.CompoundButton;
 
-import com.example.jasmine.goalachieverassistant.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Activities.AddGoalActivity;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments.DatePickerFragment;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments.GoalTasksFragment;
-import com.example.jasmine.goalachieverassistant.GoalModel;
+import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerFragment;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,10 +35,7 @@ import java.util.UUID;
 
 import io.realm.ParentViewHolder;
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * Created by jasmine on 18/01/18.
@@ -107,15 +99,10 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
 
 
-
-
-
-
-
         //if no subgoals to this goal, dont display the subgoal count done item
         if(subGoal.getChildSubGoalCount()>0){
             starredIngredientCount.setVisibility(View.VISIBLE);
-            starredIngredientCount.setText("0 / " +subGoal.getChildSubGoalCount());
+            starredIngredientCount.setText(subGoal.getChildSubgoalsComplete()+" / " +subGoal.getChildSubGoalCount());
         }
 
         //if no due date display the default "No Due Date" from layout file
@@ -269,8 +256,6 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                                         .setNegativeButton("Cancel", null)
                                         .create();
                                 dialog.show();
-                                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(Color.parseColor("#757575"));
-                                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#757575"));
                                 realm.close();
 
 

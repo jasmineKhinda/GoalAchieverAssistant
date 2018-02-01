@@ -1,4 +1,6 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.Models;
+
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;

@@ -1,19 +1,16 @@
-package com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments;
+package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,19 +18,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
-
-import com.example.jasmine.goalachieverassistant.AddGoal;
-import com.example.jasmine.goalachieverassistant.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.GoalModel;
-import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.SubGoalModel;
-import com.example.jasmine.goalachieverassistant.recyclerview.adapter.SubGoalAdapter;
-
 import java.util.Calendar;
+
+import com.example.jasmine.goalachieverassistant.DateDisplayParser;
+import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.R;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
+
 import java.util.UUID;
 
 import io.realm.OrderedCollectionChangeSet;
@@ -59,6 +53,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     private SubGoalAdapter adapter;
     RealmResults<SubGoalModel> subgoalsForThisGoal;
     public EditText addTaskDueDate;
+    Date dueDate;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -79,10 +74,32 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         Log.d("GOALS", "in onDateSet");
         // This method will be called with the date from the `DatePicker`.
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d");
-        String date = sdf.format(view);
 
-        addTaskDueDate.setText(date);
+//        SimpleDateFormat year =  new SimpleDateFormat("yyyy");
+//
+//        String selectedYear = year.format(view);
+//        String dateToDisplay;
+//        Log.d("GOALS", "selected year  "+ selectedYear);
+//        Log.d("GOALS", "current year  "+ Calendar.getInstance().get(Calendar.YEAR));
+//
+//        if(Integer.parseInt(selectedYear) > Calendar.getInstance().get(Calendar.YEAR) || Integer.parseInt(selectedYear) < Calendar.getInstance().get(Calendar.YEAR)){
+//            SimpleDateFormat sdfWithYear = new SimpleDateFormat("MMM dd, yyyy");
+//            dateToDisplay = sdfWithYear.format(view);
+//        }else {
+//            SimpleDateFormat sdfWithWithoutYear = new SimpleDateFormat("EEE, MMM dd");
+//            dateToDisplay = sdfWithWithoutYear.format(view);
+//        }
+        if(null != view ){
+
+            String dateToDisplay = DateDisplayParser.parseDateForDisplay(view);
+            addTaskDueDate.setText(dateToDisplay);
+
+        }else{
+            addTaskDueDate.setText(R.string.no_due_date);
+        }
+
+        dueDate = view;
+
     }
 
 
@@ -111,7 +128,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         super.onViewCreated(view, savedInstanceState);
 
         goalUUID = getArguments().getString(GOAL_UUID);
-        Log.d("GOALS", "onViewCreated: goal UUID" + goalUUID);
+        Log.d("GOALS", "onViewCreated:  for GoalTasksFragment goal UUID" + goalUUID);
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
 
         realm = Realm.getDefaultInstance();
@@ -211,7 +228,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                Log.d("GOALS", "onChange!!!!!!!!!!: " + persons.first().getName() + "     " + persons.first().getDone());
+                Log.d("GOALS", "onChange!!!");
 
 
             }
@@ -221,9 +238,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Log.d("GOALS", "onCreate real data  : " + subgoalsForThisGoal);
+
 
 
         //expanding and collapsing each subgoal or child sub goal

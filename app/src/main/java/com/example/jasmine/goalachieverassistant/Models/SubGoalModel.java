@@ -1,7 +1,6 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.Models;
 
 import io.realm.RealmModel;
-import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
 import io.realm.annotations.Required;
@@ -107,6 +106,16 @@ public class SubGoalModel implements RealmModel, Parent<ChildSubGoalModel> {
 
     public int getChildSubGoalCount() {
         return childSubgoals.size();
+    }
+
+    public int getChildSubgoalsComplete() {
+        int subGoalsCompleteCount=0;
+        for ( ChildSubGoalModel r: childSubgoals) {
+            if (r.getDone()){
+                subGoalsCompleteCount++;
+            }
+        }
+        return subGoalsCompleteCount;
     }
 
     public ChildSubGoalModel getChildSubGoal(int position) {

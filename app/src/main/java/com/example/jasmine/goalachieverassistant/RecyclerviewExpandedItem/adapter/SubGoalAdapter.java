@@ -1,23 +1,19 @@
-package com.example.jasmine.goalachieverassistant.recyclerview.adapter;
+package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter;
 
-import android.app.FragmentManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 
-import com.example.jasmine.goalachieverassistant.ChildSubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.SubGoalModel;
-import com.example.jasmine.goalachieverassistant.recyclerview.viewHolders.ChildSubGoalViewHolder;
-import com.example.jasmine.goalachieverassistant.recyclerview.viewHolders.SubGoalViewHolder;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.ChildSubGoalViewHolder;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
 
 import java.util.List;
 
-import io.realm.ChildViewHolder;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmExpandableSearchRecyclerAdapter;
 

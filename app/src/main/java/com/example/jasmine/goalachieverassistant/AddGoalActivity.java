@@ -1,4 +1,4 @@
-package com.example.jasmine.goalachieverassistant.FragmentIdea.Activities;
+package com.example.jasmine.goalachieverassistant;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,10 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Adapters.CustomPagerFragmentAdapter;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments.GoalDetailsFragment;
-import com.example.jasmine.goalachieverassistant.FragmentIdea.Fragments.GoalTasksFragment;
-import com.example.jasmine.goalachieverassistant.R;
+import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 
 import io.realm.Realm;
 
@@ -36,7 +35,7 @@ public class AddGoalActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.x_add_goal_view_fragments);
+        setContentView(R.layout.add_edit_goal_view_fragments);
         final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
 
 
@@ -90,32 +89,6 @@ public class AddGoalActivity extends AppCompatActivity  {
 
             detailsFrag.addGoalDetailsToRealm();
 
-
-//
-//            long mDate = System.currentTimeMillis();
-//            SimpleDateFormat mSdf = new SimpleDateFormat("MMM MM dd,yyy h:mm a");
-//            final String mDateString = mSdf.format(mDate);
-//
-//            realm = Realm.getDefaultInstance();
-//            realm.executeTransactionAsync(new Realm.Transaction() {
-//                @Override
-//                public void execute(Realm realm) {
-//
-//                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
-//                    goalModel.setName(mGoalName);
-//                    goalModel.setTime(mDateString);
-//                    Log.d("GOALS", "reason :  " + mReasonGoalText);
-//                    goalModel.setReason(mReasonGoalText);
-//                    goalModel.setType(selectedType);
-//                    goalModel.setDueDate(selectedDueDate);
-//                    goalModel.setTimeStamp(System.currentTimeMillis());
-//                    Log.d("GOALS", " goalModel added id: " + goalUUID + " goalModel name is " + goalModel.getName());
-//
-//                }
-//            });
-//
-//            Intent addGoalIntent = new Intent(AddGoalActivity.this, GoalListActivity.class);
-//            startActivity(addGoalIntent);
         }
         return super.onOptionsItemSelected(item);
 

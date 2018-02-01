@@ -1,4 +1,4 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -22,12 +22,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
-import android.content.Context;
 
 
-
-import com.example.jasmine.goalachieverassistant.recyclerview.adapter.SubGoalAdapter;
+import com.example.jasmine.goalachieverassistant.DateDisplayParser;
+import com.example.jasmine.goalachieverassistant.GoalListActivity;
+import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.R;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,7 +38,6 @@ import java.util.UUID;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
 import io.realm.RealmExpandableRecyclerAdapter;
 import io.realm.RealmResults;
 
@@ -68,7 +69,7 @@ public class EditGoal extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_goal);
+        setContentView(R.layout.x_to_delete_activity_add_goal);
         task_key = getIntent().getExtras().getString("TASK_OBJECT");
         Log.d("GOALS", "task key: " + task_key);
 
@@ -95,18 +96,24 @@ public class EditGoal extends AppCompatActivity {
             }
         });
 
-        realm = Realm.getDefaultInstance();
-        realm.executeTransactionAsync(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
-                mEditGoal.setText(goalModel.getName());
-                taskDueDate.setText(goalModel.getDueDate());
-                mReasonGoal.setText(goalModel.getReason());
-                //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
-                spinner2.setSelection(adapter2.getPosition(goalModel.getType()));
-            }
-        });
+//        realm = Realm.getDefaultInstance();
+//        realm.executeTransactionAsync(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
+//                mEditGoal.setText(goalModel.getName());
+//
+//                if(null != goalModel.getDueDate()){
+//                    String dateToDisplay = DateDisplayParser.parseDateForDisplay(goalModel.getDueDate());
+//                    taskDueDate.setText(dateToDisplay);
+//                }else{
+//                    taskDueDate.setText(R.string.no_due_date);
+//                }
+//                mReasonGoal.setText(goalModel.getReason());
+//                //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
+//                spinner2.setSelection(adapter2.getPosition(goalModel.getType()));
+//            }
+//        });
 
 
         ImageView addTaskDate = (ImageView) findViewById(R.id.add_task_date);
@@ -268,19 +275,23 @@ public class EditGoal extends AppCompatActivity {
             final String mDateString = mSdf.format(mDate);
 
 
-
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
-                    goalModel.setName(mGoalName);
-                    goalModel.setTime(mDateString);
-                    goalModel.setReason(mReasonGoalText);
-                    goalModel.setDueDate(selectedDueDate);
-                    goalModel.setType(selectedType);
-
-                }
-            });
+//
+//            realm.executeTransactionAsync(new Realm.Transaction() {
+//                @Override
+//                public void execute(Realm realm) {
+//                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
+//                    goalModel.setName(mGoalName);
+//                    goalModel.setTime(mDateString);
+//                    goalModel.setReason(mReasonGoalText);
+//
+//                    goalModel.setDueDate(selectedDueDate);
+//
+//
+//
+//                    goalModel.setType(selectedType);
+//
+//                }
+//            });
 
 
             Intent addGoalIntent = new Intent(EditGoal.this, GoalListActivity.class);

@@ -34,6 +34,7 @@
     <string name="tab1">Details</string>
     <string name="tab2">Tasks</string>
     <string name="tab3">Stats</string>
+    <string name="full_date_format">EEE MMM dd, yyyy</string>
     <string name="dialog_addtask_duedate">Due date</string>
     <string name="dialog_addtask_reward">Reward Points</string>
 

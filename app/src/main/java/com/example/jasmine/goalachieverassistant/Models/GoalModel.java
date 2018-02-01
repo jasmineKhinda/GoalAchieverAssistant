@@ -1,11 +1,11 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.Models;
 
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.LinkingObjects;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
+import java.util.Date;
 
 public class GoalModel extends RealmObject {
     @Required
@@ -19,7 +19,7 @@ public class GoalModel extends RealmObject {
     private String priority;
     private String dateTime;
     private long timeStamp;
-    private String dueDate;
+    private Date dueDate;
 
  //   @LinkingObjects("goal")
     private RealmList<SubGoalModel> subgoals;
@@ -32,15 +32,27 @@ public class GoalModel extends RealmObject {
         return subgoals;
     }
 
+
+    public int getSubgoalsComplete() {
+        int subGoalsCompleteCount=0;
+        for ( SubGoalModel r: subgoals) {
+            if (r.getDone()){
+                subGoalsCompleteCount++;
+            }
+        }
+        return subGoalsCompleteCount;
+    }
+
+
     public void setSubgoals(RealmList<SubGoalModel> subgoals) {
         this.subgoals = subgoals;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
@@ -119,4 +131,12 @@ public class GoalModel extends RealmObject {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public int getSubGoalCount() {
+        return subgoals.size();
+    }
+
+
+
+
 }
