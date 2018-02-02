@@ -40,16 +40,18 @@
 
         <activity android:name=".EditGoalActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
 
 
         </activity>
         <activity android:name=".AddGoalActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
 
 
         </activity>
+
+
 
 
     </application>

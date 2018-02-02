@@ -5,7 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -24,12 +24,12 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerFragment;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -56,6 +56,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     private TextView dueDateDialog;
     private Context context;
     Realm realm;
+    Date taskDueDate;
  //   private TextView ingredientCount;
 
     private SubGoalModel subGoal;
@@ -84,11 +85,19 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
         // This method will be called with the date from the `DatePicker`.
+        if(null != view ){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d");
-        String date = sdf.format(view);
-        Log.d("GOALS", "in onDateSet "+ date);
-        dueDateDialog.setText(date);
+            String dateToDisplay = Utilities.parseDateForDisplay(view);
+            dueDateDialog.setText(dateToDisplay);
+            Log.d("GOALS", "onDateSet: ");
+
+        }else{
+            dueDate.setText(R.string.no_due_date);
+        }
+
+        taskDueDate = view;
+
+
     }
 
     public void bind(@NonNull final SubGoalModel r) {
@@ -105,9 +114,13 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
             starredIngredientCount.setText(subGoal.getChildSubgoalsComplete()+" / " +subGoal.getChildSubGoalCount());
         }
 
+        //if due date exists in db then display it
         //if no due date display the default "No Due Date" from layout file
-        if(!subGoal.getDueDate().isEmpty()){
-            dueDate.setText(subGoal.getDueDate());
+        if(null!=subGoal.getDueDate()){
+            String dateToDisplay = Utilities.parseDateForDisplay(subGoal.getDueDate());
+            dueDate.setText(dateToDisplay);
+        }else{
+            dueDate.setText(R.string.no_due_date);
         }
 
 
@@ -116,9 +129,18 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                 arrowExpandImageView.setVisibility(View.VISIBLE);
             }
 
-
-
+            //if item is checked(done) then check off the checkbox and strike through the textview
             isTaskDone.setChecked(subGoal.getDone());
+            if(subGoal.getDone()){
+                subGoalTextView.setPaintFlags( subGoalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                subGoalTextView.setAlpha(0.38f);
+
+            }//if item is unchecked(not done) then set checkbox to false and un-strike through the textview
+            else{
+                subGoalTextView.setPaintFlags(subGoalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            }
+
+
 
 
             Log.d("GOALS", "true or false? " +subGoal.getDone());
@@ -130,29 +152,26 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
                                                   if (subGoal.getDone()) {
 
-                                                      CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
-                                                      checkBox.setChecked(!checkBox.isChecked());
+//
                                                       Realm realm = Realm.getDefaultInstance();
                                                       realm.executeTransaction(new Realm.Transaction() {
                                                           @Override
                                                           public void execute(Realm realm) {
                                                               subGoal.setDone(false);
-                                                              Log.d("GOALS", "IN TRUEEEEEE");
+                                                              Log.d("GOALS", "IN NOT DONE");
                                                           }
                                                       });
                                                       realm.close();
 
                                                   } else {
 
-                                                      CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
-                                                      checkBox.setChecked(!checkBox.isChecked());
 
                                                       Realm realm2 = Realm.getDefaultInstance();
                                                       realm2.executeTransaction(new Realm.Transaction() {
                                                           @Override
                                                           public void execute(Realm realm) {
                                                               subGoal.setDone(true);
-                                                              Log.d("GOALS", "IN FALSE");
+                                                              Log.d("GOALS", "IN DONE");
                                                           }
                                                       });
                                                       realm2.close();
@@ -172,10 +191,6 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        final int position = getAdapterPosition();
-                      //  final GoalModel mTaskModel = getData().get(position);
-                       // final String id = mTaskModel.getId().toString();
-
 
                         switch (item.getItemId()) {
                             case R.id.delete_task:
@@ -220,7 +235,6 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-                                                //realm = Realm.getDefaultInstance();
                                                 realm.executeTransactionAsync(new Realm.Transaction() {
                                                                                   @Override
                                                                                   public void execute(Realm realm) {
@@ -231,7 +245,9 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                                                                                       SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskId).findFirst();
                                                                                       subGoalModel.getChildList().add(sub);
                                                                                       sub.setSubGoal(subGoalModel);
-                                                                                      sub.setDueDate(dueDateDialog.getText().toString());
+                                                                                      if(null!=taskDueDate){
+                                                                                          sub.setDueDate(taskDueDate);
+                                                                                      }
                                                                                       Log.d("GOALS", "added subgoal ");
 
 
@@ -262,8 +278,6 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                             addTaskDueDate.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-                                    // DatePickerFragment date = new DatePickerFragment();
                                     fragment.show(fragment.getActivity().getSupportFragmentManager(), "Task Date");
                                 }
                             });
@@ -271,14 +285,9 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                             addTaskDueDateImage.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
-
-
                                     FragmentManager manager = ((AppCompatActivity) scanForActivity(v.getContext())).getSupportFragmentManager();
                                     Log.d("GOALS", "fragman "+ manager);
-                                    //DatePickerFragment fragment = new DatePickerFragment();
                                     fragment.show(manager, "Task Date");
-                                    //new GoalTasksFragment.DatePickersFragment().show(getFragmentManager(), "Task Date");
                                 }
                             });
                             break;

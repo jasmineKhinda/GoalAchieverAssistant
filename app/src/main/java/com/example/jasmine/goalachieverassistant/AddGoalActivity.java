@@ -1,12 +1,23 @@
 package com.example.jasmine.goalachieverassistant;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
@@ -21,7 +32,6 @@ import io.realm.Realm;
 public class AddGoalActivity extends AppCompatActivity  {
 
 
-    private Realm realm;
     CustomPagerFragmentAdapter adapter;
     private String GoalName;
     private String GoalReason;
@@ -29,6 +39,7 @@ public class AddGoalActivity extends AppCompatActivity  {
     private String DueDate;
     private GoalDetailsFragment detailsFrag;
     private GoalTasksFragment tasksFrag;
+    AppBarLayout appbar;
 
 
     @Override
@@ -37,15 +48,18 @@ public class AddGoalActivity extends AppCompatActivity  {
 
         setContentView(R.layout.add_edit_goal_view_fragments);
         final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
-
+        CoordinatorLayout clay = findViewById(R.id.clayout);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         toolbar.inflateMenu(R.menu.menu_add_goal);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        //in order for the EditText for goal name to get focus when view is initialized (to help used input goal name first thing)
+        clay.setFocusableInTouchMode(false);
 
         // Find the view pager that will allow the user to swipe between fragments
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -81,18 +95,52 @@ public class AddGoalActivity extends AppCompatActivity  {
         final String mReasonGoalText = GoalReason;
         final String selectedType = Spinner;
         final String selectedDueDate = DueDate;
+        final EditText goalTitle = findViewById(R.id.ltitle);
+        final TextInputLayout goalTextInputLayout = findViewById(R.id.lNameLayout);
+        String goalName="";
 
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
-        } else if (item.getItemId() == R.id.action_settings_done) {
+            //validate the goal Name is entered and not blank
+            if(TextUtils.isEmpty(goalTitle.getText())){
+               goalTitle.requestFocus();
+               goalTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Goal Name", Color.WHITE));
+               goalTitle.clearFocus();
 
-            detailsFrag.addGoalDetailsToRealm();
+            }else{
+                goalTitle.clearFocus();
+                goalName = goalTitle.getText().toString();
+                detailsFrag.addGoalDetailsToRealm(goalName);
+            }
+        } else if (item.getItemId() == R.id.action_settings_done) {
+            //validate the goal Name is entered and not blank
+            if(TextUtils.isEmpty(goalTitle.getText())){
+                goalTitle.requestFocus();
+                goalTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Goal Name", Color.WHITE));
+                goalTitle.clearFocus();
+
+            }else{
+                goalTitle.clearFocus();
+                goalName = goalTitle.getText().toString();
+                detailsFrag.addGoalDetailsToRealm(goalName);
+            }
 
         }
         return super.onOptionsItemSelected(item);
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("GOALS", "onPause: in here");
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        Log.d("GOALS", "onDestroy: ");
+        super.onDestroy();
+    }
 
 }

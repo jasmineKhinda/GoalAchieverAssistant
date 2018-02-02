@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
-        android:text="@string/goal_reason_title"
+        android:text="@string/goal_notes_title"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:cursorVisible="true"
-        android:hint="@string/goal_reason_hint"
+        android:hint="@string/goal_notes_hint"
         android:textColorLink="@color/colorPrimary"
         android:textCursorDrawable="@null"
         android:textColor="@color/colorPrimary"

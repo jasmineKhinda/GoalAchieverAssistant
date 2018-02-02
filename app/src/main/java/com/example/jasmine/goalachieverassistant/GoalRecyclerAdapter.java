@@ -5,8 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -17,43 +15,14 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.R;
+
 import io.realm.Realm;
 
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import io.realm.OrderedRealmCollection;
-import io.realm.Realm;
 import io.realm.RealmRecyclerViewAdapter;
 
 /**
@@ -122,7 +91,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 //        //holder.taskCategory.setText(mTaskModel.getType());
         if(null != mTaskModel.getDueDate() ){
 
-            String dateToDisplay = DateDisplayParser.parseDateForDisplay(mTaskModel.getDueDate());
+            String dateToDisplay = Utilities.parseDateForDisplay(mTaskModel.getDueDate());
             holder.taskDate.setText(dateToDisplay);
 
         }else{
@@ -134,6 +103,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
                 Intent viewTaskIntent = new Intent(view.getContext(), EditGoalActivity.class);
                 viewTaskIntent.putExtra("EDIT_GOALUUID", mTaskModel.getId());
+                viewTaskIntent.putExtra("EDIT_GOALNAME", mTaskModel.getName());
                 view.getContext().startActivity(viewTaskIntent);
             }
         });

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:innerRadiusRatio="2.5"
     android:shape="ring"
-    android:thicknessRatio="18.0"
+    android:thicknessRatio="20.0"
     android:useLevel="false">
     <solid android:color="@color/progressbar_circle_background" />
 

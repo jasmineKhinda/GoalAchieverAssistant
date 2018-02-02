@@ -46,7 +46,6 @@
 
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="8dp"
-
                 android:layout_toEndOf="@id/chevron_Ne"
                 android:layout_toRightOf="@id/chevron_Ne"
                 android:focusable="false" />
@@ -62,7 +61,7 @@
                 android:layout_toEndOf="@id/task_item_done"
                 android:layout_toRightOf="@id/task_item_done"
 
-                android:textColor="#000000"
+
                 android:textSize="15dp"
                 android:textStyle="bold" />
 

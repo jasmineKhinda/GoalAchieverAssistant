@@ -1,6 +1,9 @@
 package com.example.jasmine.goalachieverassistant;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -11,7 +14,7 @@ import java.util.Date;
  * Created by jkhinda on 31/01/18.
  */
 
-public class DateDisplayParser {
+public class Utilities {
 
     @NonNull
     public static String parseDateForDisplay(Date date){
@@ -30,4 +33,13 @@ public class DateDisplayParser {
         }
         return dateToDisplay;
     }
+
+    @NonNull
+    public static SpannableStringBuilder getSpannableStringForErrorOutput(String errorMessage,int color){
+        ForegroundColorSpan fgcspan = new ForegroundColorSpan(color);
+        SpannableStringBuilder ssbuilder = new SpannableStringBuilder(errorMessage);
+        ssbuilder.setSpan(fgcspan, 0, errorMessage.length(), 0);
+        return ssbuilder;
+    }
+
 }

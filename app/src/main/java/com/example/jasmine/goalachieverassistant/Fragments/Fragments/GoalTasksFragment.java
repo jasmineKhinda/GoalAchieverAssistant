@@ -3,7 +3,6 @@ package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -20,9 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import java.util.Calendar;
 
-import com.example.jasmine.goalachieverassistant.DateDisplayParser;
+import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
@@ -73,25 +71,9 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         Log.d("GOALS", "in onDateSet");
         // This method will be called with the date from the `DatePicker`.
-
-
-//        SimpleDateFormat year =  new SimpleDateFormat("yyyy");
-//
-//        String selectedYear = year.format(view);
-//        String dateToDisplay;
-//        Log.d("GOALS", "selected year  "+ selectedYear);
-//        Log.d("GOALS", "current year  "+ Calendar.getInstance().get(Calendar.YEAR));
-//
-//        if(Integer.parseInt(selectedYear) > Calendar.getInstance().get(Calendar.YEAR) || Integer.parseInt(selectedYear) < Calendar.getInstance().get(Calendar.YEAR)){
-//            SimpleDateFormat sdfWithYear = new SimpleDateFormat("MMM dd, yyyy");
-//            dateToDisplay = sdfWithYear.format(view);
-//        }else {
-//            SimpleDateFormat sdfWithWithoutYear = new SimpleDateFormat("EEE, MMM dd");
-//            dateToDisplay = sdfWithWithoutYear.format(view);
-//        }
         if(null != view ){
 
-            String dateToDisplay = DateDisplayParser.parseDateForDisplay(view);
+            String dateToDisplay = Utilities.parseDateForDisplay(view);
             addTaskDueDate.setText(dateToDisplay);
 
         }else{
@@ -126,6 +108,8 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         goalUUID = getArguments().getString(GOAL_UUID);
         Log.d("GOALS", "onViewCreated:  for GoalTasksFragment goal UUID" + goalUUID);
@@ -187,7 +171,10 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
                                                                       GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
                                                                       goalModel.getSubgoals().add(sub);
                                                                       sub.setGoal(goalModel);
-                                                                      sub.setDueDate(addTaskDueDate.getText().toString());
+
+                                                                      if(null !=dueDate){
+                                                                          sub.setDueDate(dueDate);
+                                                                      }
                                                                       Log.d("GOALS", "added subgoal ");
 
                                                                   }
@@ -211,8 +198,11 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
                         .create();
                 dialog.show();
 
+
             }
         });
+
+
 
 
         //recycler view of all the sub goals and child sub goals
@@ -266,11 +256,19 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 //                        Toast.LENGTH_SHORT)
 //                        .show();
             }
+
+
         });
 
 
     }
 
+    @Override
+    public void onStop() {
 
+        Log.d("GOALS", "onStop: ");
+        subgoalsForThisGoal.removeAllChangeListeners();
+        super.onStop();
 
+    }
 }

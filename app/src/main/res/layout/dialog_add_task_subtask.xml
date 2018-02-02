@@ -9,8 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        tools:context="com.inducesmile.androidrealmexample.AddTaskActivity">
+        android:paddingRight="16dp">
 
         <EditText
             android:id="@+id/add_task_name"
@@ -51,7 +50,7 @@
                 android:background="@drawable/border_edit_text"
                 android:hint="@string/due_date_hint"
                 android:maxLines="1"
-                android:textColor="@color/colorBlack"
+
                 android:padding="12dp"/>
             <ImageView
                 android:id="@+id/add_task_date_image"

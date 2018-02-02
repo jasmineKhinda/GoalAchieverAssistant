@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 
 
-import com.example.jasmine.goalachieverassistant.DateDisplayParser;
 import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -104,7 +103,7 @@ public class EditGoal extends AppCompatActivity {
 //                mEditGoal.setText(goalModel.getName());
 //
 //                if(null != goalModel.getDueDate()){
-//                    String dateToDisplay = DateDisplayParser.parseDateForDisplay(goalModel.getDueDate());
+//                    String dateToDisplay = Utilities.parseDateForDisplay(goalModel.getDueDate());
 //                    taskDueDate.setText(dateToDisplay);
 //                }else{
 //                    taskDueDate.setText(R.string.no_due_date);

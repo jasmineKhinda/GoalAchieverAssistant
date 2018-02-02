@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#643579</color>
-    <color name="colorPrimaryDark">#3D1860</color>
-    <color name="colorAccent">#757575</color>
+    <!--<color name="primaryColor">#00acc1</color>-->
+    <!--<color name="primaryLightColor">#5ddef4</color>-->
+    <!--<color name="primaryDarkColor">#007c91</color>-->
+    <!--<color name="secondaryColor">#5a6abf</color>-->
+    <!--<color name="secondaryLightColor">#8d98f2</color>-->
+    <!--<color name="secondaryDarkColor">#23408e</color>-->
+    <!--<color name="primaryTextColor">#000000</color>-->
+    <!--<color name="secondaryTextColor">#ffffff</color>-->
+
+
+    <!--<color name="colorAccent">#5a6abf</color>-->
+
+
+    <color name="colorPrimary">#21a1ac</color>
+    <color name="colorPrimaryLight">#62d3de</color>
+    <color name="colorPrimaryDark">#00727d</color>
+
+    <color name="colorAccent">#616161</color>
+    <color name="secondaryLightColor">#8e8e8e</color>
+    <color name="secondaryDarkColor">#373737</color>
+    <color name="colorPrimaryLighter">#d6fbff</color>
+    <color name="secondaryTextColor">#37474f</color>
+    <!--<color name="colorAccent">#616161</color>-->
+    <!--<color name="secondaryLightColor">#ff867f</color>-->
+    <!--<color name="secondaryDarkColor">#c50e29</color>-->
+    <!--<color name="colorPrimaryLighter">#FFFCCDC5</color>-->
+
     <color name="colorLightGrey">#bfbfbf</color>
-    <color name="colorSecondaryCheckBox">#00dacf</color>
-    <color name="colorPrimaryCheckbox">#757575</color>
     <color name="border">#d1d0d0</color>
-    <color name="progressbar_circle_background">#e4e4e4</color>
-    <color name="progressbar_circle_end">#00dacf</color>
-    <color name="progressbar_circle_start">#b1edea</color>
-    <color name="colorBlack">#000000</color>
+    <color name="progressbar_circle_background">#ececec</color>
+    <color name="textColorPrimary">#263238</color>
+    <color name="colorRed">#f44336</color>
+    <color name="colorYellow">#f4b926</color>
+    <color name="colorGreen">#558b2f</color>
+    <color name="colorOrange">#ff9800</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <!--<color name="colorLightGrey">#bfbfbf</color>-->
+    <!--<color name="colorSecondaryCheckBox">#00dacf</color>-->
+    <!--<color name="colorPrimaryCheckbox">#757575</color>-->
+    <!--<color name="border">#d1d0d0</color>-->
+    <!--<color name="progressbar_circle_background">#e4e4e4</color>-->
+    <!--<color name="progressbar_circle_end">#00dacf</color>-->
+    <!--<color name="progressbar_circle_start">#b1edea</color>-->
+    <!--<color name="colorBlack">#000000</color>-->
+    <!--<color name="colorWhite">#FFFFFF</color>-->
+    <!--<color name="colorOrange">#f46506</color>-->
+
+    <!--<color name="colorAccent">#5a6abf</color>-->
+    <!--<color name="secondaryLightColor">#8d98f2</color>-->
+    <!--<color name="secondaryDarkColor">#23408e</color>-->
+
+
 </resources>

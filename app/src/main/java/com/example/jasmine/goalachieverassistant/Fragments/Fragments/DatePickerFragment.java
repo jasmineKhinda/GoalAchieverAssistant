@@ -35,19 +35,14 @@ import java.util.Date;
         public void onDateSet(DatePicker view, int year, int month, int day) {
 
 
-            Log.d("GOALS", "Month ?? "+  month);
-            Log.d("GOALS", "Day ??"+  day);
+            Log.d("GOALS", "InDatePicker Utility "+  day+month+year);
 
-//            SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d");
-//            String formattedDate = sdf.format(c.getTime());
 
             Calendar c = Calendar.getInstance();
             c.set(year, month, day);
             Date date = c.getTime();
 
-
             notifyDatePickerListener(date);
-            //((EditText) getActivity().findViewById(R.id.add_task_dueDate)).setText(String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day));
 
         }
 

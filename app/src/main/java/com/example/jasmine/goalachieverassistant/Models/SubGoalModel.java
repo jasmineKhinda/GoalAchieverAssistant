@@ -1,5 +1,7 @@
 package com.example.jasmine.goalachieverassistant.Models;
 
+import java.util.Date;
+
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
@@ -20,7 +22,7 @@ public class SubGoalModel implements RealmModel, Parent<ChildSubGoalModel> {
     @Required
     private String name;
     private long timeStamp;
-    private String dueDate;
+    private Date dueDate;
     private boolean done;
     private boolean isExpand = false;
     GoalModel goal;
@@ -59,11 +61,11 @@ public class SubGoalModel implements RealmModel, Parent<ChildSubGoalModel> {
         this.goal = goal;
     }
 
-    public String getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(String dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 

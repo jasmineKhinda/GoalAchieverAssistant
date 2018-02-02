@@ -24,18 +24,7 @@
             android:padding="10dp">
             />
 
-<!--
-            <TextView
-                android:id="@+id/goalName"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="false"
-                android:layout_marginBottom="5dp"
-                android:textColor="#000000"
-                android:textSize="15dp"
-                android:text="Goal Name"
-                android:textStyle="bold"/> -->
+
 
             <TextView
                 android:id="@+id/goalName"
@@ -47,9 +36,11 @@
                 android:layout_toLeftOf="@id/imageButton"
                 android:layout_toStartOf="@id/imageButton"
                 android:text="Goal Name"
-                android:textColor="#000000"
                 android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+
+                />
 
             <RelativeLayout
                 android:id="@+id/progress_layout"
@@ -80,6 +71,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="10dp"
+                    android:textColor="@color/colorPrimaryDark"
                     android:text="0%" />
 
             </RelativeLayout>
@@ -95,7 +87,8 @@
                 android:layout_alignStart="@+id/goalName"
                 android:layout_below="@+id/goalName"
                 android:text="8 April 4:30pm"
-                android:textSize="10dp">
+                android:textSize="10dp"
+               >
 
             </TextView>
 

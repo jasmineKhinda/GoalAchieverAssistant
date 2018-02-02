@@ -11,12 +11,12 @@
             <shape
                 android:innerRadiusRatio="2.5"
                 android:shape="ring"
-                android:thicknessRatio="18.0"
+                android:thicknessRatio="20.0"
                 android:useLevel="true">
                 <gradient
-                    android:centerColor="@color/progressbar_circle_end"
-                    android:endColor="@color/progressbar_circle_end"
-                    android:startColor="@color/progressbar_circle_end"
+                    android:centerColor="@color/colorYellow"
+                    android:endColor="@color/colorPrimaryLight"
+                    android:startColor="@color/colorPrimaryLight"
                     android:type="sweep"
                     android:useLevel="false"/>
             </shape>

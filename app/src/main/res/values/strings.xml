@@ -15,11 +15,11 @@
     <string name="no_due_date">No due date</string>
     <string name="add_goal_title">What\'s your goal?</string>
     <string name="goal_subtask_section">Sub-goals</string>
-    <string name="goal_reason_title">Why do you want to achieve this goal?</string>
+    <string name="goal_notes_title">Notes</string>
     <string name="goal_priority_title">When do you want to achieve this goal?</string>
     <string name="goal_category_title">What type of goal is this?</string>
     <string name="goal_duedate_title">Due Date</string>
-    <string name="goal_reason_hint">Enter Reason Here</string>
+    <string name="goal_notes_hint">Enter goal notes</string>
     <string name="db_parent_Goals">Goals</string>
     <string name="db_Goal_Name">name</string>
     <string name="db_Goal_Reason">reason</string>
@@ -31,6 +31,7 @@
     <string name="delete">Delete</string>
     <string name="add_subtask">Add a subtask...</string>
     <string name="share">Share</string>
+    <string name="goal_name_hint">Goal Name</string>
     <string name="tab1">Details</string>
     <string name="tab2">Tasks</string>
     <string name="tab3">Stats</string>

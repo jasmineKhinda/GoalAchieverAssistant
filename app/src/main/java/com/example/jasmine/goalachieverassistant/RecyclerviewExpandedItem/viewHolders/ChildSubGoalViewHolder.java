@@ -1,5 +1,6 @@
 package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders;
 
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MenuInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 
@@ -46,13 +48,23 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         final String taskId = childSubGoal.getId();
 
         //if no due date display the default "No Due Date" from layout file
-        if(!childSubGoal.getDueDate().isEmpty()){
-            dueDate.setText(childSubGoal.getDueDate());
+        if(null !=childSubGoal.getDueDate()){
+            String dateToDisplay = Utilities.parseDateForDisplay(childSubGoal.getDueDate());
+            dueDate.setText(dateToDisplay);
+        }else{
+            dueDate.setText(R.string.no_due_date);
         }
 
 
-
         isTaskDone.setChecked(childSubGoal.getDone());
+        if(childSubGoal.getDone()){
+            childSubGoalTextView.setPaintFlags( childSubGoalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            childSubGoalTextView.setAlpha(0.38f);
+
+        }//if item is unchecked(not done) then set checkbox to false and un-strike through the textview
+        else{
+            childSubGoalTextView.setPaintFlags(childSubGoalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
 
 
         Log.d("GOALS", "true or false? " + childSubGoal.getDone());
@@ -64,8 +76,10 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
 
                 if (childSubGoal.getDone()) {
 
-                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
-                    checkBox.setChecked(!checkBox.isChecked());
+//                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
+//                    checkBox.setChecked(!checkBox.isChecked());
+
+
                     Realm realm = Realm.getDefaultInstance();
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
@@ -78,8 +92,9 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
 
                 } else {
 
-                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
-                    checkBox.setChecked(!checkBox.isChecked());
+//                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
+//                    checkBox.setChecked(!checkBox.isChecked());
+
 
                     Realm realm2 = Realm.getDefaultInstance();
                     realm2.executeTransaction(new Realm.Transaction() {
@@ -106,11 +121,6 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        final int position = getAdapterPosition();
-                        //  final GoalModel mTaskModel = getData().get(position);
-                        // final String id = mTaskModel.getId().toString();
-
-
                         switch (item.getItemId()) {
                             case R.id.delete_task:
                                 realm = Realm.getDefaultInstance();
@@ -140,11 +150,6 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         });
 
 
-//        if (childSubGoal.getDone()) {
-//            itemView.setBackgroundColor(Color.YELLOW);
-//        } else {
-//            itemView.setBackgroundColor(Color.WHITE);
-//        }
     }
 
     @Override
