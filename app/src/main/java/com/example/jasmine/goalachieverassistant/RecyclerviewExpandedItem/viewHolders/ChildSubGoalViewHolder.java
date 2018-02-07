@@ -154,7 +154,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        Log.i("Realm", "onClick: childSubGoal");
+        Log.i("Realm", "onColorSet: childSubGoal");
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(new Realm.Transaction() {
             @Override

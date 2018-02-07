@@ -20,8 +20,17 @@ public class GoalModel extends RealmObject {
     private String dateTime;
     private long timeStamp;
     private Date dueDate;
+    private int labelColor;
 
- //   @LinkingObjects("goal")
+    public int getLabelColor() {
+        return labelColor;
+    }
+
+    public void setLabelColor(int labelColor) {
+        this.labelColor = labelColor;
+    }
+
+    //   @LinkingObjects("goal")
     private RealmList<SubGoalModel> subgoals;
 
     public GoalModel(){
@@ -42,6 +51,7 @@ public class GoalModel extends RealmObject {
         }
         return subGoalsCompleteCount;
     }
+
 
 
     public void setSubgoals(RealmList<SubGoalModel> subgoals) {

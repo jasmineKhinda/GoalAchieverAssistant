@@ -1,1 +1,1 @@
-include ':app', ':expandablerecyclerviewer'
+include ':app', ':expandablerecyclerviewer', ':colorpicker'

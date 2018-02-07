@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -53,6 +54,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
 
         holder.taskName.setText(mTaskModel.getName());
+        holder.frameBorder.setBackgroundColor(mTaskModel.getLabelColor());
 
 
         if(mTaskModel.getSubGoalCount()>0) {
@@ -122,6 +124,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
         public ProgressBar progressBar;
         public ImageButton buttonViewOption;
         public TextView progressbar_percentage;
+        FrameLayout frameBorder;
 
         public TaskViewHolder(View itemView) {
             super(itemView);
@@ -132,6 +135,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
             buttonViewOption = (ImageButton) itemView.findViewById(R.id.imageButton);
             progressBar = (ProgressBar) itemView.findViewById(R.id.cmll_progrssbar);
             progressbar_percentage =(TextView) itemView.findViewById(R.id.cmll_completed_per);
+            frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
 
             buttonViewOption.setOnClickListener(new View.OnClickListener() {
                 @Override

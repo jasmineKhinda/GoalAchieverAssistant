@@ -4,6 +4,7 @@
     <string name="goal_Id">GoalId</string>
     <string name="add_goalName">Enter Goal Name Here</string>
     <string name="goal_name">Enter Goal Name Here</string>
+    <string name="label_colour_picker_button">Select label color...</string>
     <string name="goal_title_toolbar">Add Goal</string>
     <string name="goal_edit_title_toolbar">Edit Goal</string>
     <string name="home_title_toolbar">Goal List</string>
@@ -36,6 +37,7 @@
     <string name="tab2">Tasks</string>
     <string name="tab3">Stats</string>
     <string name="full_date_format">EEE MMM dd, yyyy</string>
+    <string name="label_color_picker_dialog">Select label color</string>
     <string name="dialog_addtask_duedate">Due date</string>
     <string name="dialog_addtask_reward">Reward Points</string>
 

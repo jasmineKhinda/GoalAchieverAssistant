@@ -17,6 +17,8 @@ buildscript {
         classpath "io.realm:realm-gradle-plugin:3.3.2"//https://realm.io/docs/java/latest/#installation
         classpath 'me.tatarka:gradle-retrolambda:3.7.0'
 
+
+
         
 //classpath "io.realm:realm-gradle-plugin:3.1.4"
         // NOTE: Do not place your application dependencies here; they belong

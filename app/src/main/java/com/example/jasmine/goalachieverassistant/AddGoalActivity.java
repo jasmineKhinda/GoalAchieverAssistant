@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.android.colorpicker.ColorPickerDialog;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
@@ -98,6 +99,8 @@ public class AddGoalActivity extends AppCompatActivity  {
         final EditText goalTitle = findViewById(R.id.ltitle);
         final TextInputLayout goalTextInputLayout = findViewById(R.id.lNameLayout);
         String goalName="";
+
+
 
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {

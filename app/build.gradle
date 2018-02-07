@@ -40,6 +40,8 @@ dependencies {
     compile 'com.uphyca:stetho_realm:2.1.0'
     compile 'com.facebook.stetho:stetho-js-rhino:1.5.0'
     compile 'com.android.support:support-annotations:27.0.2'
+    compile project(':colorpicker')
+
 
     // compile 'io.realm:realm-gradle-plugin:3.5.0'
 

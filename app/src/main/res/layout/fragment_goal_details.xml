@@ -111,16 +111,24 @@
 
 
 
-
-        <TextView
-            android:id="@+id/addReasonText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="0dp"
             android:layout_marginTop="20dp"
-            android:text="@string/goal_notes_title"
-            android:textStyle="bold"
-            android:textSize="12dp" />
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp"
+            >
+
+            <ImageView
+                android:id="@+id/add_goal_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_edit_black_24dp" />
 
         <EditText
             android:id="@+id/addReason"
@@ -132,10 +140,10 @@
             android:cursorVisible="true"
             android:hint="@string/goal_notes_hint"
             android:gravity="top|left"
-            android:lines="3"
-            android:background="@drawable/border_edit_text"
             android:padding="10dp"
-            android:textSize="12dp"/>
+            android:textSize="12dp"
+            android:background="@android:color/transparent"/>
+        </LinearLayout>
 
         <!--
             <TextView
@@ -160,61 +168,120 @@
                 android:padding="10dp"
                 android:spinnerMode="dropdown"/>
         -->
-        <TextView
-            android:id="@+id/goalTypeText"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/goal_category_title"
-            android:textSize="12dp"
-            android:textStyle="bold" />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@drawable/spinner_border"
-            >
-        <Spinner
-            style="@style/Widget.AppCompat.DropDownItem.Spinner"
-            android:id="@+id/spinnerType"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginTop="0dp"
-            android:tooltipText="Goal Type"
-            android:textSize="10dp"
-            android:spinnerMode="dropdown"/>
-        </RelativeLayout>
+            android:id="@+id/divider1"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginLeft="40dp"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:layout_marginLeft="0dp"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp"
+            >
 
-
-            <EditText
-                android:id="@+id/add_task_ending"
-                android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/add_project_label_color"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/due_date_hint"
-                android:layout_weight="4"
-                android:textSize="12dp"
-                android:textIsSelectable="true"
-                android:background="@drawable/border_edit_text"
-                android:maxLines="1"
-                android:inputType="none"
-                android:padding="12dp"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_label_black_24dp" />
+
+                <!--<RelativeLayout-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="70dp"-->
+                    <!--android:padding="5dp"-->
+
+                    <!--&gt;-->
+               <Button
+                android:id="@+id/pick_colour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                   android:textStyle="normal"
+                   android:textAppearance="@id/addReason"
+                   android:textSize="12dp"
+                android:text="@string/label_colour_picker_button"
+                android:textAllCaps="false"
+                android:background="@null"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <ImageButton
+                        android:id="@+id/color_label_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="15dp"
+                        android:padding="10dp"
+                        android:tooltipText="select label color"
+                        android:background="@null"
+                        android:src="@drawable/label_color_button"
+                        />
+                    <!--<Spinner-->
+                    <!--style="@style/Widget.AppCompat.DropDownItem.Spinner"-->
+                    <!--android:id="@+id/spinnerType"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="70dp"-->
+                    <!--android:layout_marginTop="0dp"-->
+                    <!--android:tooltipText="Goal Type"-->
+                    <!--android:textSize="10dp"-->
+                    <!--android:spinnerMode="dropdown"-->
+                        <!--/>-->
+                <!--</RelativeLayout>-->
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:id="@+id/divider2"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:layout_marginLeft="40dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="10dp">
 
             <ImageView
                 android:id="@+id/add_task_date"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="15dp"
                 android:contentDescription="@string/app_name"
-
                 android:src="@drawable/ic_date_range_black_24dp" />
+
+            <EditText
+                android:id="@+id/add_task_ending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/due_date_hint"
+                android:textSize="12dp"
+                android:textIsSelectable="true"
+                android:maxLines="1"
+                android:layout_marginRight="10dp"
+                android:inputType="none"
+                android:padding="12dp"
+                android:background="@android:color/transparent"/>
+
+
 
         </LinearLayout>
 

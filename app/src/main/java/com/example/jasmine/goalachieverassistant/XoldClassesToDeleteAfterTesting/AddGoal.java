@@ -107,7 +107,7 @@ public class AddGoal extends AppCompatActivity {
 //
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
+//            public void onColorSet(View v) {
 //                //What to do on back clicked
 //                if (onSupportNavigateUp()){
 //                    Intent addGoalIntent = new Intent(AddGoal.this, GoalListActivity.class);
@@ -167,7 +167,7 @@ public class AddGoal extends AppCompatActivity {
 //
 //        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
+//            public void onColorSet(View v) {
 //                //What to do on back clicked
 //                 if (onSupportNavigateUp()){
 //                    Intent addGoalIntent = new Intent(AddGoal.this, GoalListActivity.class);
