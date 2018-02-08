@@ -33,6 +33,7 @@ import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmExpandableRecyclerAdapter;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -151,7 +152,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
                 });
 
 
-                // final EditText taskEditText = new EditText(getActivity());
+                 //final EditText taskEditText = new EditText(getActivity());
                 //Adding the add task layout to the AlertDialog builder
                 AlertDialog dialog = new AlertDialog.Builder(getActivity())
                         .setTitle("Add a Task")
@@ -207,7 +208,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         //recycler view of all the sub goals and child sub goals
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
-        subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAll();
+        subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
 
         subgoalsForThisGoal.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SubGoalModel>>() {
             @Override

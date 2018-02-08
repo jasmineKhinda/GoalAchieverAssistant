@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialoglayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/add_note_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="25dp"
+        >
+
+
+        <EditText
+            android:id="@+id/goal_notes_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:textSize="12dp"
+            android:hint="@string/notes_dialog_hint"
+            android:gravity="start"
+            android:background="@android:color/transparent"/>
+
+    </RelativeLayout>
+</LinearLayout>

@@ -17,8 +17,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.GestureDetectorCompat;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,12 +57,12 @@ import io.realm.RealmResults;
  * Use the {@link GoalDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GoalDetailsFragment extends Fragment implements DatePickerFragment.DatePickerFragmentListener, ColorPickerAlertDialog.ColorPickerListener{
+public class GoalDetailsFragment extends Fragment implements DatePickerFragment.DatePickerFragmentListener, ColorPickerAlertDialog.ColorPickerListener, NotesDialogFragment.AddNotesListener{
 
     private static final String GOAL_UUID = "GoalUUID";
     private  EditText goalDueDate;
     EditText goalName;
-    EditText goalReason;
+    TextView goalReason;
     ImageButton colourLabelButton;
     ImageView tagIcon;
     private Date dueDate;
@@ -74,6 +79,11 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
 
 
     @Override
+    public void onNoteAdded(String note){
+        goalReason.setText(note);
+    }
+
+    @Override
     public void onColorSet(int color){
 
         colourLabelButton.setColorFilter(color);
@@ -83,14 +93,17 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
 
     @Override
     public void onDateSet(Date view) {
-
+        Log.d("GOALS", "onDateset "+ view);
         if(null != view ){
 
             String dateToDisplay = Utilities.parseDateForDisplay(view);
             goalDueDate.setText(dateToDisplay);
 
+
         }else{
             goalDueDate.setText(R.string.no_due_date);
+
+
         }
 
         dueDate = view;
@@ -123,11 +136,29 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
         final String uuId = getArguments().get(GOAL_UUID).toString();
         final DialogFragment colorFrag = ColorPickerAlertDialog.newInstance(getResources().getString(R.string.label_color_picker_dialog),uuId,this);
+        final NotesDialogFragment fragmentNotes =NotesDialogFragment.newInstance(getResources().getString(R.string.notes_dialog_title),uuId,this);
         Log.d("GOALS", "onViewCreated: GOALSDETAILSFRAGMENT.java");
 
 
-        //goalName = (EditText) view.findViewById(R.id.goalName);
-        goalReason = (EditText) view.findViewById(R.id.addReason);
+
+        goalReason = (TextView) view.findViewById(R.id.addReason);
+        Log.d("GOALS", "intiliazed the goalDueDate ");
+        goalReason.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentNotes.show(getFragmentManager(), "Goal Notes");
+            }
+        });
+
+        ImageView editNotesIcon = (ImageView) view.findViewById(R.id.add_goal_notes);
+        editNotesIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fragmentNotes.show(getFragmentManager(), "Goal Notes");
+            }
+        });
+
+
         colourLabelButton = view.findViewById(R.id.color_label_button);
 
         tagIcon =view.findViewById(R.id.add_project_label_color);
@@ -137,7 +168,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
 
                 //open the colour picker dialog fragment for user to pick colours
 
-                colorFrag.show(getFragmentManager(), "color dialog");
+                colorFrag.show(getFragmentManager(), " Goal Color");
 
             }
         });
@@ -149,7 +180,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             public void onClick(View view) {
 
                 //open the colour picker dialog fragment for user to pick colours
-                colorFrag.show(getFragmentManager(), "color dialog");
+                colorFrag.show(getFragmentManager(), "Goal Color");
 
             }
         });
@@ -158,7 +189,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             @Override
             public void onClick(View view) {
                 //open the colour picker dialog fragment for user to pick colours
-                colorFrag.show(getFragmentManager(), "color dialog");
+                colorFrag.show(getFragmentManager(), "Goal Color");
 
             }
         });
@@ -187,7 +218,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
         goalDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragment.show(getFragmentManager(), "Task Date");
+                fragment.show(getFragmentManager(), "Goal Date");
             }
         });
 
@@ -195,7 +226,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
         imageCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragment.show(getFragmentManager(), "Task Date");
+                fragment.show(getFragmentManager(), "Goal Date");
             }
         });
 
@@ -213,6 +244,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
 
                         String dateToDisplay = Utilities.parseDateForDisplay(goalModel.getDueDate());
                         goalDueDate.setText(dateToDisplay);
+                        dueDate = goalModel.getDueDate();
                     }else{
                         goalDueDate.setText(R.string.no_due_date);
                     }
@@ -224,6 +256,9 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             });
             realm.close();
         }
+
+
+
 
 
 
@@ -259,6 +294,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
                 goalModel.setDueDate(dueDate);
 
                 Log.d("GOALS", "adding goal details into realm");
+                    Log.d("GOALS", "setting due date"+ goalModel.getDueDate());
 
 
                 }

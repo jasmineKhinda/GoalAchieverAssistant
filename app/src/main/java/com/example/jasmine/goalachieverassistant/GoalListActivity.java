@@ -11,13 +11,22 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomSpinnerAdapter;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class GoalListActivity extends AppCompatActivity {
     private Realm realm;
@@ -29,11 +38,74 @@ public class GoalListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goal_list);
 
 
+
+        recyclerView = (RecyclerView)findViewById(R.id.goal_list);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(GoalListActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        realm = Realm.getDefaultInstance();
+        RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
+        tasks = tasks.sort("name", Sort.ASCENDING);
+
+        final GoalRecyclerAdapter adapter = new GoalRecyclerAdapter(this, tasks, true);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
+
+
+        String[] filterGoalsList;
+        filterGoalsList= getResources().getStringArray(R.array.goalfilter);
+        List<String> mGoalFilterArrayList = Arrays.asList(filterGoalsList);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle("All Goals");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter (getSupportActionBar().getThemedContext(),android.R.layout.simple_spinner_item, mGoalFilterArrayList);
+        customSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        Spinner mNavigationSpinner = (Spinner) findViewById(R.id.spinner_main);
+        mNavigationSpinner.setAdapter(customSpinnerAdapter);
+
+        mNavigationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String itemSelected = parent.getItemAtPosition(position).toString();
+                Log.d("GOALS", "onItemSelected: in toolbar for Goals. Item selected is " +itemSelected);
+                String[] filterGoalsList;
+                filterGoalsList= getResources().getStringArray(R.array.goalfilter);
+
+                if(itemSelected.equals(filterGoalsList[0])){
+                    adapter.sortGoalListWithSortOrder("name",Sort.ASCENDING);
+                    //All Goals which are filtered by default alphabetically
+
+                }else if(itemSelected.equals(filterGoalsList[1])){
+                    //By Due Date Ascending (takes out all goals with "no due dates"
+                    adapter.sortGoalListContainsTextAndReturnsSortedList("dueDate", Sort.ASCENDING, null, false,"dueDate");
+
+
+                }else if(itemSelected.equals(filterGoalsList[2])){
+                    //No Due Date
+                    adapter.sortGoalListContainsTextAndReturnsSortedList("dueDate", Sort.ASCENDING, null, true,"name");
+
+
+                }else{
+                    Log.e("ERROR:", "onItemSelected: valid choice not selected" );
+                }
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+  //      toolbar.addView(mNavigationSpinner);
+
+
 
 
 
@@ -62,17 +134,19 @@ public class GoalListActivity extends AppCompatActivity {
         });
 
 
-        recyclerView = (RecyclerView)findViewById(R.id.goal_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(GoalListActivity.this);
-        recyclerView.setLayoutManager(linearLayoutManager);
 
 
-        realm = Realm.getDefaultInstance();
-        RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
-        tasks = tasks.sort("timeStamp");
-        final GoalRecyclerAdapter adapter = new GoalRecyclerAdapter(this, tasks, true);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(adapter);
+
+        //        RealmResults<GoalModel> tasksNull = realm.where(GoalModel.class).equalTo("dueDate", "").findAll();
+//
+//        RealmResults<GoalModel> tasksNotNull = realm.where(GoalModel.class).notEqualTo("dueDate", "").findAll();
+//        tasksNotNull = tasksNotNull.sort("dueDate", Sort.ASCENDING);
+
+//
+//        List<RealmResults<GoalModel>> results = new ArrayList<>();
+//        results.add(tasksNotNull);
+//        results.add(tasksNull);
+
 
 
 

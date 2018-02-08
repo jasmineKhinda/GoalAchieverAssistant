@@ -24,7 +24,10 @@ import io.realm.Realm;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by jasmine on 15/01/18.
@@ -51,7 +54,6 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
         Log.d("GOALS", "WHY AM I COMING IN HERE?");
 
         final GoalModel mTaskModel = getData().get(position);
-
 
         holder.taskName.setText(mTaskModel.getName());
         holder.frameBorder.setBackgroundColor(mTaskModel.getLabelColor());
@@ -114,6 +116,66 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
     }
 
+    /**
+     * sorting the goals list with sort order on the selected column in db
+     * @param sortType : Spinner drop down menu item which was selected by the user from the Goals List
+     * @param sortOrder Ascending or descending order
+     */
+    public void sortGoalListWithSortOrder(String sortType, Sort sortOrder) {
+        try{
+            realm = Realm.getDefaultInstance();
+            OrderedRealmCollection<GoalModel> sorting = realm.where(GoalModel.class).findAll();
+            updateData(sorting.sort(sortType,sortOrder));
+        }catch(Exception e) {
+            Log.e("GOALS", "Not able to update the sorting of the goals list, see stack trace" );
+            e.printStackTrace();
+        }finally {
+            realm.close();
+        }
+
+
+    }
+    /**
+     * sorting the goals with a primary text search filter (searches the column in db for text), then finally a sorted list is returned
+     * @param goalSpinnerSelectedFilter : Spinner drop down menu item which was selected by the user from the Goals List
+     * @param sortOrder Ascending or descending order
+     * @param containsValue : search the "sortType" column with the containing string
+     * @param doesContain : true if "containsValue" should be in column values, false otherwise
+     */
+    public void sortGoalListContainsTextAndReturnsSortedList(String goalSpinnerSelectedFilter, Sort sortOrder, String containsValue, Boolean doesContain,String secondarySort) {
+        try {
+            //OrderedRealmCollection<GoalModel> sorting = realm.where(GoalModel.class).findAll();
+
+            //RealmQuery<GoalModel> sorting = getData().where();
+            //RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
+            realm = Realm.getDefaultInstance();
+            OrderedRealmCollection<GoalModel> sorting = realm.where(GoalModel.class).findAll();
+            Log.d("GOALS", "sort attributes  " + goalSpinnerSelectedFilter + "   " + sortOrder);
+            if (null == containsValue && false == doesContain) {
+                sorting = sorting.where().not().isNull(goalSpinnerSelectedFilter).findAllSorted(secondarySort, sortOrder);
+                Log.d("GOALS", "onItemSelected:  sort 1");
+            } else if (null == containsValue && true == doesContain) {
+                Log.d("GOALS", "onItemSelected:  sort 2");
+                sorting = sorting.where().isNull(goalSpinnerSelectedFilter).findAllSorted(secondarySort, sortOrder);
+            } else if (null != containsValue && false == doesContain) {
+                Log.d("GOALS", "onItemSelected:  sort 3");
+                sorting = sorting.where().notEqualTo(goalSpinnerSelectedFilter, containsValue).findAllSorted(secondarySort, sortOrder);
+            } else {
+                Log.d("GOALS", "onItemSelected:  sort 4");
+                sorting = sorting.where().equalTo(goalSpinnerSelectedFilter, containsValue).findAllSorted(secondarySort, sortOrder);
+            }
+            updateData(sorting);
+
+
+        }catch(Exception e) {
+            Log.e("GOALS", "Not able to update the sorting of the goals list, see stack trace" +e.toString() );
+            e.printStackTrace();
+        }finally {
+            realm.close();
+        }
+
+
+    }
 
 
     class TaskViewHolder extends RecyclerView.ViewHolder{

@@ -100,7 +100,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext())
                     .setTitle(title)
                     .setView(colorPickerPalette)
-                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
 
                         @Override
                         public void onClick(final DialogInterface dialogInterface, int i) {

@@ -1,6 +1,8 @@
 package com.example.jasmine.goalachieverassistant.Models;
 
 
+import android.support.annotation.Nullable;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -11,6 +13,7 @@ public class GoalModel extends RealmObject {
     @Required
     @PrimaryKey
     private String id;
+    @Nullable
     private String name;
     private String time;
     private String key;
