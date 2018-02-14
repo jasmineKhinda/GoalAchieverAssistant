@@ -2,6 +2,7 @@ package com.example.jasmine.goalachieverassistant.Models;
 
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -23,7 +24,8 @@ public class GoalModel extends RealmObject {
     private String dateTime;
     private long timeStamp;
     private Date dueDate;
-    private int labelColor;
+    private int labelColor=0;
+    private boolean dueDateNotEmpty;
 
     public int getLabelColor() {
         return labelColor;
@@ -67,6 +69,22 @@ public class GoalModel extends RealmObject {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+
+
+    }
+
+    public void setDueDateNotEmpty(@Nullable Date dueDate) {
+        if(null==dueDate){
+            this.dueDateNotEmpty =false;
+
+            final String TAG = "GOALS " + SubGoalModel.class.getSimpleName();
+            Log.d(TAG, "setDueDateIsEmpty: null");
+        }else{
+            this.dueDateNotEmpty =true;
+
+            final String TAG = "GOALS " + SubGoalModel.class.getSimpleName();
+            Log.d(TAG, "setDueDateIsEmpty: GOALS not null");
+        }
     }
 
     public long getTimeStamp() {
@@ -149,6 +167,11 @@ public class GoalModel extends RealmObject {
         return subgoals.size();
     }
 
+
+    public boolean getDueDateNotEmpty() {
+        return this.dueDateNotEmpty;
+
+    }
 
 
 

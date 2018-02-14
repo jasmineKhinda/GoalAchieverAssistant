@@ -148,8 +148,12 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
             //RealmQuery<GoalModel> sorting = getData().where();
             //RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
+
+
+
             realm = Realm.getDefaultInstance();
             OrderedRealmCollection<GoalModel> sorting = realm.where(GoalModel.class).findAll();
+
             Log.d("GOALS", "sort attributes  " + goalSpinnerSelectedFilter + "   " + sortOrder);
             if (null == containsValue && false == doesContain) {
                 sorting = sorting.where().not().isNull(goalSpinnerSelectedFilter).findAllSorted(secondarySort, sortOrder);
@@ -163,6 +167,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
             } else {
                 Log.d("GOALS", "onItemSelected:  sort 4");
                 sorting = sorting.where().equalTo(goalSpinnerSelectedFilter, containsValue).findAllSorted(secondarySort, sortOrder);
+
             }
             updateData(sorting);
 

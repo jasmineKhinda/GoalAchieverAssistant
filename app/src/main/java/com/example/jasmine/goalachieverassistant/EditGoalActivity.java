@@ -3,8 +3,10 @@ package com.example.jasmine.goalachieverassistant;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +14,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
@@ -88,6 +92,18 @@ public class EditGoalActivity extends AppCompatActivity {
 
 //            GoalModel results = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
             goalTitle.setText(goal_name);
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(task_key,false,"");
+                    bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
+
+
+                }
+            });
 
 
 //                realm = Realm.getDefaultInstance();
@@ -178,6 +194,14 @@ public class EditGoalActivity extends AppCompatActivity {
         Log.d("GOALS", "onDestroy: ");
 
         super.onDestroy();
+    }
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            finish();
+        }
     }
 
     }

@@ -64,6 +64,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         }//if item is unchecked(not done) then set checkbox to false and un-strike through the textview
         else{
             childSubGoalTextView.setPaintFlags(childSubGoalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            childSubGoalTextView.setAlpha(1f);
         }
 
 

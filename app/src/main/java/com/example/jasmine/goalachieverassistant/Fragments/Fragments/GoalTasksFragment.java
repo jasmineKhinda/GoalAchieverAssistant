@@ -6,19 +6,25 @@ import android.content.DialogInterface;
 import java.util.Date;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
@@ -53,6 +59,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     RealmResults<SubGoalModel> subgoalsForThisGoal;
     public EditText addTaskDueDate;
     Date dueDate;
+    private boolean dueDateEmpty;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,7 +77,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     @Override
     public void onDateSet(Date view) {
 
-        Log.d("GOALS", "in onDateSet");
+        Log.d("GOALS", "in onDateSet  " + view);
         // This method will be called with the date from the `DatePicker`.
         if(null != view ){
 
@@ -111,104 +118,132 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         super.onViewCreated(view, savedInstanceState);
 
 
-
         goalUUID = getArguments().getString(GOAL_UUID);
         Log.d("GOALS", "onViewCreated:  for GoalTasksFragment goal UUID" + goalUUID);
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
 
         realm = Realm.getDefaultInstance();
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_task);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //setting the layout of the add Task dialog
-                LayoutInflater inflater = LayoutInflater.from(getContext());
-                View subView = inflater.inflate(R.layout.dialog_add_task_subtask, null);
-                final EditText addTaskName = (EditText) subView.findViewById(R.id.add_task_name);
-                addTaskDueDate = (EditText) subView.findViewById(R.id.add_task_dueDate);
-                final ImageView addTaskDueDateImage = (ImageView) subView.findViewById(R.id.add_task_date_image);
-
-
-
-                addTaskDueDate.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                       // DatePickerFragment date = new DatePickerFragment();
-                        fragment.show(getChildFragmentManager(), "Task Date");
-
-                    }
-                });
-
-                addTaskDueDateImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        //DatePickerFragment fragment = new DatePickerFragment();
-                        fragment.show(getChildFragmentManager(), "Task Date");
-                        //new GoalTasksFragment.DatePickersFragment().show(getFragmentManager(), "Task Date");
-                    }
-                });
-
-
-                 //final EditText taskEditText = new EditText(getActivity());
-                //Adding the add task layout to the AlertDialog builder
-                AlertDialog dialog = new AlertDialog.Builder(getActivity())
-                        .setTitle("Add a Task")
-                        .setView(subView)
-                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                //realm = Realm.getDefaultInstance();
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                                                  @Override
-                                                                  public void execute(Realm realm) {
-                                                                      final String uuID = UUID.randomUUID().toString();
-                                                                      realm.createObject(SubGoalModel.class, uuID)
-                                                                              .setName(String.valueOf(addTaskName.getText()));
-                                                                      SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuID).findFirst();
-                                                                      GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
-                                                                      goalModel.getSubgoals().add(sub);
-                                                                      sub.setGoal(goalModel);
-
-                                                                      if(null !=dueDate){
-                                                                          sub.setDueDate(dueDate);
-                                                                      }
-                                                                      Log.d("GOALS", "added subgoal ");
-
-                                                                  }
-                                                              },
-                                        new Realm.Transaction.OnSuccess() {
-                                            @Override
-                                            public void onSuccess() {
-                                                Log.d("GOALS", "onSuccess: ");
-
-
-                                            }
-                                        }, new Realm.Transaction.OnError() {
-                                            @Override
-                                            public void onError(Throwable error) {
-                                                Log.d("GOALS", "onError: ");
-                                            }
-                                        });
-                            }
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .create();
-                dialog.show();
-
-
-            }
-        });
-
-
+//        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab_task);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(goalUUID);
+//                bottomSheetDialogFragment.show(getFragmentManager(),"BottomSheet");
+//
+////                //setting the layout of the add Task dialog
+////                LayoutInflater inflater = LayoutInflater.from(getContext());
+////                View subView = inflater.inflate(R.layout.dialog_add_task_subtask, null);
+////                final EditText addTaskName = (EditText) subView.findViewById(R.id.add_task_name);
+////                addTaskDueDate = (EditText) subView.findViewById(R.id.add_task_dueDate);
+////                final ImageView addTaskDueDateImage = (ImageView) subView.findViewById(R.id.add_task_date_image);
+////                dueDate=null;
+////
+////
+////                addTaskDueDate.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View view) {
+////
+////                       // DatePickerFragment date = new DatePickerFragment();
+////                        fragment.show(getChildFragmentManager(), "Task Date");
+////
+////                    }
+////                });
+////
+////                addTaskDueDateImage.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View view) {
+////
+////                        //DatePickerFragment fragment = new DatePickerFragment();
+////                        fragment.show(getChildFragmentManager(), "Task Date");
+////                        //new GoalTasksFragment.DatePickersFragment().show(getFragmentManager(), "Task Date");
+////                    }
+////                });
+////
+////
+////                 //final EditText taskEditText = new EditText(getActivity());
+////                //Adding the add task layout to the AlertDialog builder
+////                AlertDialog dialog = new AlertDialog.Builder(getActivity())
+////                        .setTitle("Add a Task")
+////                        .setView(subView)
+////                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+////
+////                            @Override
+////                            public void onClick(DialogInterface dialogInterface, int i) {
+////                                //realm = Realm.getDefaultInstance();
+////
+////                                    realm.executeTransactionAsync(new Realm.Transaction() {
+////                                                                      @Override
+////                                                                      public void execute(Realm realm) {
+////                                                                          final String uuID = UUID.randomUUID().toString();
+////                                                                          realm.createObject(SubGoalModel.class, uuID)
+////                                                                                  .setName(String.valueOf(addTaskName.getText()));
+////                                                                          SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuID).findFirst();
+////                                                                          GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
+////                                                                          goalModel.getSubgoals().add(sub);
+////                                                                          sub.setGoal(goalModel);
+////                                                                          Log.d("GOALS", "right before setting duedate empty "+ dueDate);
+////                                                                          if(null !=dueDate && addTaskDueDate.getText().toString().equals(Utilities.parseDateForDisplay(dueDate))){
+////                                                                              sub.setDueDate(dueDate);
+////                                                                              sub.setDueDateNotEmpty(dueDate);
+////                                                                              Log.d("GOALS", "Due dates matched! added subgoal due date");
+////                                                                          }
+////                                                                          else{
+////                                                                              Log.d("GOALS", "Due dates didn't matched!+ " + sub.getDueDateNotEmpty());
+////                                                                          }
+//////                                                                          if(null !=dueDate){
+//////                                                                              sub.setDueDate(dueDate);
+//////                                                                              Log.d("GOALS", "Due date is not null adding to realm");
+//////                                                                          }
+////
+////
+////                                                                      }
+////                                                                  },
+////                                            new Realm.Transaction.OnSuccess() {
+////                                                @Override
+////                                                public void onSuccess() {
+////                                                    Log.d("GOALS", "onSuccess: ");
+////
+////
+////                                                }
+////                                            }, new Realm.Transaction.OnError() {
+////                                                @Override
+////                                                public void onError(Throwable error) {
+////                                                    Log.d("GOALS", "onError: ");
+////                                                }
+////                                            });
+////
+////
+////
+////                            }
+////                        })
+////                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+////                            @Override
+////                            public void onClick(DialogInterface dialogInterface, int i) {
+////                                //resetting the dueDate class variable so that the next instance that calls this fragment starts from clean due date
+////
+////
+////                                Log.d("GOALS", "resetting the variable");
+////                            }
+////                        })
+////                        .create();
+////                dialog.show();
+//
+//
+//            }
+//        });
 
 
         //recycler view of all the sub goals and child sub goals
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
-        subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
+      //  subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
+        realm = Realm.getDefaultInstance();
+        subgoalsForThisGoal =realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).
+                findAllSortedAsync(
+                        new String[] {"dueDateNotEmpty", "dueDate"},
+                        new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+
+
 
         subgoalsForThisGoal.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SubGoalModel>>() {
             @Override
@@ -269,6 +304,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         Log.d("GOALS", "onStop: ");
         subgoalsForThisGoal.removeAllChangeListeners();
+        realm.close();
         super.onStop();
 
     }

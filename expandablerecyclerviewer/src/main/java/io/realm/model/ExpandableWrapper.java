@@ -1,9 +1,13 @@
 package io.realm.model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmModel;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Wrapper used to link metadata with a list item.
@@ -96,9 +100,24 @@ public class ExpandableWrapper<P extends Parent<C>, C extends Child> implements 
     private RealmList<ExpandableWrapper<P, C>> generateChildItemList(P parentListItem) {
         RealmList<ExpandableWrapper<P, C>> childItemList = new RealmList<>();
 
-        for (C child : parentListItem.getChildList()) {
+        //all added below
+        Log.d("GOALS", "in the expandable recycler adapter sorting the subtask list");
+        RealmList<C> childList = parentListItem.getChildList();
+        RealmResults<C> childResults = childList.where().findAllSortedAsync(
+                new String[] {"dueDateNotEmpty", "dueDate"},
+                new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+
+        RealmList<C> childListOrdered = new RealmList<C>();
+
+        //TODO: order the subtask list in expandable view
+        for (C child : childResults) {
             childItemList.add(new ExpandableWrapper<P, C>(child));
         }
+
+//        //TODO: order the subtask list in expandable view
+//        for (C child : parentListItem.getChildList()) {
+//            childItemList.add(new ExpandableWrapper<P, C>(child));
+//        }
 
         return childItemList;
     }

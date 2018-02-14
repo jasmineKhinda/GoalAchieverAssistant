@@ -137,6 +137,8 @@ public abstract class RealmExpandableRecyclerAdapter<P extends Parent<C>, C exte
     }
 
     private void addChildCollectionListener(int parentPosition) {
+
+
         RealmList<C> data = parentList.get(parentPosition).getChildList();
         OrderedRealmCollectionChangeListener<RealmList<C>> childCollectionListener = createChildCollectionListener(parentPosition);
         List<RealmObjectChangeListener<C>> childListeners = new ArrayList<>();

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frm_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment"
@@ -10,12 +11,14 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/lin_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.example.jasmine.goalachieverassistant.GoalListActivity"
         tools:showIn="@layout/activity_goal_list">
+
 
 
         <android.support.v7.widget.RecyclerView
@@ -28,15 +31,16 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/colorAccent"
-        app:srcCompat="@drawable/ic_action_add" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/fab_task"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--app:backgroundTint="@color/colorAccent"-->
+        <!--app:srcCompat="@drawable/ic_action_add"-->
+        <!--app:layout_anchor="@id/recyclerview_task_list"-->
+        <!--app:layout_anchorGravity="bottom|right|end"/>-->
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>
 <!--</android.support.v4.widget.NestedScrollView>-->

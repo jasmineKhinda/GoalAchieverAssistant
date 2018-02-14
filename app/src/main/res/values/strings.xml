@@ -65,7 +65,7 @@
 
     <string-array name="goalfilter">
         <item>All Goals</item>
-        <item>By Due Date</item>
+        <item>By Name</item>
         <item>No Due Date</item>
     </string-array>
 

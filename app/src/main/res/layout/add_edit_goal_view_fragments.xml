@@ -53,6 +53,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:inputType=
+                    "textCapSentences|textAutoCorrect"
+                android:focusedByDefault="true"
                 android:hint="@string/goal_name_hint"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
@@ -80,4 +83,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorAccent"
+        app:srcCompat="@drawable/ic_action_add"
+        android:layout_gravity="bottom|right|end"/>
 </android.support.design.widget.CoordinatorLayout>

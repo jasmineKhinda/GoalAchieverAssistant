@@ -43,6 +43,8 @@
                 android:layout_toStartOf="@id/imageButton"
                 android:text="Goal Name"
                 android:textSize="15dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textStyle="bold"
 
 

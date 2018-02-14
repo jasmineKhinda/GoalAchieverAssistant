@@ -1,10 +1,13 @@
 package com.example.jasmine.goalachieverassistant;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
@@ -17,10 +20,12 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.android.colorpicker.ColorPickerDialog;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 
@@ -78,6 +83,21 @@ public class AddGoalActivity extends AppCompatActivity  {
         detailsFrag = (GoalDetailsFragment)adapter.instantiateItem(viewPager, 0);
         tasksFrag = (GoalTasksFragment) adapter.instantiateItem(viewPager, 1);
         adapter.finishUpdate(viewPager);
+
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(goalUUID,false, "");
+                bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
+
+
+
+
+            }
+        });
 
     }
 
@@ -145,5 +165,7 @@ public class AddGoalActivity extends AppCompatActivity  {
         Log.d("GOALS", "onDestroy: ");
         super.onDestroy();
     }
+
+
 
 }

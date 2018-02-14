@@ -1,5 +1,6 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Adapters;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;

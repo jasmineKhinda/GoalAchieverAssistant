@@ -44,8 +44,13 @@ public class GoalListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         realm = Realm.getDefaultInstance();
-        RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
-        tasks = tasks.sort("name", Sort.ASCENDING);
+//        RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
+//        tasks = tasks.sort("name", Sort.ASCENDING);
+
+        RealmResults<GoalModel> tasks =realm.where(GoalModel.class)
+                .findAllSortedAsync(
+                        new String[] {"dueDateNotEmpty", "dueDate"},
+                        new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
 
         final GoalRecyclerAdapter adapter = new GoalRecyclerAdapter(this, tasks, true);
         recyclerView.setHasFixedSize(true);
@@ -76,13 +81,16 @@ public class GoalListActivity extends AppCompatActivity {
                 filterGoalsList= getResources().getStringArray(R.array.goalfilter);
 
                 if(itemSelected.equals(filterGoalsList[0])){
-                    adapter.sortGoalListWithSortOrder("name",Sort.ASCENDING);
-                    //All Goals which are filtered by default alphabetically
+                //default "All goals" sorts the goals with due dates ascending and puts the empty due dates at bottom
+                    RealmResults<GoalModel> tasks =realm.where(GoalModel.class)
+                            .findAllSortedAsync(
+                                    new String[] {"dueDateNotEmpty", "dueDate"},
+                                    new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+                    adapter.updateData(tasks);
 
                 }else if(itemSelected.equals(filterGoalsList[1])){
-                    //By Due Date Ascending (takes out all goals with "no due dates"
-                    adapter.sortGoalListContainsTextAndReturnsSortedList("dueDate", Sort.ASCENDING, null, false,"dueDate");
-
+                    //By Name Ascending
+                    adapter.sortGoalListWithSortOrder("name",Sort.ASCENDING);
 
                 }else if(itemSelected.equals(filterGoalsList[2])){
                     //No Due Date

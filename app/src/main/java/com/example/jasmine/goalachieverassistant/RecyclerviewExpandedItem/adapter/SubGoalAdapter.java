@@ -2,6 +2,7 @@ package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapt
 
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +16,20 @@ import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHo
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.RealmExpandableRecyclerAdapter;
 import io.realm.RealmExpandableSearchRecyclerAdapter;
 
 /**
  * Created by jasmine on 18/01/18.
  */
 
-public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoalModel, ChildSubGoalModel, SubGoalViewHolder, ChildSubGoalViewHolder> {
+public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<SubGoalModel, ChildSubGoalModel, SubGoalViewHolder, ChildSubGoalViewHolder> {
 
 
     private List<SubGoalModel> recipeList;
 
     public SubGoalAdapter(@NonNull OrderedRealmCollection<SubGoalModel> recipeList, @NonNull String filterKey) {
-        super(recipeList, filterKey);
+        super(recipeList);
         this.recipeList = recipeList;
     }
 
@@ -39,6 +41,7 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
         LayoutInflater mInflater = LayoutInflater.from(parentViewGroup.getContext());
 
         recipeView = mInflater.inflate(R.layout.sub_goal_row, parentViewGroup, false);
+        Log.d("GOALS", "onCreateParentViewHolder 1");
 
         return new SubGoalViewHolder(recipeView);
     }
@@ -51,6 +54,7 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
         LayoutInflater mInflater = LayoutInflater.from(childViewGroup.getContext());
 
         ingredientView = mInflater.inflate(R.layout.child_sub_goal_row, childViewGroup, false);
+        Log.d("GOALS", "onCreateParentViewHolder 2 " +childViewGroup + "    " + viewType);
 
         return new ChildSubGoalViewHolder(ingredientView);
     }
@@ -58,7 +62,7 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
     @UiThread
     @Override
     public void onBindParentViewHolder(@NonNull SubGoalViewHolder recipeViewHolder, int parentPosition, @NonNull SubGoalModel recipe) {
-
+        Log.d("GOALS", "onCreateParentViewHolder 3");
         recipeViewHolder.bind(recipe);
 
     }
@@ -66,7 +70,10 @@ public class SubGoalAdapter extends RealmExpandableSearchRecyclerAdapter<SubGoal
     @UiThread
     @Override
     public void onBindChildViewHolder(@NonNull ChildSubGoalViewHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull ChildSubGoalModel ingredient) {
+        Log.d("GOALS", "onCreateParentViewHolder 4" + childPosition +"     ing"+ ingredient);
         ingredientViewHolder.bind(ingredient);
+
+
     }
 
 

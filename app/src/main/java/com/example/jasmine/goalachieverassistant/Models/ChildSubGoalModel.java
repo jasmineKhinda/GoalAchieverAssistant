@@ -1,5 +1,8 @@
 package com.example.jasmine.goalachieverassistant.Models;
 
+import android.support.annotation.Nullable;
+import android.util.Log;
+
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
 import java.util.Date;
@@ -26,6 +29,7 @@ public class ChildSubGoalModel implements RealmModel,Child {
     private boolean done;
     private boolean isExpand;
     SubGoalModel subGoal;
+    private boolean dueDateNotEmpty;
 
     public ChildSubGoalModel() {
 
@@ -39,11 +43,13 @@ public class ChildSubGoalModel implements RealmModel,Child {
         this.subGoal = goal;
     }
 
+    @Nullable
     public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Date dueDate) {
+    public void setDueDate(Date dueDate)
+    {
         this.dueDate = dueDate;
     }
 
@@ -73,5 +79,23 @@ public class ChildSubGoalModel implements RealmModel,Child {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public boolean getDueDateNotEmpty() {
+        return this.dueDateNotEmpty;
+
+    }
+    public void setDueDateNotEmpty(@Nullable Date dueDate) {
+        if(null==dueDate){
+            this.dueDateNotEmpty =false;
+
+            final String TAG = "GOALS " + SubGoalModel.class.getSimpleName();
+            Log.d(TAG, "setDueDateIsEmpty: null");
+        }else{
+            this.dueDateNotEmpty =true;
+
+            final String TAG = "GOALS " + SubGoalModel.class.getSimpleName();
+            Log.d(TAG, "setDueDateIsEmpty: GOALS not null");
+        }
     }
 }

@@ -100,11 +100,12 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             goalDueDate.setText(dateToDisplay);
 
 
-        }else{
-            goalDueDate.setText(R.string.no_due_date);
-
-
         }
+//        else{
+//            goalDueDate.setText(R.string.no_due_date);
+//
+//
+//        }
 
         dueDate = view;
     }
@@ -245,9 +246,10 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
                         String dateToDisplay = Utilities.parseDateForDisplay(goalModel.getDueDate());
                         goalDueDate.setText(dateToDisplay);
                         dueDate = goalModel.getDueDate();
-                    }else{
-                        goalDueDate.setText(R.string.no_due_date);
                     }
+//                    else{
+//                        goalDueDate.setText(R.string.no_due_date);
+//                    }
 
                     goalReason.setText(goalModel.getReason());
                     //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
@@ -292,9 +294,9 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
                 goalModel.setReason(goalReason.getText().toString());
                 goalModel.setTimeStamp(System.currentTimeMillis());
                 goalModel.setDueDate(dueDate);
-
+                goalModel.setDueDateNotEmpty(dueDate);
                 Log.d("GOALS", "adding goal details into realm");
-                    Log.d("GOALS", "setting due date"+ goalModel.getDueDate());
+                    Log.d("GOALS", "due date is"+ dueDate);
 
 
                 }

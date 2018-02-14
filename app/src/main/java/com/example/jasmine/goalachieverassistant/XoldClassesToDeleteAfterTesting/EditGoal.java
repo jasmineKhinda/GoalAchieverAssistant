@@ -129,7 +129,7 @@ public class EditGoal extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 final EditText taskEditText = new EditText(EditGoal.this);
                 AlertDialog dialog = new AlertDialog.Builder(EditGoal.this)
                         .setTitle("Add Task")

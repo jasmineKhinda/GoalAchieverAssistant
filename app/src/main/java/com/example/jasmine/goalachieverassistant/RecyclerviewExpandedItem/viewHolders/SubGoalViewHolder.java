@@ -2,12 +2,14 @@ package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewH
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerFragment;
@@ -99,25 +102,32 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
     }
-
+//TODO blah
     public void bind(@NonNull final SubGoalModel r) {
-
+        final SubGoalModel subgoal;
         this.subGoal = r;
+        subgoal = r;
         subGoalTextView.setText(r.getName());
-        final String taskId = subGoal.getId();
+        final String taskId = subgoal.getId();
+        final String taskName = subgoal.getName();
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
+
+        Log.d("GOALS", "the sub goal is "+ subGoal.getName() +  " child list is + "+ subgoal.getChildList().size()+ "  "+ subgoal.getDueDate());
 
 
         //if no subgoals to this goal, dont display the subgoal count done item
-        if(subGoal.getChildSubGoalCount()>0){
+        if(subgoal.getChildSubGoalCount()>0){
             starredIngredientCount.setVisibility(View.VISIBLE);
-            starredIngredientCount.setText(subGoal.getChildSubgoalsComplete()+" / " +subGoal.getChildSubGoalCount());
+            starredIngredientCount.setText(subgoal.getChildSubgoalsComplete()+" / " +subgoal.getChildSubGoalCount() );
+        }else{
+            starredIngredientCount.setVisibility(View.INVISIBLE);
+            starredIngredientCount.setText("");
         }
 
         //if due date exists in db then display it
         //if no due date display the default "No Due Date" from layout file
-        if(null!=subGoal.getDueDate()){
-            String dateToDisplay = Utilities.parseDateForDisplay(subGoal.getDueDate());
+        if(null!=subgoal.getDueDate()){
+            String dateToDisplay = Utilities.parseDateForDisplay(subgoal.getDueDate());
             dueDate.setText(dateToDisplay);
         }else{
             dueDate.setText(R.string.no_due_date);
@@ -125,39 +135,42 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
         //if the Task has sub tasks show the expander/collapser icon, if else keep the expander/collapser hidden
-            if (subGoal.getChildList().size()>0){
+            if (subgoal.getChildList().size()>0){
                 arrowExpandImageView.setVisibility(View.VISIBLE);
+            }else{
+                arrowExpandImageView.setVisibility(View.INVISIBLE);
             }
 
             //if item is checked(done) then check off the checkbox and strike through the textview
-            isTaskDone.setChecked(subGoal.getDone());
-            if(subGoal.getDone()){
+            isTaskDone.setChecked(subgoal.getDone());
+            if(subgoal.getDone()){
                 subGoalTextView.setPaintFlags( subGoalTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 subGoalTextView.setAlpha(0.38f);
 
             }//if item is unchecked(not done) then set checkbox to false and un-strike through the textview
             else{
                 subGoalTextView.setPaintFlags(subGoalTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                subGoalTextView.setAlpha(1f);
             }
 
 
 
 
-            Log.d("GOALS", "true or false? " +subGoal.getDone());
+            Log.d("GOALS", "true or false? " +subgoal.getDone());
 
 
             isTaskDone.setOnClickListener(new View.OnClickListener() {
                                               @Override
                                               public void onClick(final View v) {
 
-                                                  if (subGoal.getDone()) {
+                                                  if (subgoal.getDone()) {
 
 //
                                                       Realm realm = Realm.getDefaultInstance();
                                                       realm.executeTransaction(new Realm.Transaction() {
                                                           @Override
                                                           public void execute(Realm realm) {
-                                                              subGoal.setDone(false);
+                                                              subgoal.setDone(false);
                                                               Log.d("GOALS", "IN NOT DONE");
                                                           }
                                                       });
@@ -170,7 +183,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                                                       realm2.executeTransaction(new Realm.Transaction() {
                                                           @Override
                                                           public void execute(Realm realm) {
-                                                              subGoal.setDone(true);
+                                                              subgoal.setDone(true);
                                                               Log.d("GOALS", "IN DONE");
                                                           }
                                                       });
@@ -216,81 +229,106 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                                 realm.close();
                                 break;
                             case R.id.add_subtask:
-                                realm = Realm.getDefaultInstance();
 
-                                //setting the layout of the add Task dialog
+//                                FloatingActionButton fab = (FloatingActionButton) itemView.findViewById(R.id.fab_task);
+//                                fab.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
 
-                                LayoutInflater inflater = LayoutInflater.from(v.getContext());
-
-                                View subView = inflater.inflate(R.layout.dialog_add_task_subtask, null);
-                                EditText addTaskDueDate = (EditText) subView.findViewById(R.id.add_task_dueDate);
-                                dueDateDialog = (EditText) subView.findViewById(R.id.add_task_dueDate);
-                                final EditText addTaskName = (EditText) subView.findViewById(R.id.add_task_name);
-                                final ImageView addTaskDueDateImage = (ImageView) subView.findViewById(R.id.add_task_date_image);
-
-                                final AlertDialog dialog = new AlertDialog.Builder(v.getContext())
-                                        .setTitle("Add Sub-Task")
-                                        .setView(subView)
-                                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                                                                  @Override
-                                                                                  public void execute(Realm realm) {
-                                                                                      final String uuID = UUID.randomUUID().toString();
-                                                                                      realm.createObject(ChildSubGoalModel.class, uuID)
-                                                                                              .setName(String.valueOf(addTaskName .getText()));
-                                                                                      ChildSubGoalModel sub = realm.where(ChildSubGoalModel.class).equalTo("id", uuID).findFirst();
-                                                                                      SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskId).findFirst();
-                                                                                      subGoalModel.getChildList().add(sub);
-                                                                                      sub.setSubGoal(subGoalModel);
-                                                                                      if(null!=taskDueDate){
-                                                                                          sub.setDueDate(taskDueDate);
-                                                                                      }
-                                                                                      Log.d("GOALS", "added subgoal ");
+                                        FragmentManager manager = ((AppCompatActivity) scanForActivity(v.getContext())).getSupportFragmentManager();
+                                        CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskId,true, taskName);
+                                        bottomSheetDialogFragment.show(manager,"BottomSheet");
 
 
 
-                                                                                  }
-                                                                              },
-                                                        new Realm.Transaction.OnSuccess() {
-                                                            @Override
-                                                            public void onSuccess() {
-
-                                                            }
-                                                        }, new Realm.Transaction.OnError() {
-                                                            @Override
-                                                            public void onError(Throwable error) {
-
-                                                            }
-                                                        });
-
-
-                                            }
-                                        })
-                                        .setNegativeButton("Cancel", null)
-                                        .create();
-                                dialog.show();
-                                realm.close();
-
-
-                            addTaskDueDate.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    fragment.show(fragment.getActivity().getSupportFragmentManager(), "Task Date");
-                                }
-                            });
-
-                            addTaskDueDateImage.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    FragmentManager manager = ((AppCompatActivity) scanForActivity(v.getContext())).getSupportFragmentManager();
-                                    Log.d("GOALS", "fragman "+ manager);
-                                    fragment.show(manager, "Task Date");
-                                }
-                            });
-                            break;
+//
+//                                    }
+//                                });
+//                                realm = Realm.getDefaultInstance();
+//                                taskDueDate=null;
+//
+//                                //setting the layout of the add Task dialog
+//
+//                                LayoutInflater inflater = LayoutInflater.from(v.getContext());
+//
+//                                View subView = inflater.inflate(R.layout.dialog_add_task_subtask, null);
+//                                EditText addTaskDueDate = (EditText) subView.findViewById(R.id.add_task_dueDate);
+//                                dueDateDialog = (EditText) subView.findViewById(R.id.add_task_dueDate);
+//                                final EditText addTaskName = (EditText) subView.findViewById(R.id.add_task_name);
+//                                final ImageView addTaskDueDateImage = (ImageView) subView.findViewById(R.id.add_task_date_image);
+//
+//                                final AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+//                                        .setTitle("Add Sub-Task")
+//                                        .setView(subView)
+//                                        .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+//
+//                                            @Override
+//                                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                                realm.executeTransactionAsync(new Realm.Transaction() {
+//                                                                                  @Override
+//                                                                                  public void execute(Realm realm) {
+//                                                                                      final String uuID = UUID.randomUUID().toString();
+//                                                                                      realm.createObject(ChildSubGoalModel.class, uuID)
+//                                                                                              .setName(String.valueOf(addTaskName .getText()));
+//                                                                                      ChildSubGoalModel sub = realm.where(ChildSubGoalModel.class).equalTo("id", uuID).findFirst();
+//                                                                                      SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskId).findFirst();
+//                                                                                      subGoalModel.getChildList().add(sub);
+//                                                                                      sub.setSubGoal(subGoalModel);
+//
+//                                                                                      if(null !=taskDueDate && dueDateDialog.getText().toString().equals(Utilities.parseDateForDisplay(taskDueDate))){
+//                                                                                          sub.setDueDate(taskDueDate);
+//                                                                                          sub.setDueDateNotEmpty(taskDueDate);
+//                                                                                          Log.d("GOALS", "Due dates matched! added subgoal due date");
+//                                                                                      }else{
+//                                                                                          Log.d("GOALS", "Due dates didn't matched!");
+//                                                                                      }
+////
+////                                                                                      if(null!=taskDueDate){
+////                                                                                          sub.setDueDate(taskDueDate);
+////                                                                                      }
+//                                                                                      Log.d("GOALS", "added subgoal ");
+//
+//
+//
+//                                                                                  }
+//                                                                              },
+//                                                        new Realm.Transaction.OnSuccess() {
+//                                                            @Override
+//                                                            public void onSuccess() {
+//
+//                                                            }
+//                                                        }, new Realm.Transaction.OnError() {
+//                                                            @Override
+//                                                            public void onError(Throwable error) {
+//
+//                                                            }
+//                                                        });
+//
+//
+//                                            }
+//                                        })
+//                                        .setNegativeButton("Cancel", null)
+//                                        .create();
+//                                dialog.show();
+//                                realm.close();
+//
+//
+//                            addTaskDueDate.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    fragment.show(fragment.getActivity().getSupportFragmentManager(), "Task Date");
+//                                }
+//                            });
+//
+//                            addTaskDueDateImage.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View view) {
+//                                    FragmentManager manager = ((AppCompatActivity) scanForActivity(v.getContext())).getSupportFragmentManager();
+//                                    Log.d("GOALS", "fragman "+ manager);
+//                                    fragment.show(manager, "Task Date");
+//                                }
+//                            });
+//                            break;
                         }
                         return false;
 
@@ -315,6 +353,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
         return null;
     }
+
     @Override
     public void setExpanded(boolean expanded) {
         super.setExpanded(expanded);
