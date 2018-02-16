@@ -50,6 +50,10 @@
 
 
         </activity>
+        <activity android:name=".EditTaskActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+        </activity>
 
 
 

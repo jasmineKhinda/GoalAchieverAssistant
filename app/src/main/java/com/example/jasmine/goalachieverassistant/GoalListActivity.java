@@ -12,15 +12,13 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomSpinnerAdapter;
+import com.example.jasmine.goalachieverassistant.Fragments.Adapters.GoalRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

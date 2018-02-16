@@ -67,6 +67,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
             try{
                 realm = Realm.getDefaultInstance();
                 GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                //TODO: fix this recurring issue that causes intermittent crash 87678
                 colorSelected = goalModel.getLabelColor();
             }finally{
                 realm.close();

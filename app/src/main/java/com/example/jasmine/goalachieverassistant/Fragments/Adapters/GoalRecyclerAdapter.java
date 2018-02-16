@@ -1,4 +1,4 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.Fragments.Adapters;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -17,16 +17,18 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.EditGoalActivity;
+import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
 import io.realm.Realm;
 
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.R;
+import com.example.jasmine.goalachieverassistant.Utilities;
 
 import io.realm.OrderedRealmCollection;
-import io.realm.RealmQuery;
 import io.realm.RealmRecyclerViewAdapter;
-import io.realm.RealmResults;
 import io.realm.Sort;
 
 /**

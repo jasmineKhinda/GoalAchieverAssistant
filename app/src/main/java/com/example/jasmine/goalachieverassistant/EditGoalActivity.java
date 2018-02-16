@@ -76,7 +76,8 @@ public class EditGoalActivity extends AppCompatActivity {
 
             // Create an adapter that knows which fragment should be shown on each page
             adapter = new CustomPagerFragmentAdapter(this, getSupportFragmentManager(),task_key);
-
+            Log.d("GOALS", " goals context is "+ this);
+            Log.d("GOALS", " goal adapter is "+ adapter.getItem(0));
 
             // Set the adapter onto the view pager
             viewPager.setAdapter(adapter);

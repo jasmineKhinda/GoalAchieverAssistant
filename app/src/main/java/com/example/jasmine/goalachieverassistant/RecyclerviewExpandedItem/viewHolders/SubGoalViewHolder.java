@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -26,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
@@ -54,6 +57,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     private TextView subGoalTextView;
     private TextView starredIngredientCount;
     private TextView dueDate;
+    public CardView card;
     public ImageButton buttonViewOption;
     private CheckBox isTaskDone;
     private TextView dueDateDialog;
@@ -104,6 +108,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     }
 //TODO blah
     public void bind(@NonNull final SubGoalModel r) {
+
         final SubGoalModel subgoal;
         this.subGoal = r;
         subgoal = r;
@@ -113,6 +118,19 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
 
         Log.d("GOALS", "the sub goal is "+ subGoal.getName() +  " child list is + "+ subgoal.getChildList().size()+ "  "+ subgoal.getDueDate());
+
+        card = (CardView) itemView.findViewById(R.id.card_view);
+
+        card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent viewTaskIntent = new Intent(view.getContext(), EditTaskActivity.class);
+                viewTaskIntent.putExtra("EDIT_TASKUUID", subgoal.getId());
+                viewTaskIntent.putExtra("EDIT_TASKNAME", subgoal.getName());
+                view.getContext().startActivity(viewTaskIntent);
+            }
+        });
 
 
         //if no subgoals to this goal, dont display the subgoal count done item
@@ -339,6 +357,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
             }
         });
+
 
 
     }

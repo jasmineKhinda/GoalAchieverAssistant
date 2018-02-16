@@ -27,9 +27,12 @@ public class ChildSubGoalModel implements RealmModel,Child {
     private long timeStamp;
     private Date dueDate;
     private boolean done;
+    private String reason;
+    private int labelColor=0;
     private boolean isExpand;
     SubGoalModel subGoal;
     private boolean dueDateNotEmpty;
+    private String time;
 
     public ChildSubGoalModel() {
 
@@ -53,12 +56,27 @@ public class ChildSubGoalModel implements RealmModel,Child {
         this.dueDate = dueDate;
     }
 
+    public int getLabelColor() {
+        return labelColor;
+    }
+
+    public void setLabelColor(int labelColor) {
+        this.labelColor = labelColor;
+    }
+
     public long getTimeStamp() {
         return timeStamp;
     }
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getReason() {
+        return reason;
     }
 
     public String getId() {
@@ -79,6 +97,13 @@ public class ChildSubGoalModel implements RealmModel,Child {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public String getTime() {
+        return time;
+    }
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public boolean getDueDateNotEmpty() {
