@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
+import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
@@ -48,6 +49,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
     private List<ChildSubGoalModel> childTaskList;
     private View itemView;
     private FragmentActivity activity;
+    private CardView card;
 
     public SubTaskRecyclerAdapter(@NonNull FragmentActivity activity, @Nullable OrderedRealmCollection<ChildSubGoalModel> childTaskList, boolean autoUpdate) {
         super(childTaskList,autoUpdate);
@@ -95,6 +97,21 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
         childSubGoalTextView.setText(childSubGoal.getName());
 
         final String taskId = childSubGoal.getId();
+
+            card = (CardView) itemView.findViewById(R.id.card_view);
+
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Intent viewTaskIntent = new Intent(view.getContext(), EditSubTaskActivity.class);
+                    viewTaskIntent.putExtra("EDIT_TASKUUID", childSubGoal.getId());
+                    viewTaskIntent.putExtra("EDIT_TASKNAME", childSubGoal.getName());
+                    Log.d("GOALS", "calling activity is2 "+view.getContext().getClass().getName()  );
+                    viewTaskIntent.putExtra("CALLING_ACTIVITY", activity.getClass().getName());
+                    view.getContext().startActivity(viewTaskIntent);
+                }
+            });
 
         //if no due date display the default "No Due Date" from layout file
         if(null !=childSubGoal.getDueDate()){

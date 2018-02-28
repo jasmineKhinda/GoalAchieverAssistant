@@ -55,19 +55,28 @@
                 android:textSize="15dp"
                 android:textStyle="bold"/>
 
-
+            <ImageView
+                android:id="@+id/due_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignLeft="@id/child_subGoal_textview"
+                android:layout_alignStart="@id/child_subGoal_textview"
+                android:layout_below="@id/child_subGoal_textview"
+                android:visibility="invisible"
+                android:src="@drawable/ic_date_range_black_small">
+            </ImageView>
 
             <TextView
                 android:id="@+id/childDueDueDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-
+                android:layout_toRightOf="@id/due_date_icon"
                 android:layout_below="@id/child_subGoal_textview"
-                android:layout_alignStart="@id/child_subGoal_textview"
-                android:layout_alignLeft="@id/child_subGoal_textview"
-
                 android:text="No Due Date"
+                android:visibility="invisible"
                 android:textSize="9dp">
 
             </TextView>

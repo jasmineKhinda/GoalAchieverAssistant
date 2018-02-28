@@ -1,5 +1,6 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.app.Dialog;
@@ -70,6 +71,8 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
     private Realm realm;
     int colorSelected=0;
     int labelColorFromDB=0;
+
+
 
 
 
@@ -302,8 +305,9 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
                 }
             });
             realm.close();
-            Intent addGoalIntent = new Intent(getContext(), GoalListActivity.class);
-            startActivity(addGoalIntent);
+        Log.d("GOALS", "addGoalDetailsToRealm2: ");
+//            Intent addGoalIntent = new Intent(getContext(), GoalListActivity.class);
+//            startActivity(addGoalIntent);
     }
 
 

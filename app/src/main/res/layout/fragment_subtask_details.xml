@@ -112,7 +112,6 @@
                         android:text="@string/label_colour_picker_button"
                         android:textAllCaps="false"
                         android:background="@null"
-                        android:alpha="0.38"
                         />
 
                     <View
@@ -124,18 +123,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:gravity="right"
-
+                        android:layout_marginRight="15dp"
+                        android:padding="10dp"
                         android:tooltipText="select label color"
                         android:background="@null"
                         android:src="@drawable/label_color_button"
                         />
-jh
-
 
                 </LinearLayout>
-
 
 
                 <View
@@ -163,141 +158,23 @@ jh
                         android:layout_marginRight="15dp"
                         android:src="@drawable/ic_date_range_black_24dp" />
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/lNameLayoutDate"
-                        android:hint="@string/due_date_hint"
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="5dp">
-
                     <EditText
                         android:id="@+id/add_task_ending"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:textColorHint="@android:color/transparent"
                         android:hint="@string/due_date_hint"
-                        android:textColor="@color/colorBlack"
-                        android:textAppearance="@id/addReason"
+                        android:textSize="12dp"
                         android:textIsSelectable="true"
                         android:focusable="false"
                         android:maxLines="1"
                         android:layout_marginRight="10dp"
-                        android:inputType="text"
-                        android:layout_marginBottom="13dp"
-                        android:padding="10dp"
+                        android:inputType="none"
+                        android:padding="12dp"
                         android:background="@android:color/transparent"/>
-                    </android.support.design.widget.TextInputLayout>
 
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
 
-                    <ImageView
-                        android:id="@+id/remove_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-
-                        android:gravity="right"
-                        android:layout_marginLeft="5dp"
-                        android:src="@drawable/ic_close_black_24dp" />
 
                 </LinearLayout>
-                    <View
-                        android:layout_width="match_parent"
-                        android:id="@+id/divider3"
-                        android:layout_height="1dp"
-                        android:background="?android:attr/listDivider"
-                        android:layout_marginLeft="40dp"/>
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal"
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:id="@+id/linLayout"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="0dp"
-                        android:gravity="start"
-                        android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@id/linlayout2"
-
-                        android:layout_marginHorizontal="10dp">
-                    <ImageView
-                        android:id="@+id/project_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="15dp"
-
-
-                        android:src="@drawable/ic_assignment_black_24dp"
-                        />
-
-                    <Button
-                        android:id="@+id/project_selection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:hint="@string/add_project_hint"
-                        android:textSize="12dp"
-                        android:textAppearance= "@id/addReason"
-
-
-                        android:textIsSelectable="true"
-                        android:singleLine="true"
-                        android:focusable="false"
-                        android:ellipsize="end"
-                        android:textAlignment="center"
-                        android:paddingRight="10dp"
-                        android:paddingLeft="10dp"
-
-                        android:background="@android:color/transparent"
-                        style="?android:attr/borderlessButtonStyle"/>
-                        <!--<Space-->
-                            <!--android:id="@+id/space"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="0dp"-->
-
-                            <!--/>-->
-                    </LinearLayout>
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:id="@+id/linlayout2"
-                            android:layout_height="match_parent"
-                            android:layout_marginHorizontal="0dp"
-                            android:layout_marginLeft="0dp"
-                            android:gravity="end|top"
-                            android:orientation="horizontal"
-                            android:layout_alignTop="@id/linLayout"
-                            android:layout_alignParentRight="true"
-                             >
-
-                            <ImageView
-                                android:id="@+id/delete_project"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginLeft="5dp"
-
-                                android:layout_marginRight="10dp"
-                                android:layout_toRightOf="@id/project_selection"
-
-                                android:src="@drawable/ic_close_black_24dp" />
-
-                    </LinearLayout>
-                </RelativeLayout>
-
-
 
 
             </LinearLayout>

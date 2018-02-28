@@ -1,10 +1,13 @@
 package com.example.jasmine.goalachieverassistant;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.View;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,6 +43,24 @@ public class Utilities {
         SpannableStringBuilder ssbuilder = new SpannableStringBuilder(errorMessage);
         ssbuilder.setSpan(fgcspan, 0, errorMessage.length(), 0);
         return ssbuilder;
+    }
+
+    /**
+     * sets a view with a rounded border and specified background and border colours
+     * @param context
+     * @param view
+     * @param backgroundColor
+     * @param borderColor
+     */
+    public static void setRoundedDrawable(Context context, View view, int backgroundColor, int borderColor) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadius(90f);
+        shape.setColor(backgroundColor);
+        if (borderColor != 0){
+            shape.setStroke(5, borderColor);
+        }
+        view.setBackground(shape);
     }
 
 }

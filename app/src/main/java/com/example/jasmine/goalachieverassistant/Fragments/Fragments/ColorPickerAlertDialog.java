@@ -10,7 +10,12 @@ import android.view.LayoutInflater;
 
 import com.android.colorpicker.ColorPickerPalette;
 import com.android.colorpicker.ColorPickerSwatch;
+import com.example.jasmine.goalachieverassistant.EditGoalActivity;
+import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
+import com.example.jasmine.goalachieverassistant.EditTaskActivity;
+import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 
 import io.realm.Realm;
@@ -64,14 +69,46 @@ public class ColorPickerAlertDialog extends DialogFragment {
 
             };
             //if there user has already selected a color and saved it to DB display the color as the the selected one
-            try{
-                realm = Realm.getDefaultInstance();
-                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
-                //TODO: fix this recurring issue that causes intermittent crash 87678
-                colorSelected = goalModel.getLabelColor();
-            }finally{
-                realm.close();
+
+
+            if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
+                try{
+                    realm = Realm.getDefaultInstance();
+                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                    //TODO: fix this recurring issue that causes intermittent crash 87678
+                    colorSelected = goalModel.getLabelColor();
+                }finally{
+                    realm.close();
+                }
+                Log.d("GOALS", "color picker 1 ");
+            }else if(EditTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                try{
+                    realm = Realm.getDefaultInstance();
+                    SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                    //TODO: fix this recurring issue that causes intermittent crash 87678
+                    colorSelected = subGoalModel.getLabelColor();
+                }finally{
+                    realm.close();
+                }
+                Log.d("GOALS", "color picker 2 ");
+
+            }else if(EditSubTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                try{
+                    realm = Realm.getDefaultInstance();
+                    ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                    //TODO: fix this recurring issue that causes intermittent crash 87678
+                    colorSelected = childSubGoalModel.getLabelColor();
+                }finally{
+                    realm.close();
+                }
+                Log.d("GOALS", "color picker 3 ");
+
+            }else{
+                Log.e("ERROR", "Matching Class not found ");
             }
+
+
+
 
 
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
@@ -106,18 +143,79 @@ public class ColorPickerAlertDialog extends DialogFragment {
                         @Override
                         public void onClick(final DialogInterface dialogInterface, int i) {
 
-                            realm = Realm.getDefaultInstance();
-                            realm.executeTransactionAsync(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
-                                    if(colorSelected!=0){
-                                        goalModel.setLabelColor(colorSelected);
-                                    }
+                            if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
+                                try{
+                                    realm = Realm.getDefaultInstance();
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                                            if(colorSelected!=0){
+                                                goalModel.setLabelColor(colorSelected);
+                                            }
+                                        }
+                                    });
+                                }finally{
+                                    realm.close();
+                                    notifyDatePickerListener(colorSelected);
                                 }
-                            });
-                            realm.close();
-                            notifyDatePickerListener(colorSelected);
+                                Log.d("GOALS", "color picker 1 ");
+                            }else if(EditTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                                try{
+                                    realm = Realm.getDefaultInstance();
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                                            if(colorSelected!=0){
+                                                subGoalModel.setLabelColor(colorSelected);
+                                            }
+                                        }
+                                    });
+                                }finally{
+                                    realm.close();
+                                    notifyDatePickerListener(colorSelected);
+                                }
+                                Log.d("GOALS", "color picker 2 ");
+
+                            }else if(EditSubTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                                try{
+                                    realm = Realm.getDefaultInstance();
+                                    realm.executeTransactionAsync(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
+                                            ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                                            if(colorSelected!=0){
+                                                childSubGoalModel.setLabelColor(colorSelected);
+                                            }
+                                        }
+                                    });
+                                }finally{
+                                    realm.close();
+                                    notifyDatePickerListener(colorSelected);
+                                }
+                                Log.d("GOALS", "color picker 3 ");
+
+                            }else{
+                                Log.e("ERROR", "Matching Class not found ");
+                            }
+
+
+
+
+//
+//                            realm = Realm.getDefaultInstance();
+//                            realm.executeTransactionAsync(new Realm.Transaction() {
+//                                @Override
+//                                public void execute(Realm realm) {
+//                                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+//                                    if(colorSelected!=0){
+//                                        goalModel.setLabelColor(colorSelected);
+//                                    }
+//                                }
+//                            });
+//                            realm.close();
+//                            notifyDatePickerListener(colorSelected);
                         }
                     })
                     .setNegativeButton("Cancel", null);

@@ -54,12 +54,32 @@
         <item name="android:background">@null</item>
     </style>
 
+    <style name="AudioFileInfoOverlayText">
+        <item name="android:paddingLeft">4px</item>
+        <item name="android:paddingBottom">4px</item>
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1.5</item>
+        <item name="android:shadowDy">1.5</item>
+        <item name="android:shadowRadius">3</item>
+    </style>
 
     <style name="CustomProgressBar" parent="android:Widget.ProgressBar.Horizontal">
 
         <item name="android:progressDrawable">@drawable/progress_limit</item>
         <item name="android:minHeight">8dp</item>
         <item name="android:maxHeight">15dp</item>
+    </style>
+    <style name="TextLabelInput" parent="TextAppearance.AppCompat">
+
+            <item name="android:textColor">@color/colorBlack</item>
+            <item name="colorControlNormal">@color/colorTransparent</item>
+            <item name="colorControlHighlight">@color/colorBlack</item>
+            <item name="colorControlActivated">@color/colorTransparent</item>
+            <item name="android:textColorHint">@color/colorBlack</item> // set grey color for hint
+
+
     </style>
 
 

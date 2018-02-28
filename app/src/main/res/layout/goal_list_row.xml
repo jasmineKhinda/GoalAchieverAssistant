@@ -87,17 +87,56 @@
             <!--
                             style="?android:attr/progressBarStyleHorizontal" !-->
 
+            <ImageView
+                android:id="@+id/due_date_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/number_tasks_complete"
+                android:layout_below="@+id/goalName"
+                android:src="@drawable/ic_date_range_black_small">
+            </ImageView>
+
             <TextView
                 android:id="@+id/goalTimeAdded"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_alignLeft="@+id/goalName"
-                android:layout_alignStart="@+id/goalName"
+                android:layout_marginLeft="2dp"
                 android:layout_below="@+id/goalName"
+                android:layout_toRightOf="@+id/due_date_icon"
                 android:text="8 April 4:30pm"
                 android:textSize="10dp"
                >
+
+            </TextView>
+            <ImageView
+                android:id="@+id/number_tasks_complete_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="0dp"
+                android:layout_alignLeft="@+id/goalName"
+                android:layout_alignStart="@+id/goalName"
+                android:layout_below="@+id/goalName"
+
+                android:src="@drawable/ic_check_box_black_24dp"
+                >
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/number_tasks_complete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="2dp"
+                android:layout_toRightOf="@+id/number_tasks_complete_icon"
+                android:layout_below="@+id/goalName"
+                android:text="0 / 0"
+                android:textSize="10dp"
+                >
 
             </TextView>
 

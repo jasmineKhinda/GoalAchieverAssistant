@@ -53,13 +53,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType=
-                    "textCapSentences|textAutoCorrect"
+                android:imeOptions="actionDone"
+                android:scrollHorizontally="false"
+                android:inputType="text|textMultiLine|textCapSentences"
                 android:focusedByDefault="true"
                 android:hint="@string/goal_name_hint"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
 
+            <!--android:maxLines="5"-->
+            <!--android:singleLine="false"-->
         </android.support.design.widget.TextInputLayout>
 
 

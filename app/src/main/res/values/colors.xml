@@ -30,6 +30,8 @@
 
     <color name="colorLightGrey">#bfbfbf</color>
     <color name="border">#d1d0d0</color>
+    <color name="button_background">#FFDFDFDF</color>
+
     <color name="progressbar_circle_background">#ececec</color>
     <color name="textColorPrimary">#263238</color>
     <color name="colorRed">#f44336</color>
@@ -37,6 +39,8 @@
     <color name="colorGreen">#558b2f</color>
     <color name="colorOrange">#ff9800</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorTransparent">#00ff0000</color>
 
     <color name="colorprogress_center">#ef5350</color>
 

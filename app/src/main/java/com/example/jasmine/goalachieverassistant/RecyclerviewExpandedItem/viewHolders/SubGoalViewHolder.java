@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -36,6 +38,7 @@ import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerF
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -56,9 +59,11 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     private final ImageView arrowExpandImageView;
     private TextView subGoalTextView;
     private TextView starredIngredientCount;
+    private ImageView starredIngredientCountIcon;
     private TextView dueDate;
-    public CardView card;
-    public ImageButton buttonViewOption;
+    private ImageView dueDateIcon;
+    private CardView card;
+    private ImageButton buttonViewOption;
     private CheckBox isTaskDone;
     private TextView dueDateDialog;
     private Context context;
@@ -78,6 +83,8 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         subGoalTextView = (TextView) itemView.findViewById(R.id.subGoal_textview);
         arrowExpandImageView = (ImageView) itemView.findViewById(R.id.chevron_Ne);
         starredIngredientCount = (TextView) itemView.findViewById(R.id.done_count);
+        dueDateIcon =(ImageView) itemView.findViewById(R.id.due_date_icon);
+        starredIngredientCountIcon = (ImageView) itemView.findViewById(R.id.number_tasks_complete_icon);
         dueDate = (TextView) itemView.findViewById(R.id.goalDueDate);
         buttonViewOption = (ImageButton) itemView.findViewById(R.id.overFlow);
         isTaskDone = (CheckBox) itemView.findViewById(R.id.task_item_done);
@@ -136,19 +143,33 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         //if no subgoals to this goal, dont display the subgoal count done item
         if(subgoal.getChildSubGoalCount()>0){
             starredIngredientCount.setVisibility(View.VISIBLE);
+            starredIngredientCountIcon.setVisibility(View.VISIBLE);
             starredIngredientCount.setText(subgoal.getChildSubgoalsComplete()+" / " +subgoal.getChildSubGoalCount() );
         }else{
             starredIngredientCount.setVisibility(View.INVISIBLE);
+            starredIngredientCountIcon.setVisibility(View.INVISIBLE);
             starredIngredientCount.setText("");
         }
 
         //if due date exists in db then display it
         //if no due date display the default "No Due Date" from layout file
         if(null!=subgoal.getDueDate()){
+
+            Date currentTime = Calendar.getInstance().getTime();
+            if(null!=subgoal.getDueDate()&& ((currentTime.getTime() - subgoal.getDueDate().getTime()))>0){
+                dueDate.setTextColor(Color.RED);
+            }else if (null!=subgoal.getDueDate()&& ((currentTime.getTime() - subgoal.getDueDate().getTime()))<0){
+                Log.d("GOALS", "text colour: " +dueDate.getTextColors().getDefaultColor());
+                dueDate.setTextColor(dueDate.getTextColors().getDefaultColor());
+            }
+
             String dateToDisplay = Utilities.parseDateForDisplay(subgoal.getDueDate());
+            dueDate.setVisibility(View.VISIBLE);
             dueDate.setText(dateToDisplay);
+            dueDateIcon.setVisibility(View.VISIBLE);
         }else{
-            dueDate.setText(R.string.no_due_date);
+            dueDate.setVisibility(View.INVISIBLE);
+            dueDateIcon.setVisibility(View.INVISIBLE);
         }
 
 

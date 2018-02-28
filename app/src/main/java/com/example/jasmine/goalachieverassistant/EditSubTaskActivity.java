@@ -1,16 +1,19 @@
 package com.example.jasmine.goalachieverassistant;
 
-import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,41 +22,40 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapterTask;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.ChildTaskDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
-import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
-import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskSubTaskListFragment;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
+import java.text.SimpleDateFormat;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
- * Created by jasmine on 15/02/18.
+ * Created by jasmine on 23/02/18.
  */
 
-public class EditTaskActivity extends AppCompatActivity {
+public class EditSubTaskActivity extends AppCompatActivity {
 
 
 
 
 
-    private TaskDetailsFragment detailsFrag;
+    private ChildTaskDetailsFragment detailsFrag;
     private TaskSubTaskListFragment tasksFrag;
     private String taskKey;
     private String taskName;
+    private String callingActivity;
     //EditText taskTitle;
     Realm realm;
-    private CustomPagerFragmentAdapterTask adapter;
 
 
     @Override
@@ -61,20 +63,41 @@ public class EditTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.edit_task_view_fragment);
-        taskKey = getIntent().getExtras().getString("EDIT_TASKUUID");
-        taskName =getIntent().getExtras().getString("EDIT_TASKNAME");
-        TextView breadCrumb =(TextView) findViewById(R.id.subTask_breadcrumb);
-
-
-        breadCrumb.setVisibility(View.GONE);
-
         TextInputLayout textInputLayout = (TextInputLayout)findViewById(R.id.lNameLayout);
-        textInputLayout.setHint(getResources().getString(R.string.task_name_hint));
+        TabLayout tab = (TabLayout)findViewById(R.id.tbl_pages_task);
+        tab.setVisibility(View.GONE);
+        textInputLayout.setHint(getResources().getString(R.string.sub_task_name_hint));
+        TextView breadCrumb =(TextView) findViewById(R.id.subTask_breadcrumb);
+        breadCrumb.setVisibility(View.VISIBLE);
+        taskKey = getIntent().getExtras().getString("EDIT_TASKUUID");
+        callingActivity = getIntent().getExtras().getString("CALLING_ACTIVITY");
+        taskName =getIntent().getExtras().getString("EDIT_TASKNAME");
         final EditText taskTitle =(EditText) findViewById(R.id.task_title);
+
+
+        realm = Realm.getDefaultInstance();
+        final ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", taskKey).findFirst();
+       // breadCrumb.setText("Subtask of "+ childSubGoalModel.getSubGoal().getName() );
+        breadCrumb.setText(Html.fromHtml("Subtask of  &#160;" +   "<font color=\"#0645AD\"<b>"+childSubGoalModel.getSubGoal().getName()+"</b></font>"));
+
+
+        breadCrumb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent viewTaskIntent = new Intent(EditSubTaskActivity.this, EditTaskActivity.class);
+                viewTaskIntent.putExtra("EDIT_TASKUUID", childSubGoalModel.getSubGoal().getId());
+                viewTaskIntent.putExtra("EDIT_TASKNAME", childSubGoalModel.getSubGoal().getName());
+                startActivity(viewTaskIntent);
+            }
+        });
+
         taskTitle.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        taskTitle.setHint(R.string.task_name_hint);
         taskTitle.setRawInputType(InputType.TYPE_CLASS_TEXT);
         taskTitle.setMaxLines(5);
+
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+        fab.setVisibility(View.GONE);
+
         taskTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -87,8 +110,8 @@ public class EditTaskActivity extends AppCompatActivity {
                             @Override
                             public void execute(Realm realm) {
 
-                                SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskKey).findFirst();
-                                subGoalModel.setName(taskTitle.getText().toString());
+                                ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", taskKey).findFirst();
+                                childSubGoalModel.setName(taskTitle.getText().toString());
 
                                 Log.d("GOALS", "adding goal name into realm");
 
@@ -106,6 +129,12 @@ public class EditTaskActivity extends AppCompatActivity {
         });
 
 
+        View viewLayout = (View) findViewById(R.id.clayout);
+
+
+
+        //View detailsFragment = (View) findViewById(R.id.detail_holder);
+        detailsFrag = ChildTaskDetailsFragment.newInstance(taskKey);
 
         //final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
 
@@ -117,63 +146,20 @@ public class EditTaskActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        final String TASK_UUID = "GoalUUID";
+        Bundle args = new Bundle();
+        args.putString(TASK_UUID, taskKey);
 
-        // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager_editTask);
+        android.support.v4.app.FragmentTransaction ft = this.getSupportFragmentManager().beginTransaction();
+        Fragment fragment = Fragment.instantiate(this,ChildTaskDetailsFragment.class.getName(),args);
+        ft.add(viewLayout.getId(), fragment, "SubTDetails");
+        ft.commit();
 
-//        // Create an adapter that knows which fragment should be shown on each page
-         adapter = new CustomPagerFragmentAdapterTask(this, getSupportFragmentManager(), taskKey);
-        Log.d("GOALS", " taskNAme is "+ taskName);
-        Log.d("GOALS", " context is "+ this);
-        Log.d("GOALS", " adapter is "+ adapter.getItem(0));
-//
-//
-//        // Set the adapter onto the view pager
-        viewPager.setAdapter(adapter);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tbl_pages_task);
-        tabLayout.setupWithViewPager(viewPager);
-
-        adapter.startUpdate(viewPager);
-        Log.d("GOALS", " goalbee item at position "+ adapter.instantiateItem(viewPager, 0));
-        detailsFrag = (TaskDetailsFragment) adapter.instantiateItem(viewPager, 0);
-
-        tasksFrag = (TaskSubTaskListFragment) adapter.instantiateItem(viewPager, 1);
-        adapter.finishUpdate(viewPager);
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-                if(tab.getPosition()==0){
-                    fab.setVisibility(View.GONE);
-                }else if (tab.getPosition()==1){
-                    fab.setVisibility(View.VISIBLE);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
         taskTitle.setText(taskName);
 
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskKey,true,taskName);
-                bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
+        detailsFrag = (ChildTaskDetailsFragment) fragment;
 
 
-            }
-        });
 
 
     }
@@ -186,8 +172,8 @@ public class EditTaskActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final EditText taskTitle =(EditText) findViewById(R.id.task_title);
 
+        final EditText taskTitle =(EditText) findViewById(R.id.task_title);
         //final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
 
         //      final EditText taskTitle =(EditText) findViewById(R.id.ltitle);
@@ -197,24 +183,35 @@ public class EditTaskActivity extends AppCompatActivity {
             //validate the goal Name is entered and not blank
             if(TextUtils.isEmpty(taskTitle.getText())){
                 taskTitle.requestFocus();
-                taskTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Task Name", Color.WHITE));
+                taskTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Sub Task Name", Color.WHITE));
 
             }else{
                 childTaskName = taskTitle.getText().toString();
-                detailsFrag.addTaskDetailsToRealm(childTaskName);
-                startIntentAfterUserCompletesActivity();
+
+                detailsFrag.addSubTaskDetailsToRealm(childTaskName);
+
+                try{
+                    startIntentAfterUserCompletesActivityFromSubTask();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         } else if (item.getItemId() == R.id.action_settings_done) {
             //validate the goal Name is entered and not blank
             if(TextUtils.isEmpty(taskTitle.getText())){
                 taskTitle.requestFocus();
-                taskTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Task Name", Color.WHITE));
+                taskTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Sub Task Name", Color.WHITE));
 
             }else{
                 childTaskName = taskTitle.getText().toString();
-                detailsFrag.addTaskDetailsToRealm(childTaskName);
-                startIntentAfterUserCompletesActivity();
+                detailsFrag.addSubTaskDetailsToRealm(childTaskName);
+                try{
+                    startIntentAfterUserCompletesActivityFromSubTask();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
 
         }else if (item.getItemId() == R.id.delete) {
@@ -226,17 +223,10 @@ public class EditTaskActivity extends AppCompatActivity {
                     @Override
                     public void execute(Realm realm) {
 //                        RealmResults<SubGoalModel> childSubGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskKey).findAll();
- //                       childSubGoalModel.deleteFirstFromRealm();
-                        RealmResults<SubGoalModel> subGoalModel = realm.where(SubGoalModel.class).equalTo("id",taskKey).findAll();
+                        //                       childSubGoalModel.deleteFirstFromRealm();
+                        RealmResults<ChildSubGoalModel> subGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id",taskKey).findAll();
 
-                        SubGoalModel subGoalModelChild = realm.where(SubGoalModel.class).equalTo("id",taskKey).findFirst();
-
-                        //delete all children that belong to the Task first
-                        Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getChildSubGoalCount() );
-                        if(subGoalModelChild.getChildList().size()>0){
-                            subGoalModelChild.getChildList().deleteAllFromRealm();
-                        }
-                        //delete the task after children are deleted
+                        //delete the subtask
                         subGoalModel.deleteFirstFromRealm();
                         Log.d("GOALS", "deleted item? ");
                         // realm.close();
@@ -244,47 +234,63 @@ public class EditTaskActivity extends AppCompatActivity {
 
                     }
                 }, new Realm.Transaction.OnSuccess() {
-            @Override
-            public void onSuccess() {
-                finish();
-            }});
+                    @Override
+                    public void onSuccess() {
+                        finish();
+                    }});
 
             }finally{
                 realm.close();
 
             }
 
-            startIntentAfterUserCompletesActivity();
+            try{
+                startIntentAfterUserCompletesActivityFromSubTask();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
-           
-            
+
+
         }
         return super.onOptionsItemSelected(item);
 
     }
 
-    public void startIntentAfterUserCompletesActivity(){
+    public void startIntentAfterUserCompletesActivityFromSubTask()throws  ClassNotFoundException  {
 //        try{
 //            realm = Realm.getDefaultInstance();
-//            SubGoalModel subGoalModel =realm.where(SubGoalModel.class).equalTo("id", taskKey).findFirst();
+//            ChildSubGoalModel childSubGoalModel =realm.where(ChildSubGoalModel.class).equalTo("id", taskKey).findFirst();
+//            String subGoalKey = childSubGoalModel.getSubGoal().getId();
+//            SubGoalModel subGoalModel =realm.where(SubGoalModel.class).equalTo("id", subGoalKey).findFirst();
 //            String goalUUID= subGoalModel.getGoal().getId();
 //            String goalName= subGoalModel.getGoal().getName();
 //
-//            Intent addGoalIntent = new Intent(EditTaskActivity.this, EditGoalActivity.class);
-//            addGoalIntent.putExtra("EDIT_GOALUUID",goalUUID);
-//            addGoalIntent.putExtra("EDIT_GOALNAME",goalName);
-//            startActivity(addGoalIntent);
+//            Log.d("GOALS", "calling activity is "+ callingActivity);
+//            Class callerClass = Class.forName(callingActivity);
+    //        if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
+//                Intent addGoalIntent = new Intent(EditSubTaskActivity.this, callerClass);
+//                addGoalIntent.putExtra("EDIT_GOALUUID",goalUUID);
+//                addGoalIntent.putExtra("EDIT_GOALNAME",goalName);
+
+
+
+ //           startActivity(addGoalIntent);
 //        }finally{
 //            realm.close();
 //        }
+
         finish();
     }
+
 
 
     @Override
     protected void onDestroy() {
         Log.d("GOALS", "onDestroy: ");
-
+        if(!realm.isClosed()){
+            realm.close();
+        }
         super.onDestroy();
     }
     @Override
@@ -296,15 +302,9 @@ public class EditTaskActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-        Log.d("GOALS", "onResume:  here!!!");
-    }
-
 
 
 }
+
 
 

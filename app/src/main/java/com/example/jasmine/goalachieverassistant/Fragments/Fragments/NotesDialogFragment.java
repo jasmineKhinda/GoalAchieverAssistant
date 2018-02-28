@@ -12,7 +12,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.EditGoalActivity;
+import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
+import com.example.jasmine.goalachieverassistant.EditTaskActivity;
+import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 
 import io.realm.Realm;
@@ -48,8 +53,26 @@ public class NotesDialogFragment extends DialogFragment {
         //if there user has already has a note saved in DB display it
         try{
             realm = Realm.getDefaultInstance();
-            GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
-            notesFromDb = goalModel.getReason();
+
+            if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
+                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                notesFromDb = goalModel.getReason();
+                Log.d("GOALS", "onCreateDialog:1 ");
+            }else if(EditTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                SubGoalModel goalModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                notesFromDb = goalModel.getReason();
+                Log.d("GOALS", "onCreateDialog2: ");
+
+            }else if(EditSubTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                ChildSubGoalModel goalModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                notesFromDb = goalModel.getReason();
+                Log.d("GOALS", "onCreateDialog3: ");
+
+            }else{
+                Log.e("ERROR", "Matching Class not found ");
+            }
+
+
         }finally{
             realm.close();
         }
@@ -75,18 +98,51 @@ public class NotesDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(final DialogInterface dialogInterface, int i) {
 
-                        realm = Realm.getDefaultInstance();
-                        realm.executeTransactionAsync(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                        if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
+                            realm = Realm.getDefaultInstance();
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
 
                                     goalModel.setReason(goalNotesText.getText().toString());
 
-                            }
-                        });
-                        realm.close();
-                        notifyAddNotesListener(goalNotesText.getText().toString());
+                                }
+                            });
+                            realm.close();
+                            notifyAddNotesListener(goalNotesText.getText().toString());
+                        }else if(EditTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                            realm = Realm.getDefaultInstance();
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+
+                                    subGoalModel.setReason(goalNotesText.getText().toString());
+
+                                }
+                            });
+                            realm.close();
+                            notifyAddNotesListener(goalNotesText.getText().toString());
+                        }else if(EditSubTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
+                            realm = Realm.getDefaultInstance();
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+                                    ChildSubGoalModel ChildSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+
+                                    ChildSubGoalModel.setReason(goalNotesText.getText().toString());
+
+                                }
+                            });
+                            realm.close();
+                            notifyAddNotesListener(goalNotesText.getText().toString());
+
+                        }else{
+                            Log.e("ERROR", "Matching Class not found ");
+                        }
+
+
                     }
                 })
                 .setNegativeButton("Cancel", null);

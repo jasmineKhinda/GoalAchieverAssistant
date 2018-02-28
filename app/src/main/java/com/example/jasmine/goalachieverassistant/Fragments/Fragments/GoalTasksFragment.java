@@ -303,8 +303,11 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     public void onStop() {
 
         Log.d("GOALS", "onStop: ");
-        subgoalsForThisGoal.removeAllChangeListeners();
-        realm.close();
+        if(!(realm.isClosed())){
+            subgoalsForThisGoal.removeAllChangeListeners();
+            realm.close();
+        }
+
         super.onStop();
 
     }

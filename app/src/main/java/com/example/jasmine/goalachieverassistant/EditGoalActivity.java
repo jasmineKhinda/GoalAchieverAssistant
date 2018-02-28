@@ -10,12 +10,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
@@ -45,6 +49,8 @@ public class EditGoalActivity extends AppCompatActivity {
         private String task_key;
         private String goal_name;
         EditText goalTitle;
+        private ViewPager viewPager;
+        Realm realm;
 
 
         @Override
@@ -55,6 +61,38 @@ public class EditGoalActivity extends AppCompatActivity {
             task_key = getIntent().getExtras().getString("EDIT_GOALUUID");
             goal_name =getIntent().getExtras().getString("EDIT_GOALNAME");
             goalTitle =(EditText) findViewById(R.id.ltitle);
+            goalTitle.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            goalTitle.setRawInputType(InputType.TYPE_CLASS_TEXT);
+            goalTitle.setMaxLines(5);
+            goalTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    //Log.d("GOALS", "adding goal name into realm" + event + "   "+ actionId+ "  "+ EditorInfo.IME_ACTION_DONE);
+                    if(actionId==EditorInfo.IME_ACTION_DONE){
+
+                        try {
+                            realm = Realm.getDefaultInstance();
+                            realm.executeTransactionAsync(new Realm.Transaction() {
+                                @Override
+                                public void execute(Realm realm) {
+
+                                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
+                                    goalModel.setName(goalTitle.getText().toString());
+
+                                    Log.d("GOALS", "adding goal name into realm");
+
+
+
+                                }
+                            });
+                        }finally{
+                            realm.close();
+                        }
+                        goalTitle.clearFocus();
+                    }
+                    return false;
+                }
+            });
 
             GoalModel goalModel;
 
@@ -72,7 +110,7 @@ public class EditGoalActivity extends AppCompatActivity {
 
 
             // Find the view pager that will allow the user to swipe between fragments
-            ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+            viewPager = (ViewPager) findViewById(R.id.viewPager);
 
             // Create an adapter that knows which fragment should be shown on each page
             adapter = new CustomPagerFragmentAdapter(this, getSupportFragmentManager(),task_key);
@@ -94,7 +132,30 @@ public class EditGoalActivity extends AppCompatActivity {
 //            GoalModel results = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
             goalTitle.setText(goal_name);
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+
+
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+
+                    if(tab.getPosition()==0){
+                        fab.setVisibility(View.GONE);
+                    }else if (tab.getPosition()==1){
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -153,6 +214,9 @@ public class EditGoalActivity extends AppCompatActivity {
                 }else{
                     goalName = goalTitle.getText().toString();
                     detailsFrag.addGoalDetailsToRealm(goalName);
+                    Intent addGoalIntent = new Intent(EditGoalActivity.this, GoalListActivity.class);
+                    startActivity(addGoalIntent);
+
                 }
 
             } else if (item.getItemId() == R.id.action_settings_done) {
@@ -164,6 +228,8 @@ public class EditGoalActivity extends AppCompatActivity {
                 }else{
                     goalName = goalTitle.getText().toString();
                     detailsFrag.addGoalDetailsToRealm(goalName);
+                    Intent addGoalIntent = new Intent(EditGoalActivity.this, GoalListActivity.class);
+                    startActivity(addGoalIntent);
                 }
 
             }else if (item.getItemId() == R.id.delete) {
@@ -205,5 +271,16 @@ public class EditGoalActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onResume() {
+
+        //adapter.notifyDataSetChanged();
+        super.onResume();
+        adapter.notifyDataSetChanged();
+        //viewPager.getAdapter().notifyDataSetChanged();
+ //       adapter.notifyUpdate();
+        Log.d("GOALS", "onResume2:  here!!!"+ getLocalClassName());
+    }
     }
 

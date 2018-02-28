@@ -249,7 +249,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                     toast.show();
                     addTask.setText("");
                     dueDate =null;
-
+                    realm.close();
 
                 }
                 },
@@ -259,10 +259,11 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                     Log.d("GOALS", "onError: ");
                     dueDate = null;
                     addTask.setText("");
+                    realm.close();
                 }
 
         });
-        realm.close();
+
     }
 
 

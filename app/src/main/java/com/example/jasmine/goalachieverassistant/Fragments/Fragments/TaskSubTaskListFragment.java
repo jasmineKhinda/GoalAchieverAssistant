@@ -1,9 +1,11 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.SubTaskRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
@@ -96,6 +99,8 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
         Log.d("GOALS", "onViewCreated:  for TasksFragment goal UUID" + taskUUID);
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
 
+
+
        // realm = Realm.getDefaultInstance();
 
         //recycler view of all the sub tasks
@@ -149,8 +154,12 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
     public void onStop() {
 
         Log.d("GOALS", "onStop: ");
-        subTasks.removeAllChangeListeners();
-        realm.close();
+        if( ! (realm.isClosed())){
+            subTasks.removeAllChangeListeners();
+            realm.close();
+        }
+
+
         super.onStop();
 
     }

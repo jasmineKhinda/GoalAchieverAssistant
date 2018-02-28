@@ -1,9 +1,11 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Adapters;
 
+import android.os.Parcelable;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
@@ -17,8 +19,9 @@ import com.example.jasmine.goalachieverassistant.R;
  * Created by jasmine on 23/01/18.
  */
 
-public class CustomPagerFragmentAdapter extends FragmentStatePagerAdapter {
+public class CustomPagerFragmentAdapter extends FragmentStatePagerAdapter   {
 
+   // CustomPagerFragmentAdapter adapter;
     private Context mContext;
     private String extraInfo;
 
@@ -80,6 +83,43 @@ public class CustomPagerFragmentAdapter extends FragmentStatePagerAdapter {
 
     }
 
+//    @Override
+//    public int getItemPosition(Object object) {
+//        if (object instanceof GoalDetailsFragment) {
+//            // Create a new method notifyUpdate() in your fragment
+//            // it will get call when you invoke
+//            // notifyDatasetChaged();
+//            ((CustomPagerFragmentAdapter) object).notifyUpdate();
+//        }
+//        //don't return POSITION_NONE, avoid fragment recreation.
+//        return super.getItemPosition(object);
+//    }
+////
+////
+////    public void notifyUpdate(){
+////        Log.d("GOALS", "notifyUpdate2: ");
+////        notifyDataSetChanged();
+////
+////
+////    }
+
+
+
+    public int getItemPosition(Object item) {
+
+//        if (item instanceof GoalDetailsFragment) {
+//            Log.d("GOALS", "getItemPosition:1 ");
+//            return 0;
+//
+//        } else if(item instanceof GoalTasksFragment){
+//            Log.d("GOALS", "getItemPosition:2 ");
+//            return 1;
+//        } else{
+//            Log.d("GOALS", "getItemPosition:3 ");
+            return POSITION_NONE;
+ //       }
+    }
+
 
     // This determines the number of tabs
     @Override
@@ -100,5 +140,11 @@ public class CustomPagerFragmentAdapter extends FragmentStatePagerAdapter {
                 return null;
         }
     }
+
+//    public void refresh(){
+//        adapter.notifyDataSetChanged();
+//    }
+
+
 
 }

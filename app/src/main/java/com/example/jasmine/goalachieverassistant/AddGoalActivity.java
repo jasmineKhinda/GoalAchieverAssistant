@@ -2,6 +2,7 @@ package com.example.jasmine.goalachieverassistant;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -14,20 +15,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.InputType;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.colorpicker.ColorPickerDialog;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
+import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
 import io.realm.Realm;
 
@@ -46,6 +52,7 @@ public class AddGoalActivity extends AppCompatActivity  {
     private GoalDetailsFragment detailsFrag;
     private GoalTasksFragment tasksFrag;
     AppBarLayout appbar;
+    Realm realm;
 
 
     @Override
@@ -55,6 +62,40 @@ public class AddGoalActivity extends AppCompatActivity  {
         setContentView(R.layout.add_edit_goal_view_fragments);
         final String goalUUID =getIntent().getExtras().getString("GOAL_UUID");
         CoordinatorLayout clay = findViewById(R.id.clayout);
+        final EditText goalTitle = findViewById(R.id.ltitle);
+        goalTitle.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        goalTitle.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        goalTitle.setMaxLines(5);
+        goalTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                //Log.d("GOALS", "adding goal name into realm" + event + "   "+ actionId+ "  "+ EditorInfo.IME_ACTION_DONE);
+                if(actionId==EditorInfo.IME_ACTION_DONE){
+
+                    try {
+                        realm = Realm.getDefaultInstance();
+                        realm.executeTransactionAsync(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+                                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
+                                goalModel.setName(goalTitle.getText().toString());
+
+                                Log.d("GOALS", "adding goal name into realm");
+
+
+
+                            }
+                        });
+                    }finally{
+                        realm.close();
+                    }
+                    goalTitle.clearFocus();
+                }
+                return false;
+            }
+        });
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -85,7 +126,28 @@ public class AddGoalActivity extends AppCompatActivity  {
         adapter.finishUpdate(viewPager);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_task);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+                if(tab.getPosition()==0){
+                    fab.setVisibility(View.GONE);
+                }else if (tab.getPosition()==1){
+                    fab.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,6 +179,8 @@ public class AddGoalActivity extends AppCompatActivity  {
         final String selectedType = Spinner;
         final String selectedDueDate = DueDate;
         final EditText goalTitle = findViewById(R.id.ltitle);
+
+
         final TextInputLayout goalTextInputLayout = findViewById(R.id.lNameLayout);
         String goalName="";
 
@@ -134,6 +198,9 @@ public class AddGoalActivity extends AppCompatActivity  {
                 goalTitle.clearFocus();
                 goalName = goalTitle.getText().toString();
                 detailsFrag.addGoalDetailsToRealm(goalName);
+
+                Intent addGoalIntent = new Intent(AddGoalActivity.this, GoalListActivity.class);
+                startActivity(addGoalIntent);
             }
         } else if (item.getItemId() == R.id.action_settings_done) {
             //validate the goal Name is entered and not blank
@@ -146,6 +213,9 @@ public class AddGoalActivity extends AppCompatActivity  {
                 goalTitle.clearFocus();
                 goalName = goalTitle.getText().toString();
                 detailsFrag.addGoalDetailsToRealm(goalName);
+
+                Intent addGoalIntent = new Intent(AddGoalActivity.this, GoalListActivity.class);
+                startActivity(addGoalIntent);
             }
 
         }

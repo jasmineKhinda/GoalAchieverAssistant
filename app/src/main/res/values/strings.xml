@@ -15,6 +15,7 @@
     <string name="notes_dialog_hint">Enter notes here</string>
     <string name="reward_hint">0 points</string>
     <string name="due_date_hint">Due Date</string>
+    <string name="add_project_hint">Add to project...</string>
     <string name="no_due_date">No due date</string>
     <string name="add_goal_title">What\'s your goal?</string>
     <string name="goal_subtask_section">Sub-goals</string>
@@ -37,10 +38,12 @@
     <string name="share">Share</string>
     <string name="goal_name_hint">Goal name</string>
     <string name="task_name_hint">Task name</string>
+    <string name="sub_task_name_hint">Subtask name</string>
 
     <string name="tab1">Details</string>
     <string name="tab2">Tasks</string>
     <string name="tab3">Stats</string>
+    <string name="tab2_subTasks">subTasks</string>
     <string name="full_date_format">EEE MMM dd, yyyy</string>
     <string name="label_color_picker_dialog">Select label color</string>
     <string name="notes_dialog_title">Edit Note</string>

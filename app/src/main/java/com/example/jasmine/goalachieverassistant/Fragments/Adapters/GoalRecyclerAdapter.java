@@ -1,20 +1,26 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Adapters;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
@@ -26,6 +32,10 @@ import io.realm.Realm;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -80,28 +90,75 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
             Log.d("GOALS", "2 Child subgoal complete "+ doneSubGoals);
             Log.d("GOALS", "2 subgoal complete "+ doneChildSubGoals);
-
+            int totalTasks= (int) (totalSubGoalCount+totalChildSubGoals);
+            int totalDoneTasks =(int) (doneSubGoals +doneChildSubGoals);
 
 
             int progress_print = (int) progress;
             holder.progressBar.setProgress(progress_print);
+            Log.d("GOALS", "progres is "+ mTaskModel.getName()+ "  "+ progress_print);
             holder.progressbar_percentage.setText(String.valueOf(progress_print) + "%");
+            holder.numberTasksComplete.setText(totalDoneTasks+"/"+totalTasks);
+            holder.numberTasksComplete.setVisibility(View.VISIBLE);
+            holder.numberTasksCompleteIcon.setVisibility(View.VISIBLE);
+
+
+//            if(null != mTaskModel.getDueDate()){
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.numberTasksCompleteIcon.getLayoutParams();
+//                params.addRule(RelativeLayout.ALIGN_RIGHT, R.id.goalTimeAdded);
+//                params.setMargins(0,0,0,0);
+//
+//                holder.numberTasksCompleteIcon.setLayoutParams(params);
+//                holder.numberTasksCompleteIcon.setVisibility(View.VISIBLE);
+//
+//            }else{
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.numberTasksCompleteIcon.getLayoutParams();
+//                params.addRule(RelativeLayout.ALIGN_START, R.id.goalName);
+//                params.addRule(RelativeLayout.ALIGN_TOP, R.id.number_tasks_complete);
+//                params.setMargins(0,0,0,0);
+//
+//                holder.numberTasksCompleteIcon.setLayoutParams(params);
+//                holder.numberTasksCompleteIcon.setVisibility(View.VISIBLE);
+ //           }
+        }else{
+            holder.progressBar.setProgress(0);
+            Log.d("GOALS", "progres is else statement "+ mTaskModel.getName()+ "  "+ 0);
+            holder.progressbar_percentage.setText(String.valueOf(0) + "%");
+            holder.numberTasksComplete.setVisibility(View.INVISIBLE);
+            holder.numberTasksCompleteIcon.setVisibility(View.INVISIBLE);
+
         }
         Log.d("GOALS", "getName "+  mTaskModel.getName());
 
-//        if(!TextUtils.isEmpty(mTaskModel.getDateTime())){
-//            holder.taskDueDate.setText(mTaskModel.getDateTime());
-//        }else{
-//            holder.taskDueDate.setText(R.string.no_time);
-//        }
-//        //holder.taskCategory.setText(mTaskModel.getType());
         if(null != mTaskModel.getDueDate() ){
 
-            String dateToDisplay = Utilities.parseDateForDisplay(mTaskModel.getDueDate());
-            holder.taskDate.setText(dateToDisplay);
+
+                String dateToDisplay = Utilities.parseDateForDisplay(mTaskModel.getDueDate());
+                holder.taskDate.setText(dateToDisplay);
+                holder.taskDate.setVisibility(View.VISIBLE);
+                holder.dueDateIcon.setVisibility(View.VISIBLE);
 
         }else{
-            holder.taskDate.setText(R.string.no_due_date);
+
+            holder.taskDate.setVisibility(View.INVISIBLE);
+            holder.dueDateIcon.setVisibility(View.INVISIBLE);
+        }
+
+        Date currentTime = Calendar.getInstance().getTime();
+//        String mDate = showDateFormat(System.currentTimeMillis());
+//        SimpleDateFormat mSdf = new SimpleDateFormat("MMM MM dd,yyy h:mm a");
+//        final String mDateString = mSdf.format(mDate);
+//        Date dtCurrent = mSdf.parse(mDate);
+
+        Log.d("GOALS", "goal is "+mTaskModel.getName());
+        Log.d("GOALS", "current time is "+currentTime.getTime());
+//        Log.d("GOALS", "due date is time is "+mTaskModel.getDueDate().getTime());
+
+        if(null!=mTaskModel.getDueDate()&& ((currentTime.getTime() - mTaskModel.getDueDate().getTime()))>0){
+            holder.taskDate.setTextColor(Color.RED);
+        }else if (null!=mTaskModel.getDueDate()&& ((currentTime.getTime() - mTaskModel.getDueDate().getTime()))<0){
+            Log.d("GOALS", "text colour: " +holder.taskDate.getTextColors().getDefaultColor());
+            holder.taskDate.setTextColor(holder.taskDate.getTextColors().getDefaultColor());
         }
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +250,10 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
         public ProgressBar progressBar;
         public ImageButton buttonViewOption;
         public TextView progressbar_percentage;
+        public TextView numberTasksComplete;
+        public ImageView numberTasksCompleteIcon;
+        public ImageView dueDateIcon;
+
         FrameLayout frameBorder;
 
         public TaskViewHolder(View itemView) {
@@ -205,6 +266,9 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
             progressBar = (ProgressBar) itemView.findViewById(R.id.cmll_progrssbar);
             progressbar_percentage =(TextView) itemView.findViewById(R.id.cmll_completed_per);
             frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
+            numberTasksComplete = (TextView) itemView.findViewById(R.id.number_tasks_complete);
+            numberTasksCompleteIcon =(ImageView) itemView.findViewById(R.id.number_tasks_complete_icon);
+            dueDateIcon =(ImageView) itemView.findViewById(R.id.due_date_icon);
 
             buttonViewOption.setOnClickListener(new View.OnClickListener() {
                 @Override

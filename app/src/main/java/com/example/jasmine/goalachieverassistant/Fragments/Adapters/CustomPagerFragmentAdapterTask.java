@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.view.View;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
@@ -43,16 +44,29 @@ public class CustomPagerFragmentAdapterTask extends FragmentStatePagerAdapter {
 
             Log.d("GOALS", "goalbeeVIEWTYPE.TASKVIEW2  " );
             if (position == 0) {
-                Log.d("GOALS", "1goalbeee");
+
                 return TaskDetailsFragment.newInstance(extraInfo);
             } else if (position == 1){
-                Log.d("GOALS", "2goalbee" );
                 return TaskSubTaskListFragment.newInstance(extraInfo);
             } else {
-                Log.d("GOALS", "3goalbee" );
                 return null;
             }
 
+    }
+
+    public int getItemPosition(Object item) {
+
+//        if (item instanceof GoalDetailsFragment) {
+//            Log.d("GOALS", "getItemPosition:1 ");
+//            return 0;
+//
+//        } else if(item instanceof GoalTasksFragment){
+//            Log.d("GOALS", "getItemPosition:2 ");
+//            return 1;
+//        } else{
+//            Log.d("GOALS", "getItemPosition:3 ");
+        return POSITION_NONE;
+        //       }
     }
 
 
@@ -70,7 +84,7 @@ public class CustomPagerFragmentAdapterTask extends FragmentStatePagerAdapter {
             case 0:
                 return mContext.getString(R.string.tab1);
             case 1:
-                return mContext.getString(R.string.tab2);
+                return mContext.getString(R.string.tab2_subTasks);
             default:
                 return null;
         }
