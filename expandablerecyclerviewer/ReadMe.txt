@@ -1,1 +1,1 @@
-This library was forked from: https://github.com/GPSIForks/realm-expandable-recycler-view
+This library from: https://github.com/GPSIForks/realm-expandable-recycler-view
