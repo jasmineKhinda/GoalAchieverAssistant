@@ -245,7 +245,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 @Override
                 public void onSuccess() {
                     Log.d("GOALS", "onSuccess: ");
-                    Toast toast = Toast.makeText(getContext(), "Your task \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getView().getContext(), "Your task \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
                     toast.show();
                     addTask.setText("");
                     dueDate =null;

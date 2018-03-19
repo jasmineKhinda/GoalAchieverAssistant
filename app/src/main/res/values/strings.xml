@@ -24,6 +24,9 @@
     <string name="goal_category_title">What type of goal is this?</string>
     <string name="goal_duedate_title">Due Date</string>
     <string name="goal_notes_hint">Enter goal notes</string>
+    <string name="number_tasks">Add a task</string>
+    <string name="number_tasks_complete">% complete</string>
+    <string name="number_of_tasks">Number Of Tasks</string>
     <string name="task_notes_hint">Enter task notes</string>
     <string name="db_parent_Goals">Goals</string>
     <string name="db_Goal_Name">name</string>
@@ -39,7 +42,8 @@
     <string name="goal_name_hint">Goal name</string>
     <string name="task_name_hint">Task name</string>
     <string name="sub_task_name_hint">Subtask name</string>
-
+    <string name="project_context_change_warning"> Project context can only be changed in Tasks</string>
+    <string name="default_font" translatable="false">sans-serif-light</string>
     <string name="tab1">Details</string>
     <string name="tab2">Tasks</string>
     <string name="tab3">Stats</string>
@@ -49,6 +53,19 @@
     <string name="notes_dialog_title">Edit Note</string>
     <string name="dialog_addtask_duedate">Due date</string>
     <string name="dialog_addtask_reward">Reward Points</string>
+    <string name="nav_projects">Projects</string>
+    <string name="nav_inbox">Inbox</string>
+    <string name="nav_today">Today</string>
+    <string name="nav_week">Week</string>
+    <string name="nav_all">All</string>
+    <string name="nav_completed">Completed</string>
+    <string name="nav_list_family">Family</string>
+    <string name="nav_list_work">Work</string>
+    <string name="nav_list_travel">Travel</string>
+    <string name="nav_list_personal">Personal</string>
+    <string name="nav_add_lists">Add List</string>
+    <string name="nav_add_settings">Settings</string>
+
 
     <string-array name="priority">
         <item>Immediately</item>

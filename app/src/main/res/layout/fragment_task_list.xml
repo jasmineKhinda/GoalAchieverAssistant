@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:showIn="@layout/activity_goal_list">
+        tools:showIn="@layout/nav_goal_list">
 
 
 

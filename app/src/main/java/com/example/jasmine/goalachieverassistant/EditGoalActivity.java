@@ -26,6 +26,8 @@ import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBotto
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
 import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.EditGoal;
 
 import io.realm.Realm;
@@ -35,7 +37,7 @@ import io.realm.RealmResults;
  * Created by jkhinda on 31/01/18.
  */
 
-public class EditGoalActivity extends AppCompatActivity {
+public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFragment.ChangeTabs{
 
 
 
@@ -51,6 +53,14 @@ public class EditGoalActivity extends AppCompatActivity {
         EditText goalTitle;
         private ViewPager viewPager;
         Realm realm;
+
+
+
+
+        @Override
+        public void onTabChange(int tabNumber){
+            viewPager.setCurrentItem(tabNumber);
+        }
 
 
         @Override
@@ -163,6 +173,25 @@ public class EditGoalActivity extends AppCompatActivity {
                     CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(task_key,false,"");
                     bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
+
+                }
+            });
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if(0==position){
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
                 }
             });

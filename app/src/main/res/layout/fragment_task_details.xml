@@ -68,8 +68,6 @@
                         android:textSize="12dp"
                         android:ellipsize="end"
                         android:maxLines="4"
-                        android:inputType=
-                            "textCapSentences|textAutoCorrect"
                         android:scrollHorizontally="true"
                         android:background="@android:color/transparent"/>
 
@@ -296,6 +294,7 @@ jh
 
                     </LinearLayout>
                 </RelativeLayout>
+
 
 
 

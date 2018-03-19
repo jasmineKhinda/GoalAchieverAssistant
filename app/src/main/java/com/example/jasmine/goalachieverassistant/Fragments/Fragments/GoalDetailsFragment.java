@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GestureDetectorCompat;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -26,6 +27,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +44,7 @@ import com.android.colorpicker.ColorPickerDialog;
 import com.android.colorpicker.ColorPickerPalette;
 import com.android.colorpicker.ColorPickerSwatch;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.GoalListActivity;
@@ -50,6 +53,7 @@ import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.AddGoal;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 
@@ -58,7 +62,7 @@ import io.realm.RealmResults;
  * Use the {@link GoalDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GoalDetailsFragment extends Fragment implements DatePickerFragment.DatePickerFragmentListener, ColorPickerAlertDialog.ColorPickerListener, NotesDialogFragment.AddNotesListener{
+public class GoalDetailsFragment extends Fragment implements  DatePickerFragment.DatePickerFragmentListener, ColorPickerAlertDialog.ColorPickerListener, NotesDialogFragment.AddNotesListener{
 
     private static final String GOAL_UUID = "GoalUUID";
     private  EditText goalDueDate;
@@ -73,12 +77,21 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
     int labelColorFromDB=0;
 
 
+    private ChangeTabs changedTab;
+    public interface ChangeTabs {
+        public void onTabChange(int tabNumber);
+
+    }
+
 
 
 
     public GoalDetailsFragment() {
         // Required empty public constructor
     }
+
+
+
 
 
     @Override
@@ -97,10 +110,12 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
     @Override
     public void onDateSet(Date view) {
         Log.d("GOALS", "onDateset "+ view);
+        final ImageView clearDueDateButton =(ImageView) getView().findViewById(R.id.remove_date);
         if(null != view ){
 
             String dateToDisplay = Utilities.parseDateForDisplay(view);
             goalDueDate.setText(dateToDisplay);
+            clearDueDateButton.setVisibility(View.VISIBLE);
 
 
         }
@@ -137,13 +152,48 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
+        final DatePickerFragment fragment = DatePickerFragment.newInstance(this);
         final String uuId = getArguments().get(GOAL_UUID).toString();
-        final DialogFragment colorFrag = ColorPickerAlertDialog.newInstance(getResources().getString(R.string.label_color_picker_dialog),uuId,this);
-        final NotesDialogFragment fragmentNotes =NotesDialogFragment.newInstance(getResources().getString(R.string.notes_dialog_title),uuId,this);
+        final DialogFragment colorFrag = ColorPickerAlertDialog.newInstance(getResources().getString(R.string.label_color_picker_dialog), uuId, this);
+        final ImageView clearDueDateButton =(ImageView) view.findViewById(R.id.remove_date);
+        final TextView numberOfTasks =(TextView) view.findViewById(R.id.number_oftasks);
+        final TextView percentageComplete =(TextView) view.findViewById(R.id.percentage_complete);
+
+        final NotesDialogFragment fragmentNotes = NotesDialogFragment.newInstance(getResources().getString(R.string.notes_dialog_title), uuId, this);
         Log.d("GOALS", "onViewCreated: GOALSDETAILSFRAGMENT.java");
 
 
+
+        clearDueDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                realm = Realm.getDefaultInstance();
+                realm.executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+
+                        GoalModel sub = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                        sub.setDueDate(null);
+                        Log.d("GOALS", "in the delete due date "+ sub.getDueDate());
+
+                    }},new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        goalDueDate.setText("");
+                        Log.d("GOALS", "onSuccess: ");
+                        dueDate=null;
+                        clearDueDateButton.setVisibility(View.INVISIBLE);
+                        realm.close();
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        Log.d("GOALS", "onError: "+ error);
+                        realm.close();
+                    }
+                });
+            }
+        });
 
         goalReason = (TextView) view.findViewById(R.id.addReason);
         Log.d("GOALS", "intiliazed the goalDueDate ");
@@ -151,7 +201,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             @Override
             public void onClick(View view) {
                 fragmentNotes.show(getFragmentManager(), "Goal Notes");
-            }
+                     }
         });
 
         ImageView editNotesIcon = (ImageView) view.findViewById(R.id.add_goal_notes);
@@ -162,10 +212,53 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             }
         });
 
+        float subGoalSize =0;
+        float subTasks =0;
+        float subGoalComplete=0;
+        float subTasksComplete=0;
+        float progress=0;
+        try{
+            realm =Realm.getDefaultInstance();
+            GoalModel sub = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+
+            if(null!=sub.getSubgoals()){
+                subGoalSize =sub.getSubgoals().size();
+                subGoalComplete = sub.getSubgoalsComplete();
+                for (SubGoalModel r : sub.getSubgoals()) {
+
+                    if (r.getChildSubGoalCount()>0){
+                        subTasks= subTasks + r.getChildSubGoalCount();
+                        subTasksComplete=  subTasksComplete + r.getChildSubgoalsComplete();
+                    }
+                }
+
+            }
+
+        }finally{
+            realm.close();
+        }
+
+        if(subGoalSize>0){
+             progress =  ((subTasksComplete) +(subGoalComplete))/((subTasks)+(subGoalSize)) * 100;
+        }
+
+
+        percentageComplete.setText((int)progress +" %" );
+
+
+        numberOfTasks.setText(Html.fromHtml("<font color=\"#0645AD\"<b>"+ (int)subGoalSize +"</b></font>"+  " Task(s) and "+"<font color=\"#0645AD\"<b>"+(int)subTasks +"</b></font>"+  " Subtask(s) " ));
+        numberOfTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changedTab = (ChangeTabs) getActivity();
+                changedTab.onTabChange(1);
+            }
+        });
+
 
         colourLabelButton = view.findViewById(R.id.color_label_button);
 
-        tagIcon =view.findViewById(R.id.add_project_label_color);
+        tagIcon = view.findViewById(R.id.add_project_label_color);
         tagIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -177,7 +270,7 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             }
         });
 
-        Button selectColour =view.findViewById(R.id.pick_colour);
+        Button selectColour = view.findViewById(R.id.pick_colour);
         selectColour.setAlpha(0.38F);
         selectColour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,20 +297,20 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
             final GoalModel mGoal = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
             int selectedLabelColor = mGoal.getLabelColor();
 
-            if(0!= selectedLabelColor ){
+            if (0 != selectedLabelColor) {
                 colourLabelButton.setColorFilter(selectedLabelColor);
                 Log.d("GOALS", "selected color from db ");
-            }else{
+            } else {
                 colourLabelButton.setColorFilter(Color.TRANSPARENT);
                 Log.d("GOALS", "default ");
             }
 
-        }finally{
+        } finally {
             realm.close();
         }
 
 
-        goalDueDate =(EditText) view.findViewById(R.id.add_task_ending);
+        goalDueDate = (EditText) view.findViewById(R.id.add_task_ending);
         Log.d("GOALS", "intiliazed the goalDueDate ");
         goalDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,33 +328,37 @@ public class GoalDetailsFragment extends Fragment implements DatePickerFragment.
         });
 
         //if we are accessing the this fragment via the EditGoals Activity, then grab the goal data from realm and put in appropriate views, else skip
-        if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
+        if (EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())) {
 
-            realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
-                    //                    goalName.setText(goalModel.getName());
-                    labelColorFromDB = goalModel.getLabelColor();
-                    if(null != goalModel.getDueDate()){
+            try {
 
-                        String dateToDisplay = Utilities.parseDateForDisplay(goalModel.getDueDate());
-                        goalDueDate.setText(dateToDisplay);
-                        dueDate = goalModel.getDueDate();
-                    }
-//                    else{
-//                        goalDueDate.setText(R.string.no_due_date);
-//                    }
+                realm = Realm.getDefaultInstance();
+                //realm.executeTransactionAsync(new Realm.Transaction() {
+                //   @Override
+                //    public void execute(Realm realm) {
+                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                //                    goalName.setText(goalModel.getName());
+                labelColorFromDB = goalModel.getLabelColor();
+                if (null != goalModel.getDueDate()) {
 
-                    goalReason.setText(goalModel.getReason());
-                    //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
-                    // spinner.setSelection(adapter.getPosition(goalModel.getType()));
+                    String dateToDisplay = Utilities.parseDateForDisplay(goalModel.getDueDate());
+                    goalDueDate.setText(dateToDisplay);
+                    dueDate = goalModel.getDueDate();
+                    clearDueDateButton.setVisibility(View.VISIBLE);
+                }else{
+                    clearDueDateButton.setVisibility(View.INVISIBLE);
                 }
-            });
+
+                goalReason.setText(goalModel.getReason());
+                //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
+                // spinner.setSelection(adapter.getPosition(goalModel.getType()));
+
+            //       });
+        }finally{
+
             realm.close();
         }
-
+    }
 
 
 

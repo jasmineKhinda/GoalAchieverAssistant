@@ -70,11 +70,18 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     Realm realm;
     Date taskDueDate;
  //   private TextView ingredientCount;
-
+    SubGoalStateChanged changed;
     private SubGoalModel subGoal;
 
 
 
+
+    public interface SubGoalStateChanged{
+        void subGoalChanged();
+    }
+    public void setSubGoalChangedListener(SubGoalStateChanged changed){
+        this.changed = changed;
+    }
 
 
     public SubGoalViewHolder(@NonNull View itemView)  {
@@ -92,6 +99,9 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
     }
+
+
+
 
 
     @Override
@@ -113,6 +123,8 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
     }
+
+
 //TODO blah
     public void bind(@NonNull final SubGoalModel r) {
 
@@ -125,6 +137,8 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
 
         Log.d("GOALS", "the sub goal is "+ subGoal.getName() +  " child list is + "+ subgoal.getChildList().size()+ "  "+ subgoal.getDueDate());
+
+
 
         card = (CardView) itemView.findViewById(R.id.card_view);
 
@@ -157,10 +171,12 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
             Date currentTime = Calendar.getInstance().getTime();
             if(null!=subgoal.getDueDate()&& ((currentTime.getTime() - subgoal.getDueDate().getTime()))>0){
-                dueDate.setTextColor(Color.RED);
+                dueDate.setTextColor(itemView.getResources().getColor(R.color.color_past_due));
+                dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_past_due));
             }else if (null!=subgoal.getDueDate()&& ((currentTime.getTime() - subgoal.getDueDate().getTime()))<0){
                 Log.d("GOALS", "text colour: " +dueDate.getTextColors().getDefaultColor());
                 dueDate.setTextColor(dueDate.getTextColors().getDefaultColor());
+                dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_icons));
             }
 
             String dateToDisplay = Utilities.parseDateForDisplay(subgoal.getDueDate());
@@ -202,6 +218,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                                               @Override
                                               public void onClick(final View v) {
 
+//                                                  changed.subGoalChanged();
                                                   if (subgoal.getDone()) {
 
 //

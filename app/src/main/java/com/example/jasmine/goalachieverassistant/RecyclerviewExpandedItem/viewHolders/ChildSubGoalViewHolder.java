@@ -90,10 +90,12 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
 
             Date currentTime = Calendar.getInstance().getTime();
             if(null!=childSubGoal.getDueDate()&& ((currentTime.getTime() - childSubGoal.getDueDate().getTime()))>0){
-                dueDate.setTextColor(Color.RED);
+                dueDate.setTextColor(itemView.getResources().getColor(R.color.color_past_due));
+                dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_past_due));
             }else if (null!=childSubGoal.getDueDate()&& ((currentTime.getTime() - childSubGoal.getDueDate().getTime()))<0){
                 Log.d("GOALS", "text colour: " +dueDate.getTextColors().getDefaultColor());
                 dueDate.setTextColor(dueDate.getTextColors().getDefaultColor());
+                dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_icons));
             }
 
             String dateToDisplay = Utilities.parseDateForDisplay(childSubGoal.getDueDate());

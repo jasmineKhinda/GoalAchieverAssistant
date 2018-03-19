@@ -10,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 import java.util.Date;
 
+
 public class GoalModel extends RealmObject {
     @Required
     @PrimaryKey
@@ -37,6 +38,7 @@ public class GoalModel extends RealmObject {
 
     //   @LinkingObjects("goal")
     private RealmList<SubGoalModel> subgoals;
+
 
     public GoalModel(){
 
@@ -136,6 +138,7 @@ public class GoalModel extends RealmObject {
         this.key = key;
     }
 
+    @Nullable
     public String getName() {
         return name;
     }

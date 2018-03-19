@@ -17,7 +17,7 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="com.example.jasmine.goalachieverassistant.GoalListActivity"
-        tools:showIn="@layout/activity_goal_list">
+        tools:showIn="@layout/nav_goal_list">
 
 
 

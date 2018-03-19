@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -58,6 +59,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
     private Realm realm;
     int colorSelected=0;
     int labelColorFromDB=0;
+
 
 
 
@@ -167,16 +169,24 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
             }
         });
 
+
+
+
+
         List<String> spinnerArray=  new ArrayList<String>();
 
         try{
             //spinnerArray = new ArrayList(realm.where(GoalModel.class).findAllSorted("name"));
             realm = Realm.getDefaultInstance();
+
             RealmResults<GoalModel> results =realm.where(GoalModel.class).findAllSorted("name");
 
             for(GoalModel goal: results)
             {
-                spinnerArray.add(goal.getName().toString());
+                if(null!= goal.getName()){
+                    spinnerArray.add(goal.getName().toString());
+                }
+
             }
 
         }finally{
@@ -193,22 +203,23 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                 Log.d("GOALS", "default colour button " );
 //
                 projectSelection.setText(sub.getGoal().getName().toString());
-                Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.GRAY);
-                projectSelection.setTextAppearance(getContext(),
-                        R.style.AudioFileInfoOverlayText);
+                Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.LTGRAY);
+                projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
+//                projectSelection.setTextAppearance(getContext(),
+//                        R.style.AudioFileInfoOverlayText);
                 clearProjectButton.setVisibility(View.VISIBLE);
 
             }else if(null != sub.getGoal() && (0 != sub.getGoal().getLabelColor() && -1 != sub.getGoal().getLabelColor() )){
                 projectSelection.setText(sub.getGoal().getName().toString());
                 Utilities.setRoundedDrawable(getContext(),projectSelection, sub.getGoal().getLabelColor(), sub.getGoal().getLabelColor());
-                projectSelection.setTextAppearance(getContext(),
-                        R.style.AudioFileInfoOverlayText);
+                projectSelection.setTextColor(getResources().getColor(R.color.colorWhite));
+                projectSelection.setTypeface(null, Typeface.BOLD );
                 clearProjectButton.setVisibility(View.VISIBLE);
             }else{
                 projectSelection.setText(getResources().getString(R.string.add_project_hint));
-                Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.GRAY);
-                projectSelection.setTextAppearance(getContext(),
-                        R.style.AudioFileInfoOverlayText);
+                Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
+                projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
+                projectSelection.setTypeface(null,Typeface.NORMAL);
                 clearProjectButton.setVisibility(View.INVISIBLE);
             }
         }finally{
@@ -281,12 +292,14 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                                                         clearProjectButton.setVisibility(View.VISIBLE);
                                                         if (0 == sub.getGoal().getLabelColor()||-1 == sub.getGoal().getLabelColor()) {
                                                             projectSelection.setText(checkedItem.toString());
-                                                            Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.GRAY);
+                                                            Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.LTGRAY);
+                                                            projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
                                                             //projectSelection.setAlpha(1f);
                                                         }else{
                                                             projectSelection.setText(checkedItem.toString());
                                                             Utilities.setRoundedDrawable(getContext(),projectSelection, sub.getGoal().getLabelColor(), sub.getGoal().getLabelColor());
-
+                                                            projectSelection.setTextColor(getResources().getColor(R.color.colorWhite));
+                                                            projectSelection.setTypeface(null, Typeface.BOLD );
                                                             //projectSelection.setAlpha(1f);
                                                         }
                                                             Log.d("GOALS", "default colour button " );
@@ -346,9 +359,11 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                         projectSelection.setText(getResources().getString(R.string.add_project_hint));
                         clearProjectButton.setVisibility(View.INVISIBLE);
  //                       projectSelection.setAlpha(0.38F);
-                        Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.GRAY);
-                        projectSelection.setTextAppearance(getContext(),
-                                R.style.AudioFileInfoOverlayText);
+                        Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
+                        projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
+                        projectSelection.setTypeface(null,Typeface.NORMAL);
+//                        projectSelection.setTextAppearance(getContext(),
+//                                R.style.AudioFileInfoOverlayText);
                         realm.close();
                     }
                     });
@@ -455,52 +470,57 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
         //if we are accessing the this fragment via the EditTask Activity, then grab the task data from realm and put in appropriate views, else skip
 //        if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
 
+        try {
+
             realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    SubGoalModel taskModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
-                    //                    goalName.setText(goalModel.getName());
-                    Log.d("GOALS", "the label colour is "+taskModel.getLabelColor() +" for task " +taskModel.getName());
-                    labelColorFromDB = taskModel.getLabelColor();
-                    if(null != taskModel.getDueDate()){
+            //           realm.executeTransaction(new Realm.Transaction() {
+            //               @Override
+            //               public void execute(Realm realm) {
+            SubGoalModel taskModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+            //                    goalName.setText(goalModel.getName());
+            Log.d("GOALS", "the label colour is " + taskModel.getLabelColor() + " for task " + taskModel.getName());
+            labelColorFromDB = taskModel.getLabelColor();
+            if (null != taskModel.getDueDate()) {
 
-                        String dateToDisplay = Utilities.parseDateForDisplay(taskModel.getDueDate());
+                String dateToDisplay = Utilities.parseDateForDisplay(taskModel.getDueDate());
 
 
-                        //dueDate = taskModel.getDueDate();
-                        if(null == dateToDisplay){
+                dueDate = taskModel.getDueDate();
+                if (null == dateToDisplay) {
 //                            taskDueDate.setText(getResources().getString(R.string.due_date_hint));
 //                            taskDueDate.setTextColor(Color.BLACK);
-                           // dueDateInputLayout.setHint(getResources().getString(R.string.due_date_hint));
-                            //taskDueDate.setText("");
-                            //taskDueDates.setText("");
-                            //taskDueDate.setAlpha(0.38f);
-                            //dueDateInputLayout.setAlpha(0.38f);
-                            //dueDateInputLayout.setHintTextAppearance(R.style.TextLabelInput);
-                            clearDueDateButton.setVisibility(View.INVISIBLE);
-                           // taskDueDate.setAlpha(0.38f);
-                            Log.d("GOALS", "in null date ");
-                           // dueDate=null;
-                        }else{
-                            taskDueDate.setText(dateToDisplay);
-                            clearDueDateButton.setVisibility(View.VISIBLE);
-                            Log.d("GOALS", "in  not null date ");
-                        }
-                    }else{
-                        clearDueDateButton.setVisibility(View.INVISIBLE);
-                    }
-                    Log.d("GOALS", "onViewCreated: TASKDETAILSFRAGMENT.java END "+ taskModel.getDueDate());
+                    // dueDateInputLayout.setHint(getResources().getString(R.string.due_date_hint));
+                    //taskDueDate.setText("");
+                    //taskDueDates.setText("");
+                    //taskDueDate.setAlpha(0.38f);
+                    //dueDateInputLayout.setAlpha(0.38f);
+                    //dueDateInputLayout.setHintTextAppearance(R.style.TextLabelInput);
+                    clearDueDateButton.setVisibility(View.INVISIBLE);
+                    // taskDueDate.setAlpha(0.38f);
+                    Log.d("GOALS", "in null date ");
+                    // dueDate=null;
+                } else {
+                    taskDueDate.setText(dateToDisplay);
+                    clearDueDateButton.setVisibility(View.VISIBLE);
+                    Log.d("GOALS", "in  not null date ");
+                }
+            } else {
+                clearDueDateButton.setVisibility(View.INVISIBLE);
+            }
+            Log.d("GOALS", "onViewCreated: TASKDETAILSFRAGMENT.java END " + taskModel.getDueDate());
 //                    else{
 //                        taskDueDate.setText(R.string.no_due_date);
 //                    }
 
-                    taskReason.setText(taskModel.getReason());
-                    //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
-                    // spinner.setSelection(adapter.getPosition(goalModel.getType()));
-                }
-            });
+            taskReason.setText(taskModel.getReason());
+            //               spinner1.setSelection(adapter1.getPosition(goalModel.getPriority()));
+            //                   // spinner.setSelection(adapter.getPosition(goalModel.getType()));
+            //               }
+            //           });
+        }finally {
             realm.close();
+        }
+
  //       }
 
 

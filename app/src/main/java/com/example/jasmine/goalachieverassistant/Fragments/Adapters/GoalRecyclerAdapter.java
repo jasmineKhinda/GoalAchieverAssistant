@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -155,10 +156,12 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 //        Log.d("GOALS", "due date is time is "+mTaskModel.getDueDate().getTime());
 
         if(null!=mTaskModel.getDueDate()&& ((currentTime.getTime() - mTaskModel.getDueDate().getTime()))>0){
-            holder.taskDate.setTextColor(Color.RED);
+            holder.taskDate.setTextColor(itemView.getResources().getColor(R.color.color_past_due));
+            holder.dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_past_due));
         }else if (null!=mTaskModel.getDueDate()&& ((currentTime.getTime() - mTaskModel.getDueDate().getTime()))<0){
             Log.d("GOALS", "text colour: " +holder.taskDate.getTextColors().getDefaultColor());
             holder.taskDate.setTextColor(holder.taskDate.getTextColors().getDefaultColor());
+            holder.dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_icons));
         }
         holder.card.setOnClickListener(new View.OnClickListener() {
             @Override

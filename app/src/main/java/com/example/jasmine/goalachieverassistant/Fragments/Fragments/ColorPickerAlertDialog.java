@@ -46,26 +46,21 @@ public class ColorPickerAlertDialog extends DialogFragment {
 
             final String uuId = getArguments().getString("GOALUUID");
             final int[] colors = new int[]{
-                    getResources().getColor(R.color.red),
-                    getResources().getColor(R.color.pink),
-                    getResources().getColor(R.color.purple),
-                    getResources().getColor(R.color.deep_purple),
-                    getResources().getColor(R.color.indigo),
-                    getResources().getColor(R.color.blue),
-                    getResources().getColor(R.color.light_blue),
-                    getResources().getColor(R.color.cyan),
-                    getResources().getColor(R.color.teal),
-                    getResources().getColor(R.color.green),
-                    getResources().getColor(R.color.light_green),
-                    getResources().getColor(R.color.lime),
-                    getResources().getColor(R.color.yellow),
-                    getResources().getColor(R.color.amber),
-                    getResources().getColor(R.color.orange),
-                    getResources().getColor(R.color.deep_orange),
-                    getResources().getColor(R.color.brown),
-                    getResources().getColor(R.color.grey),
-                    getResources().getColor(R.color.blue_grey),
+
+                    getResources().getColor(R.color.colour1),
+                    getResources().getColor(R.color.colour2),
+                    getResources().getColor(R.color.colour14),
+                    getResources().getColor(R.color.colour5),
+                    getResources().getColor(R.color.colour6),
+                    getResources().getColor(R.color.colour7),
+                    getResources().getColor(R.color.colour8),
+                    getResources().getColor(R.color.colour9),
+                    getResources().getColor(R.color.colour11),
+                    getResources().getColor(R.color.colour12),
+                    getResources().getColor(R.color.colour13),
                     getResources().getColor(R.color.white)
+
+
 
             };
             //if there user has already selected a color and saved it to DB display the color as the the selected one

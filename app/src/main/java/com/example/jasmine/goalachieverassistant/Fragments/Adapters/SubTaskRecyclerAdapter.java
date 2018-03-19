@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.ChildViewHolder;
@@ -77,6 +80,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
         public TextView dueDate;
         private CheckBox isTaskDone;
         private ChildSubGoalModel childSubGoal;
+        private ImageView dueDateIcon;
         Realm realm;
 
         public TaskViewHolder(@NonNull View itemView) {
@@ -85,6 +89,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
             buttonViewOption = (ImageButton) itemView.findViewById(R.id.overFlow);
             dueDate = (TextView) itemView.findViewById(R.id.childDueDueDate);
             isTaskDone = (CheckBox) itemView.findViewById(R.id.task_item_done);
+            dueDateIcon =(ImageView) itemView.findViewById(R.id.due_date_icon);
             itemView.setOnClickListener(this);
         }
 
@@ -114,12 +119,33 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
             });
 
         //if no due date display the default "No Due Date" from layout file
-        if(null !=childSubGoal.getDueDate()){
-            String dateToDisplay = Utilities.parseDateForDisplay(childSubGoal.getDueDate());
-            dueDate.setText(dateToDisplay);
-        }else{
-            dueDate.setText(R.string.no_due_date);
-        }
+//        if(null !=childSubGoal.getDueDate()){
+//            String dateToDisplay = Utilities.parseDateForDisplay(childSubGoal.getDueDate());
+//            dueDate.setText(dateToDisplay);
+//        }else{
+//            ioiuo
+//        }
+
+            if(null!=childSubGoal.getDueDate()){
+
+                Date currentTime = Calendar.getInstance().getTime();
+                if(null!=childSubGoal.getDueDate()&& ((currentTime.getTime() - childSubGoal.getDueDate().getTime()))>0){
+                    dueDate.setTextColor(itemView.getResources().getColor(R.color.color_past_due));
+                    dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_past_due));
+                }else if (null!=childSubGoal.getDueDate()&& ((currentTime.getTime() - childSubGoal.getDueDate().getTime()))<0){
+                    Log.d("GOALS", "text colour: " +dueDate.getTextColors().getDefaultColor());
+                    dueDate.setTextColor(dueDate.getTextColors().getDefaultColor());
+                    dueDateIcon.setColorFilter(itemView.getResources().getColor(R.color.color_icons));
+                }
+
+                String dateToDisplay = Utilities.parseDateForDisplay(childSubGoal.getDueDate());
+                dueDate.setVisibility(View.VISIBLE);
+                dueDate.setText(dateToDisplay);
+                dueDateIcon.setVisibility(View.VISIBLE);
+            }else{
+                dueDate.setVisibility(View.INVISIBLE);
+                dueDateIcon.setVisibility(View.INVISIBLE);
+            }
 
 
         isTaskDone.setChecked(childSubGoal.getDone());

@@ -58,7 +58,26 @@ public class Utilities {
         shape.setCornerRadius(90f);
         shape.setColor(backgroundColor);
         if (borderColor != 0){
-            shape.setStroke(5, borderColor);
+            shape.setStroke(2, borderColor);
+        }
+        view.setBackground(shape);
+    }
+
+    /**
+     * sets a view with a rounded border with dotted line and specified background and border colours
+     * @param context
+     * @param view
+     * @param backgroundColor
+     * @param borderColor
+     */
+    public static void setRoundedDrawableDottedLine(Context context, View view, int backgroundColor, int borderColor) {
+        GradientDrawable shape = new GradientDrawable();
+        shape.setShape(GradientDrawable.RECTANGLE);
+        shape.setCornerRadius(90f);
+        Log.d("GOALS", "in dotted line");
+        shape.setColor(backgroundColor);
+        if (borderColor != 0){
+            shape.setStroke(5,borderColor,15,7);
         }
         view.setBackground(shape);
     }

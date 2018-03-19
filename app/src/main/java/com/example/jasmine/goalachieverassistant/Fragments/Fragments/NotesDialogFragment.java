@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -87,9 +88,16 @@ public class NotesDialogFragment extends DialogFragment {
         goalNotesText.setSelection(goalNotesText.getText().length());
 
 
+        goalNotesText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    getDialog().getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                }
+            }
+        });
 
-
-        //put the color palette inside an alert dialog for user to choose from
+        //put the edit notes inside an alert dialog
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext())
                 .setTitle(title)
                 .setView(subView)
@@ -146,6 +154,7 @@ public class NotesDialogFragment extends DialogFragment {
                     }
                 })
                 .setNegativeButton("Cancel", null);
+
 
 
 

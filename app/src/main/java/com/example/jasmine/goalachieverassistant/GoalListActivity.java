@@ -3,6 +3,9 @@ package com.example.jasmine.goalachieverassistant;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,12 +32,15 @@ import io.realm.Sort;
 public class GoalListActivity extends AppCompatActivity {
     private Realm realm;
     private RecyclerView recyclerView;
+    private DrawerLayout mDrawerLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goal_list);
-
+        setContentView(R.layout.nav_goal_list);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
 
         recyclerView = (RecyclerView)findViewById(R.id.goal_list);
@@ -61,8 +67,13 @@ public class GoalListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ActionBar actionbar =getSupportActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+
+
+
 
         CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter (getSupportActionBar().getThemedContext(),android.R.layout.simple_spinner_item, mGoalFilterArrayList);
         customSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,32 +85,34 @@ public class GoalListActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelected = parent.getItemAtPosition(position).toString();
-                Log.d("GOALS", "onItemSelected: in toolbar for Goals. Item selected is " +itemSelected);
+                Log.d("GOALS", "onItemSelected: in toolbar for Goals. Item selected is " + itemSelected);
                 String[] filterGoalsList;
-                filterGoalsList= getResources().getStringArray(R.array.goalfilter);
+                filterGoalsList = getResources().getStringArray(R.array.goalfilter);
 
-                if(itemSelected.equals(filterGoalsList[0])){
-                //default "All goals" sorts the goals with due dates ascending and puts the empty due dates at bottom
-                    RealmResults<GoalModel> tasks =realm.where(GoalModel.class)
+                if (itemSelected.equals(filterGoalsList[0])) {
+                    //default "All goals" sorts the goals with due dates ascending and puts the empty due dates at bottom
+
+                    realm = Realm.getDefaultInstance();
+                    RealmResults<GoalModel> tasks = realm.where(GoalModel.class)
                             .findAllSortedAsync(
-                                    new String[] {"dueDateNotEmpty", "dueDate"},
-                                    new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+                                    new String[]{"dueDateNotEmpty", "dueDate"},
+                                    new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
                     adapter.updateData(tasks);
 
-                }else if(itemSelected.equals(filterGoalsList[1])){
+                } else if (itemSelected.equals(filterGoalsList[1])) {
                     //By Name Ascending
-                    adapter.sortGoalListWithSortOrder("name",Sort.ASCENDING);
+                    adapter.sortGoalListWithSortOrder("name", Sort.ASCENDING);
 
-                }else if(itemSelected.equals(filterGoalsList[2])){
+                } else if (itemSelected.equals(filterGoalsList[2])) {
                     //No Due Date
-                    adapter.sortGoalListContainsTextAndReturnsSortedList("dueDate", Sort.ASCENDING, null, true,"name");
+                    adapter.sortGoalListContainsTextAndReturnsSortedList("dueDate", Sort.ASCENDING, null, true, "name");
 
 
-                }else{
-                    Log.e("ERROR:", "onItemSelected: valid choice not selected" );
+                } else {
+                    Log.e("ERROR:", "onItemSelected: valid choice not selected");
+
                 }
-
-
+                // realm.close();
 
             }
 
@@ -175,9 +188,18 @@ public class GoalListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_settings:
+                return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
