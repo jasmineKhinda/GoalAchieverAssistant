@@ -1,5 +1,6 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,9 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
@@ -119,6 +122,17 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
         taskReason = (TextView) view.findViewById(R.id.addReason);
         Log.d("GOALS", "onViewCreated: SUBTASKDETAILSFRAGMENT.java");
 
+        final Button categoryListSelection =(Button) view.findViewById(R.id.category_list_selection);
+
+
+        try{
+            realm = Realm.getDefaultInstance();
+            TaskModel subt = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+            Log.d("GOALS", " this is the category ");
+            categoryListSelection.setText(getResources().getString(R.string.category_list_prefix_in)+" " + subt.getTaskCategory().getName());
+        }finally{
+            realm.close();
+        }
 
         clearDueDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +142,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
                     @Override
                     public void execute(Realm realm) {
 
-                        ChildSubGoalModel sub = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                        TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                         sub.setDueDate(null);
                         Log.d("GOALS", "in the delete due date "+ sub.getDueDate());
 
@@ -153,46 +167,73 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
 
         try {
             realm = Realm.getDefaultInstance();
-            ChildSubGoalModel sub = realm.where(ChildSubGoalModel .class).equalTo("id", uuId).findFirst();
+            TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
 
-            SubGoalModel subGoal = sub.getSubGoal();
-            if(null !=subGoal ) {
+            String taskUUID =  sub.getParentTaskId();
+            TaskModel task = realm.where(TaskModel.class).equalTo("id", taskUUID).findFirst();
+            if(null !=task ) {
 
-
-                if (null != subGoal.getGoal() && (0 == subGoal.getGoal().getLabelColor() || -1 == subGoal.getGoal().getLabelColor())) {
+            if(null != task.getParentGoalId()){
+                TaskModel goal = realm.where(TaskModel.class).equalTo("id", task.getParentGoalId()).findFirst();
+                if ((0 == goal.getLabelColor() || -1 == goal.getLabelColor())) {
 
                     Log.d("GOALS", "default colour button ");
 //
-                    projectSelection.setText(subGoal.getGoal().getName().toString());
+                    projectSelection.setText(goal.getName().toString());
                     Utilities.setRoundedDrawable(getContext(), projectSelection, Color.LTGRAY, Color.LTGRAY);
                     projectSelection.setTextColor(taskReason.getTextColors().getDefaultColor());
 
 
-                } else if (null != subGoal.getGoal() && (0 != subGoal.getGoal().getLabelColor() && -1 != subGoal.getGoal().getLabelColor())) {
-                    projectSelection.setText(subGoal.getGoal().getName().toString());
-                    Utilities.setRoundedDrawable(getContext(), projectSelection, subGoal.getGoal().getLabelColor(), subGoal.getGoal().getLabelColor());
+                } else if (0 != goal.getLabelColor() && -1 != goal.getLabelColor()) {
+                    projectSelection.setText(goal.getName().toString());
+                    Utilities.setRoundedDrawable(getContext(), projectSelection, goal.getLabelColor(), goal.getLabelColor());
                     projectSelection.setTextColor(getResources().getColor(R.color.colorWhite));
                     projectSelection.setTypeface(null, Typeface.BOLD );
 
-                } else {
-                    projectSelection.setText(getResources().getString(R.string.add_project_hint));
-                    Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
-                    projectSelection.setTextColor(taskReason.getTextColors().getDefaultColor());
-                    projectSelection.setTypeface(null,Typeface.NORMAL);
-
                 }
+            }else {
+                projectSelection.setText(getResources().getString(R.string.add_project_hint));
+                Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
+                projectSelection.setTextColor(taskReason.getTextColors().getDefaultColor());
+                projectSelection.setTypeface(null,Typeface.NORMAL);
+
+            }
+
             }
         }finally{
             realm.close();
         }
 
-        projectSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast toast =Toast.makeText(v.getContext(), getResources().getString(R.string.project_context_change_warning),Toast.LENGTH_SHORT );
-                toast.show();
+        try {
+            realm = Realm.getDefaultInstance();
+            final TaskModel mTask = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+            final TaskModel parentTask = realm.where(TaskModel.class).equalTo("id", mTask.getParentTaskId()).findFirst();
+
+            if(null!=parentTask.getParentGoalId()) {
+                final TaskModel goal = realm.where(TaskModel.class).equalTo("id", parentTask.getParentGoalId()).findFirst();
+                projectSelection.setVisibility(View.VISIBLE);
+                projectSelection.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+
+
+                                                            Intent viewTaskIntent = new Intent(getView().getContext(), EditGoalActivity.class);
+                                                            viewTaskIntent.putExtra("EDIT_GOALUUID", goal.getId());
+                                                            viewTaskIntent.putExtra("EDIT_GOALNAME", goal.getName());
+
+
+                                                            getView().getContext().startActivity(viewTaskIntent);
+
+
+                                                        }
+                                                    }
+                );
+            }else{
+                projectSelection.setVisibility(View.GONE);
             }
-        });
+        }finally {
+            realm.close();
+        }
 
 
         Log.d("GOALS", "intialized the taskDueDate ");
@@ -250,7 +291,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
         //if user has already set the label colour in db, then display it in the colourLabelButton view
         try {
             realm = Realm.getDefaultInstance();
-            final ChildSubGoalModel mGoal = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+            final TaskModel mGoal = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             if(0 !=mGoal.getLabelColor()) {
                 int selectedLabelColor = mGoal.getLabelColor();
                 colourLabelButton.setColorFilter(selectedLabelColor);
@@ -292,7 +333,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
             //       realm.executeTransactionAsync(new Realm.Transaction() {
             //           @Override
             //          public void execute(Realm realm) {
-            ChildSubGoalModel taskModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+            TaskModel taskModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             //                    goalName.setText(goalModel.getName());
             Log.d("GOALS", "the label colour is " + taskModel.getLabelColor() + " for task " + taskModel.getName());
             labelColorFromDB = taskModel.getLabelColor();
@@ -349,7 +390,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
                 @Override
                 public void execute(Realm realm) {
 
-                    ChildSubGoalModel taskModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                    TaskModel taskModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                     taskModel.setName(taskTitle);
                     taskModel.setTime(mDateString);
                     taskModel.setReason(taskReason.getText().toString());

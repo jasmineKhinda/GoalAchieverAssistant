@@ -20,6 +20,11 @@
         app:cardElevation="1dp"
         app:cardMaxElevation="1dp"
         >
+        <FrameLayout
+            android:id="@+id/card_frame"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_edge"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

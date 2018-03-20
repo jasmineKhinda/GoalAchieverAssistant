@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.ChildSubGoalViewHolder;
@@ -26,14 +27,14 @@ import io.realm.RealmExpandableSearchRecyclerAdapter;
  * Created by jasmine on 18/01/18.
  */
 
-public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<SubGoalModel, ChildSubGoalModel, SubGoalViewHolder, ChildSubGoalViewHolder> {
+public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<TaskModel, TaskModel, SubGoalViewHolder, ChildSubGoalViewHolder> {
 
 
-    private List<SubGoalModel> recipeList;
+    private List<TaskModel> recipeList;
 
-    public SubGoalAdapter(@NonNull OrderedRealmCollection<SubGoalModel> recipeList, @NonNull String filterKey) {
-        super(recipeList);
-        this.recipeList = recipeList;
+    public SubGoalAdapter(@NonNull OrderedRealmCollection<TaskModel> taskList, @NonNull String filterKey) {
+        super(taskList);
+        this.recipeList = taskList;
     }
 
     @UiThread
@@ -64,7 +65,7 @@ public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<SubGoalModel,
 
     @UiThread
     @Override
-    public void onBindParentViewHolder(@NonNull SubGoalViewHolder recipeViewHolder, int parentPosition, @NonNull SubGoalModel recipe) {
+    public void onBindParentViewHolder(@NonNull SubGoalViewHolder recipeViewHolder, int parentPosition, @NonNull TaskModel recipe) {
         Log.d("GOALS", "onCreateParentViewHolder 3");
         recipeViewHolder.bind(recipe);
 
@@ -72,7 +73,7 @@ public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<SubGoalModel,
 
     @UiThread
     @Override
-    public void onBindChildViewHolder(@NonNull ChildSubGoalViewHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull ChildSubGoalModel ingredient) {
+    public void onBindChildViewHolder(@NonNull ChildSubGoalViewHolder ingredientViewHolder, int parentPosition, int childPosition, @NonNull TaskModel ingredient) {
         Log.d("GOALS", "onCreateParentViewHolder 4" + childPosition +"     ing"+ ingredient);
         ingredientViewHolder.bind(ingredient);
 

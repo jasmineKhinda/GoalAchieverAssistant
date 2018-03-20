@@ -16,6 +16,7 @@ import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 
 import io.realm.Realm;
@@ -69,7 +70,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
             if(EditGoalActivity.class.getName().contains(getActivity().getLocalClassName())){
                 try{
                     realm = Realm.getDefaultInstance();
-                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                    TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                     //TODO: fix this recurring issue that causes intermittent crash 87678
                     colorSelected = goalModel.getLabelColor();
                 }finally{
@@ -79,7 +80,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
             }else if(EditTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
                 try{
                     realm = Realm.getDefaultInstance();
-                    SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                    TaskModel subGoalModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                     //TODO: fix this recurring issue that causes intermittent crash 87678
                     colorSelected = subGoalModel.getLabelColor();
                 }finally{
@@ -90,7 +91,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
             }else if(EditSubTaskActivity.class.getName().contains(getActivity().getLocalClassName())){
                 try{
                     realm = Realm.getDefaultInstance();
-                    ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                    TaskModel childSubGoalModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                     //TODO: fix this recurring issue that causes intermittent crash 87678
                     colorSelected = childSubGoalModel.getLabelColor();
                 }finally{
@@ -144,7 +145,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
                                     realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", uuId).findFirst();
+                                            TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                                             if(colorSelected!=0){
                                                 goalModel.setLabelColor(colorSelected);
                                             }
@@ -161,7 +162,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
                                     realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                                            TaskModel subGoalModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                                             if(colorSelected!=0){
                                                 subGoalModel.setLabelColor(colorSelected);
                                             }
@@ -179,7 +180,7 @@ public class ColorPickerAlertDialog extends DialogFragment {
                                     realm.executeTransactionAsync(new Realm.Transaction() {
                                         @Override
                                         public void execute(Realm realm) {
-                                            ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                                            TaskModel childSubGoalModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                                             if(colorSelected!=0){
                                                 childSubGoalModel.setLabelColor(colorSelected);
                                             }

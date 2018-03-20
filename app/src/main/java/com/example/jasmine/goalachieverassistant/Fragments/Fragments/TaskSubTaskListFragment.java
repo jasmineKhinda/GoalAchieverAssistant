@@ -18,6 +18,7 @@ import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.SubTaskRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
 import com.example.jasmine.goalachieverassistant.Utilities;
@@ -41,7 +42,7 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
     private String taskUUID;
     private Realm realm;
     private SubTaskRecyclerAdapter adapter;
-    RealmResults<ChildSubGoalModel> subTasks;
+    RealmResults<TaskModel> subTasks;
     public EditText addTaskDueDate;
     Date dueDate;
     private static final String TASK_UUID = "GoalUUID";
@@ -106,7 +107,7 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
         //recycler view of all the sub tasks
         Log.d("GOALS", "in TaskList Fragment setting up recycler adapter!!!");
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
-        //  subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", taskUUID).findAllSorted("name", Sort.ASCENDING);
+        //  tasksForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", taskUUID).findAllSorted("name", Sort.ASCENDING);
         realm = Realm.getDefaultInstance();
 
 //        SubGoalModel task = realm.where(SubGoalModel.class).equalTo("id", taskUUID).findFirst();
@@ -116,7 +117,7 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
 
 
 //TODO : add the sorting filter
-        subTasks =realm.where(ChildSubGoalModel.class).equalTo("subGoal.id", taskUUID).
+        subTasks =realm.where(TaskModel.class).equalTo("parentTaskId", taskUUID).
                 findAllSortedAsync(
                         new String[] {"dueDateNotEmpty", "dueDate"},
                         new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
@@ -130,9 +131,9 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
 //            }
 //        });
 
-        subTasks.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<ChildSubGoalModel>>() {
+        subTasks.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<TaskModel>>() {
             @Override
-            public void onChange(RealmResults<ChildSubGoalModel> persons, OrderedCollectionChangeSet
+            public void onChange(RealmResults<TaskModel> persons, OrderedCollectionChangeSet
                     changeset) {
 
                 adapter = new SubTaskRecyclerAdapter(getActivity(),persons,true);

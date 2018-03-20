@@ -15,7 +15,7 @@ import io.realm.Sort;
  * @param <P> Parent list item
  * @param <C> Child list item
  */
-public class ExpandableWrapper<P extends Parent<C>, C extends Child> implements RealmModel {
+public class ExpandableWrapper<P extends Parent<C>, C extends Parent> implements RealmModel {
 
     private P parent;
     private C child;
@@ -29,7 +29,7 @@ public class ExpandableWrapper<P extends Parent<C>, C extends Child> implements 
      *
      * @param parent The parent object to wrap
      */
-    public ExpandableWrapper(@NonNull P parent) {
+    public ExpandableWrapper(@NonNull P parent, boolean isSubTask) {
         this.parent = parent;
         wrappedParent = true;
         expanded = false;

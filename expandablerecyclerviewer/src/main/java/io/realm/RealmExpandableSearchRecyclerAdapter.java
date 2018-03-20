@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import io.realm.model.Parent;
 import io.realm.model.Child;
 
-public abstract class RealmExpandableSearchRecyclerAdapter<P extends Parent<C>, C extends Child, PVH extends ParentViewHolder, CVH extends ChildViewHolder>
+public abstract class RealmExpandableSearchRecyclerAdapter<P extends Parent<C>, C extends Parent, PVH extends ParentViewHolder, CVH extends ChildViewHolder>
         extends RealmExpandableRecyclerAdapter<P, C, PVH, CVH> {
 
     @NonNull

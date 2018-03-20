@@ -27,9 +27,9 @@ import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.GoalListActivity;
 
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
@@ -133,10 +133,25 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
         final NotesDialogFragment fragmentNotes =NotesDialogFragment.newInstance(getResources().getString(R.string.notes_dialog_title),uuId,this);
         Log.d("GOALS", "onViewCreated: TASKDETAILSFRAGMENT.java");
         final Button projectSelection =(Button) view.findViewById(R.id.project_selection);
-        final ImageView clearProjectButton =(ImageView) view.findViewById(R.id.delete_project);
+    //    final ImageView clearProjectButton =(ImageView) view.findViewById(R.id.delete_project);
         final ImageView clearDueDateButton =(ImageView) view.findViewById(R.id.remove_date);
         //final TextInputLayout textInputLayout = (TextInputLayout)view.findViewById(R.id.lNameLayout);
         final TextInputLayout dueDateInputLayout = (TextInputLayout)view.findViewById(R.id.lNameLayoutDate);
+
+
+        final Button categoryListSelection =(Button) view.findViewById(R.id.category_list_selection);
+
+
+        try{
+            realm = Realm.getDefaultInstance();
+            TaskModel subt = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+            Log.d("GOALS", " this is the category ");
+            categoryListSelection.setText(getResources().getString(R.string.category_list_prefix_in) +" " + subt.getTaskCategory().getName());
+        }finally{
+            realm.close();
+        }
+
+
 
         clearDueDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,7 +161,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                     @Override
                     public void execute(Realm realm) {
 
-                        SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                        TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                         sub.setDueDate(null);
                         Log.d("GOALS", "in the delete due date "+ sub.getDueDate());
 
@@ -179,9 +194,9 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
             //spinnerArray = new ArrayList(realm.where(GoalModel.class).findAllSorted("name"));
             realm = Realm.getDefaultInstance();
 
-            RealmResults<GoalModel> results =realm.where(GoalModel.class).findAllSorted("name");
+            RealmResults<TaskModel> results =realm.where(TaskModel.class).findAllSorted("name");
 
-            for(GoalModel goal: results)
+            for(TaskModel goal: results)
             {
                 if(null!= goal.getName()){
                     spinnerArray.add(goal.getName().toString());
@@ -196,179 +211,118 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
         //set the project name if there is already an project associated with the task
         try {
             realm = Realm.getDefaultInstance();
-            SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+            TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
 
-            if (null != sub.getGoal() && (0 == sub.getGoal().getLabelColor()||-1 == sub.getGoal().getLabelColor()) ) {
 
-                Log.d("GOALS", "default colour button " );
+            if(null != sub.getParentGoalId()){
+                TaskModel goal = realm.where(TaskModel.class).equalTo("id", sub.getParentGoalId()).findFirst();
+                if ((0 == goal.getLabelColor()||-1 == goal.getLabelColor()) ) {
+
+                    Log.d("GOALS", "default colour button " );
 //
-                projectSelection.setText(sub.getGoal().getName().toString());
-                Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.LTGRAY);
-                projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
+                    projectSelection.setText(goal.getName().toString());
+                    Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.LTGRAY);
+                    projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
 //                projectSelection.setTextAppearance(getContext(),
 //                        R.style.AudioFileInfoOverlayText);
-                clearProjectButton.setVisibility(View.VISIBLE);
+ //                   clearProjectButton.setVisibility(View.VISIBLE);
 
-            }else if(null != sub.getGoal() && (0 != sub.getGoal().getLabelColor() && -1 != sub.getGoal().getLabelColor() )){
-                projectSelection.setText(sub.getGoal().getName().toString());
-                Utilities.setRoundedDrawable(getContext(),projectSelection, sub.getGoal().getLabelColor(), sub.getGoal().getLabelColor());
-                projectSelection.setTextColor(getResources().getColor(R.color.colorWhite));
-                projectSelection.setTypeface(null, Typeface.BOLD );
-                clearProjectButton.setVisibility(View.VISIBLE);
+                }else if( (0 != goal.getLabelColor() && -1 != goal.getLabelColor() )){
+                    projectSelection.setText(goal.getName().toString());
+                    Utilities.setRoundedDrawable(getContext(),projectSelection, goal.getLabelColor(), goal.getLabelColor());
+                    projectSelection.setTextColor(getResources().getColor(R.color.colorWhite));
+                    projectSelection.setTypeface(null, Typeface.BOLD );
+//                    clearProjectButton.setVisibility(View.VISIBLE);
+                }
             }else{
                 projectSelection.setText(getResources().getString(R.string.add_project_hint));
                 Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
                 projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
                 projectSelection.setTypeface(null,Typeface.NORMAL);
-                clearProjectButton.setVisibility(View.INVISIBLE);
+ //               clearProjectButton.setVisibility(View.INVISIBLE);
             }
+
         }finally{
             realm.close();
         }
 
         //simple_selectable_list_item
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, spinnerArray);
-        projectSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Add to Project")
-                        .setSingleChoiceItems(adapter,0, new DialogInterface.OnClickListener() {
+        //final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, spinnerArray);
+        try {
+            realm = Realm.getDefaultInstance();
+            final TaskModel mTask = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
 
-                            @Override
-                            public void onClick(final DialogInterface dialog, int which) {
-
-                                // TODO: user specific action
-
-                                ListView lw = ((AlertDialog)dialog).getListView();
-                                lw.setItemChecked(which, true);
-                                final Object checkedItem = lw.getAdapter().getItem(lw.getCheckedItemPosition());
-
-                                    realm = Realm.getDefaultInstance();
-                                    realm.executeTransactionAsync(new Realm.Transaction() {
-                                        @Override
-                                        public void execute(Realm realm) {
+            if(null!=mTask.getParentGoalId()) {
+                final TaskModel goal = realm.where(TaskModel.class).equalTo("id", mTask.getParentGoalId()).findFirst();
+                projectSelection.setVisibility(View.VISIBLE);
+                projectSelection.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
 
 
-                                            String projectName =checkedItem.toString();
+                                                            Intent viewTaskIntent = new Intent(getView().getContext(), EditGoalActivity.class);
+                                                            viewTaskIntent.putExtra("EDIT_GOALUUID", goal.getId());
+                                                            viewTaskIntent.putExtra("EDIT_GOALNAME", goal.getName());
 
-                                            Log.d("GOALS", "project name selected is  " + projectName);
 
-                                            SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
-                                             //if user is changing the project context I.e. adding a different project than original, first remove the task from the original project
-                                            Log.d("GOALS", "after sub  " + sub.getName());
-                                            try{
-                                                if (!checkedItem.equals(null)){
-                                                    GoalModel goal = sub.getGoal();
-                                                    if(null!= goal){
-                                                        goal.getSubgoals().remove(sub);
-                                                        Log.d("GOALS", " the subgals row is"+goal.getSubgoals() );
-                                                    }
-                                                }
+                                                            getView().getContext().startActivity(viewTaskIntent);
 
-                                            }finally {
 
-                                                if (!checkedItem.equals(null)) {
-
-                                                    Log.d("GOALS", "in update project name  ");
-//                                                GoalModel goalModel = realm.where(GoalModel.class).equalTo("name", sub.getGoal().getId()).findFirst();
-//                                                goalModel.getSubgoals().remove(sub);
-                                                    //now add task to the new project Object
-                                                    GoalModel goalModelNew = realm.where(GoalModel.class).equalTo("name", projectName).findFirst();
-                                                    goalModelNew.getSubgoals().add(sub);
-                                                    //now add the new project to the Task Object
-                                                    sub.setGoal(goalModelNew);
-                                                }
-                                            }
-
-                                        }},new Realm.Transaction.OnSuccess() {
-                                                @Override
-                                                public void onSuccess() {
-                                                    Log.d("GOALS", "onSuccess: ");
-                                                    if(null != checkedItem){
-
-                                                        SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
-                                                        Log.d("GOALS", "inside the if " + sub.getGoal().getLabelColor());
-                                                        clearProjectButton.setVisibility(View.VISIBLE);
-                                                        if (0 == sub.getGoal().getLabelColor()||-1 == sub.getGoal().getLabelColor()) {
-                                                            projectSelection.setText(checkedItem.toString());
-                                                            Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.LTGRAY);
-                                                            projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
-                                                            //projectSelection.setAlpha(1f);
-                                                        }else{
-                                                            projectSelection.setText(checkedItem.toString());
-                                                            Utilities.setRoundedDrawable(getContext(),projectSelection, sub.getGoal().getLabelColor(), sub.getGoal().getLabelColor());
-                                                            projectSelection.setTextColor(getResources().getColor(R.color.colorWhite));
-                                                            projectSelection.setTypeface(null, Typeface.BOLD );
-                                                            //projectSelection.setAlpha(1f);
                                                         }
-                                                            Log.d("GOALS", "default colour button " );
-//
-
-
-
                                                     }
-//
-                                                    realm.close();
-
-                                                }
-                                            }, new Realm.Transaction.OnError() {
-                                                @Override
-                                                public void onError(Throwable error) {
-                                                    Log.d("GOALS", "onError: "+ error);
-                                                    realm.close();
-                                                }
-                                            });
-
-                                        dialog.dismiss();
-                                }
-                        })
-                        .create().show();
+                );
+            }else{
+                projectSelection.setVisibility(View.GONE);
             }
-        });
+            }finally {
+                realm.close();
+            }
+
+
 
 //        adapter.setDropDownViewResource(android.R.layout.simple_selectable_list_item);
 //        Spinner sItems = (Spinner) view.findViewById(R.id.project_selection);
 //        sItems.setAdapter(adapter);
 
-        clearProjectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                    realm = Realm.getDefaultInstance();
-                    realm.executeTransactionAsync(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
-                            try{
-                                GoalModel goal = sub.getGoal();
-                                if(null!= goal){
-                                    goal.getSubgoals().remove(sub);
-                                    Log.d("GOALS", " the subgals row is"+goal.getSubgoals() );
-                                }
-                            }finally{
-                                sub.setGoal(null);
-                            }
-
-                        }},new Realm.Transaction.OnSuccess() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d("GOALS", "onSuccess: ");
-//                        SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
-                        projectSelection.setText(getResources().getString(R.string.add_project_hint));
-                        clearProjectButton.setVisibility(View.INVISIBLE);
- //                       projectSelection.setAlpha(0.38F);
-                        Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
-                        projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
-                        projectSelection.setTypeface(null,Typeface.NORMAL);
-//                        projectSelection.setTextAppearance(getContext(),
-//                                R.style.AudioFileInfoOverlayText);
-                        realm.close();
-                    }
-                    });
-            }
-        });
+//        clearProjectButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                    realm = Realm.getDefaultInstance();
+//                    realm.executeTransactionAsync(new Realm.Transaction() {
+//                        @Override
+//                        public void execute(Realm realm) {
+//                            TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+//                            TaskModel goal = realm.where(TaskModel.class).equalTo("id", sub.getParentGoalId()).findFirst();
+//                            try{
+//                                //GoalModel goal = sub.getGoal();
+//                                if(null!= goal){
+//                                    goal.getTasks().remove(sub);
+//                                    Log.d("GOALS", " the subgals row is"+goal.getTasks() );
+//                                }
+//                            }finally{
+//                                sub.setParentGoalId(null);
+//                            }
+//
+//                        }},new Realm.Transaction.OnSuccess() {
+//                    @Override
+//                    public void onSuccess() {
+//                        Log.d("GOALS", "onSuccess: ");
+////                        TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+//                        projectSelection.setText(getResources().getString(R.string.add_project_hint));
+//                        clearProjectButton.setVisibility(View.INVISIBLE);
+// //                       projectSelection.setAlpha(0.38F);
+//                        Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
+//                        projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
+//                        projectSelection.setTypeface(null,Typeface.NORMAL);
+////                        projectSelection.setTextAppearance(getContext(),
+////                                R.style.AudioFileInfoOverlayText);
+//                        realm.close();
+//                    }
+//                    });
+//            }
+//        });
 
         taskReason = (TextView) view.findViewById(R.id.addReason);
         Log.d("GOALS", "intialized the taskDueDate ");
@@ -426,7 +380,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
         //if user has already set the label colour in db, then display it in the colourLabelButton view
         try {
             realm = Realm.getDefaultInstance();
-            final SubGoalModel mGoal = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+            final TaskModel mGoal = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             if(0 !=mGoal.getLabelColor()) {
                 int selectedLabelColor = mGoal.getLabelColor();
                 colourLabelButton.setColorFilter(selectedLabelColor);
@@ -476,7 +430,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
             //           realm.executeTransaction(new Realm.Transaction() {
             //               @Override
             //               public void execute(Realm realm) {
-            SubGoalModel taskModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+            TaskModel taskModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             //                    goalName.setText(goalModel.getName());
             Log.d("GOALS", "the label colour is " + taskModel.getLabelColor() + " for task " + taskModel.getName());
             labelColorFromDB = taskModel.getLabelColor();
@@ -553,7 +507,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                 @Override
                 public void execute(Realm realm) {
 
-                    SubGoalModel taskModel = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
+                    TaskModel taskModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                     taskModel.setName(taskTitle);
                     taskModel.setTime(mDateString);
                     taskModel.setReason(taskReason.getText().toString());
@@ -603,7 +557,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                 @Override
                 public void execute(Realm realm) {
 
-                    ChildSubGoalModel taskModel = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
+                    TaskModel taskModel = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                     taskModel.setName(taskTitle);
                     taskModel.setTime(mDateString);
                     taskModel.setReason(taskReason.getText().toString());

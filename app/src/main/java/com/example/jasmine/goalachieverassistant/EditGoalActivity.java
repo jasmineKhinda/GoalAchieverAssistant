@@ -27,6 +27,7 @@ import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetails
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
 import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.EditGoal;
 
@@ -86,7 +87,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                                 @Override
                                 public void execute(Realm realm) {
 
-                                    GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
+                                    TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", task_key).findFirst();
                                     goalModel.setName(goalTitle.getText().toString());
 
                                     Log.d("GOALS", "adding goal name into realm");
@@ -170,7 +171,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 @Override
                 public void onClick(View view) {
 
-                    CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(task_key,false,"");
+                    CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(task_key,false,"",false);
                     bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 
@@ -243,7 +244,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 }else{
                     goalName = goalTitle.getText().toString();
                     detailsFrag.addGoalDetailsToRealm(goalName);
-                    Intent addGoalIntent = new Intent(EditGoalActivity.this, GoalListActivity.class);
+                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
                     startActivity(addGoalIntent);
 
                 }
@@ -257,7 +258,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 }else{
                     goalName = goalTitle.getText().toString();
                     detailsFrag.addGoalDetailsToRealm(goalName);
-                    Intent addGoalIntent = new Intent(EditGoalActivity.this, GoalListActivity.class);
+                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
                     startActivity(addGoalIntent);
                 }
 
@@ -269,15 +270,16 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                     realm.executeTransactionAsync(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", task_key).findFirst();
+                            TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", task_key).findFirst();
                             goalModel.deleteFromRealm();
+                            //TODO delete tasks and subtasks too
                         }
                     });
 
                 }finally{
                     realm.close();
                 }
-                Intent addGoalIntent = new Intent(EditGoalActivity.this, GoalListActivity.class);
+                Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
                 startActivity(addGoalIntent);
             }
             return super.onOptionsItemSelected(item);

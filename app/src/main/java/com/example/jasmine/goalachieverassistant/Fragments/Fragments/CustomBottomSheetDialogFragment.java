@@ -34,7 +34,9 @@ import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.Models.ListCategory;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
@@ -50,6 +52,8 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
     private static final String PARENT_UUID = "PARENT_UUID";
     private static final String PARENT_NAME = "PARENT_NAME";
     private static final String IS_CHILD_SUB_TASK = "IS_CHILD_SUB_TASK";
+    private static final String IS_GOAL = "IS_GOAL";
+
     private Date dueDate =null;
     ImageView imageCalendar;
     private Realm realm;
@@ -57,6 +61,8 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
     private String parentUuId="";
     private Boolean isChildSubTask=false;
     EditText addTask;
+    private boolean isGoal=false;
+    private boolean taskIsAGoal=false;
     @Override
     public void onDateSet(Date view) {
         Log.d("GOALS", "onDateset "+ view);
@@ -75,12 +81,13 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
         dueDate = view;
     }
 
-    public static CustomBottomSheetDialogFragment newInstance(String parentUUID , Boolean isChildSubTask, @Nullable String parentName) {
+    public static CustomBottomSheetDialogFragment newInstance(@Nullable String parentUUID , Boolean isChildSubTask, @Nullable String parentName,@Nullable Boolean isGoal) {
         CustomBottomSheetDialogFragment frag = new CustomBottomSheetDialogFragment();
         Bundle args1 = new Bundle();
         Log.d("GOALS"," in new instance " +parentUUID+ isChildSubTask );
         args1.putString(PARENT_UUID, parentUUID);
         args1.putBoolean(IS_CHILD_SUB_TASK,isChildSubTask);
+        args1.putBoolean(IS_GOAL,isGoal);
         args1.putString(PARENT_NAME,parentName );
         frag.setArguments(args1);
         Log.d("GOALS", "parent new instance " + args1.getString(PARENT_UUID));
@@ -106,11 +113,15 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
         final String parentName=getArguments().get(PARENT_NAME).toString();
 
         parentUuId = getArguments().get(PARENT_UUID).toString();
+        isGoal= getArguments().getBoolean(IS_GOAL);
         isChildSubTask = getArguments().getBoolean(IS_CHILD_SUB_TASK);
         addTask = (EditText)view.findViewById(R.id.taskName);
 
 
-        if (false == isChildSubTask) {
+        if(true ==isGoal){
+            addTask.setHint("What's your Project?");
+        }
+        else if (false == isChildSubTask) {
             addTask.setHint("What's your task?");
         } else {
             addTask.setHint("What's your subtask for \""+ parentName+"\" ?");
@@ -125,7 +136,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
             public void onClick(View view) {
                 String editText = addTask.getText().toString();
                 if (!TextUtils.isEmpty(editText)) {
-                    if(false ==isChildSubTask){
+                    if(true ==isGoal){
+                        addGoalToRealm();
+                    }
+                    else if(false ==isChildSubTask){
                         addParentTaskToRealm();
                     }else{
                         addChildSubTaskToRealm();
@@ -158,8 +172,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
 //                                                      public void execute(Realm realm) {
                                                          String editText = addTask.getText().toString();
                                                           if (!TextUtils.isEmpty(editText)) {
-
-                                                              if (false == isChildSubTask) {
+                                                              if(true ==isGoal){
+                                                                  addGoalToRealm();
+                                                              }
+                                                              else if (false == isChildSubTask) {
                                                                   addParentTaskToRealm();
                                                               } else {
                                                                   addChildSubTaskToRealm();
@@ -218,12 +234,19 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
 
                 Log.d("GOALS", "goal UUID IS"+ parentUuId);
-                realm.createObject(SubGoalModel.class, uuId)
+                realm.createObject(TaskModel.class, uuId)
                         .setName(addTask.getText().toString());
-                SubGoalModel sub = realm.where(SubGoalModel.class).equalTo("id", uuId).findFirst();
-                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", parentUuId).findFirst();
-                goalModel.getSubgoals().add(sub);
-                sub.setGoal(goalModel);
+                TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+                TaskModel parent = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
+
+                if(parent.isGoal()){
+                    TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
+                    goalModel.getTasks().add(sub);
+                    sub.setParentGoalId(goalModel.getId());
+                    ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+                    sub.setTaskCategory(cat);
+                    cat.getTaskList().add(sub);
+                }
 
                 if(null !=dueDate )
                 {
@@ -268,6 +291,75 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
 
     /**
+     * Triggered from Goal fragment. Adds a Task as a Goal
+     */
+    public void addGoalToRealm(){
+
+        final String uuId = UUID.randomUUID().toString();
+
+        Log.d("GOALS", "in addGoalDetailsToRealm to realm in fragment ");
+
+
+        long mDate = System.currentTimeMillis();
+        SimpleDateFormat mSdf = new SimpleDateFormat("MMM MM dd,yyy h:mm a");
+        final String mDateString = mSdf.format(mDate);
+
+        realm = Realm.getDefaultInstance();
+        realm.executeTransactionAsync(new Realm.Transaction() {
+                                          @Override
+                                          public void execute(Realm realm) {
+
+
+                                              Log.d("GOALS", "goal UUID IS"+ parentUuId);
+                                              realm.createObject(TaskModel.class, uuId)
+                                                      .setName(addTask.getText().toString());
+                                              TaskModel goal = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+                                              goal.setAsGoal(true);
+                                              ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+                                              cat.getTaskList().add(goal);
+                                              goal.setTaskCategory(cat);
+                                              if(null !=dueDate )
+                                              {
+                                                  goal.setDueDate(dueDate);
+                                                  goal.setDueDateNotEmpty(dueDate);
+                                                  Log.d("GOALS", "Due dates matched! added Goal due date");
+                                              }
+
+
+//                goalModel.setTime(mDateString);
+//                goalModel.setTimeStamp(System.currentTimeMillis());
+//                goalModel.setDueDate(dueDate);
+//                goalModel.setDueDateNotEmpty(dueDate);
+
+
+
+                                          }},
+                new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d("GOALS", "onSuccess: ");
+                        Toast toast = Toast.makeText(getView().getContext(), "Your goal \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        addTask.setText("");
+                        dueDate =null;
+                        realm.close();
+
+                    }
+                },
+                new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError (Throwable error){
+                        Log.d("GOALS", "onError: add goal");
+                        dueDate = null;
+                        addTask.setText("");
+                        realm.close();
+                    }
+
+                });
+
+    }
+
+    /**
      * Triggered from Task fragment. Adds a Subtask to the Parent Task List
      */
     public void addChildSubTaskToRealm(){
@@ -287,17 +379,28 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
             public void execute(Realm realm) {
 
 
-                realm.createObject(ChildSubGoalModel.class, uuId)
+                realm.createObject(TaskModel.class, uuId)
                         .setName(addTask.getText().toString());
-                ChildSubGoalModel childTask = realm.where(ChildSubGoalModel.class).equalTo("id", uuId).findFirst();
-                SubGoalModel parentSubTask = realm.where(SubGoalModel.class).equalTo("id", parentUuId).findFirst();
-                parentSubTask.getChildList().add(childTask);
-                childTask.setSubGoal(parentSubTask);
+                TaskModel subTask = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+                TaskModel task = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
+//                ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+//                cat.getTaskList().add(subTask);
+//                subTask.setTaskCategory(cat);
+                task.getChildList().add(subTask);
+                subTask.setParentTaskId(task.getId());
 
+
+
+                if(task.getParentGoalId()!=null){
+
+                    ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+                    subTask.setTaskCategory(cat);
+                    cat.getTaskList().add(subTask);
+                }
                 if(null !=dueDate )
                 {
-                    childTask.setDueDate(dueDate);
-                    childTask.setDueDateNotEmpty(dueDate);
+                    subTask.setDueDate(dueDate);
+                    subTask.setDueDateNotEmpty(dueDate);
                     Log.d("GOALS", "Due dates matched! added subgoal due date");
                 }
 
@@ -309,8 +412,12 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 new Realm.Transaction.OnSuccess() {
                 @Override
                 public void onSuccess() {
-                    Toast toast = Toast.makeText(getContext(), "Your subtask \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
-                    toast.show();
+
+                    if (getContext()!=null){
+                        Toast toast = Toast.makeText(getContext(), "Your subtask \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
                     Log.d("GOALS", "onSuccess: ");
                     addTask.setText("");
                     dueDate =null;

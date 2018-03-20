@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import io.realm.model.Child;
+import io.realm.model.Parent;
 
 /**
  * ViewHolder for a child list item.
@@ -13,7 +14,7 @@ import io.realm.model.Child;
  * The user should extend this class and implement as they wish for their
  * child list item.
  */
-public class ChildViewHolder<C extends Child> extends RecyclerView.ViewHolder {
+public class ChildViewHolder<C extends Parent> extends RecyclerView.ViewHolder {
     C child;
     RealmExpandableRecyclerAdapter expandableAdapter;
 

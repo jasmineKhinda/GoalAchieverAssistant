@@ -15,9 +15,15 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         >
 
+        <FrameLayout
+            android:id="@+id/card_frame"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_edge"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

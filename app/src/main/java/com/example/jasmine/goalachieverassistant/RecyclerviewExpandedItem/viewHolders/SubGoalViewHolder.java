@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerFragment;
@@ -68,10 +70,11 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     private TextView dueDateDialog;
     private Context context;
     Realm realm;
+    FrameLayout frameBorder;
     Date taskDueDate;
  //   private TextView ingredientCount;
     SubGoalStateChanged changed;
-    private SubGoalModel subGoal;
+    private TaskModel subGoal;
 
 
 
@@ -126,15 +129,18 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
 //TODO blah
-    public void bind(@NonNull final SubGoalModel r) {
+    public void bind(@NonNull final TaskModel r) {
 
-        final SubGoalModel subgoal;
+        final TaskModel subgoal;
         this.subGoal = r;
         subgoal = r;
         subGoalTextView.setText(r.getName());
         final String taskId = subgoal.getId();
         final String taskName = subgoal.getName();
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
+        frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
+
+        frameBorder.setBackgroundColor(subgoal.getLabelColor());
 
         Log.d("GOALS", "the sub goal is "+ subGoal.getName() +  " child list is + "+ subgoal.getChildList().size()+ "  "+ subgoal.getDueDate());
 
@@ -155,15 +161,17 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
         //if no subgoals to this goal, dont display the subgoal count done item
-        if(subgoal.getChildSubGoalCount()>0){
+        if(subgoal.getSubTaskCount()>0){
             starredIngredientCount.setVisibility(View.VISIBLE);
             starredIngredientCountIcon.setVisibility(View.VISIBLE);
-            starredIngredientCount.setText(subgoal.getChildSubgoalsComplete()+" / " +subgoal.getChildSubGoalCount() );
+            starredIngredientCount.setText(subgoal.getTotalSubTaskComplete()+" / " +subgoal.getSubTaskCount() );
         }else{
             starredIngredientCount.setVisibility(View.INVISIBLE);
             starredIngredientCountIcon.setVisibility(View.INVISIBLE);
             starredIngredientCount.setText("");
         }
+
+
 
         //if due date exists in db then display it
         //if no due date display the default "No Due Date" from layout file
@@ -268,11 +276,11 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
                                     @Override
                                     public void execute(Realm realm) {
 
-                                        RealmResults<SubGoalModel> subGoalModel = realm.where(SubGoalModel.class).equalTo("id",taskId).findAll();
+                                        RealmResults<TaskModel> subGoalModel = realm.where(TaskModel.class).equalTo("id",taskId).findAll();
 
-                                        SubGoalModel subGoalModelChild = realm.where(SubGoalModel.class).equalTo("id",taskId).findFirst();
+                                        TaskModel subGoalModelChild = realm.where(TaskModel.class).equalTo("id",taskId).findFirst();
 
-                                        Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getChildSubGoalCount() );
+                                        Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getSubTaskCount());
                                        if(subGoalModelChild.getChildList().size()>0){
                                            subGoalModelChild.getChildList().deleteAllFromRealm();
                                        }
@@ -292,7 +300,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 //                                    public void onClick(View view) {
 
                                         FragmentManager manager = ((AppCompatActivity) scanForActivity(v.getContext())).getSupportFragmentManager();
-                                        CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskId,true, taskName);
+                                        CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskId,true, taskName,false);
                                         bottomSheetDialogFragment.show(manager,"BottomSheet");
 
 

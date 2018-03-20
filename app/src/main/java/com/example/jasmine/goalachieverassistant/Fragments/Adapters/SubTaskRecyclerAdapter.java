@@ -30,6 +30,7 @@ import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
@@ -47,14 +48,14 @@ import io.realm.RealmResults;
  * Created by jasmine on 15/02/18.
  */
 
-public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoalModel, SubTaskRecyclerAdapter.TaskViewHolder> {
+public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, SubTaskRecyclerAdapter.TaskViewHolder> {
 
-    private List<ChildSubGoalModel> childTaskList;
+    private List<TaskModel> childTaskList;
     private View itemView;
     private FragmentActivity activity;
     private CardView card;
 
-    public SubTaskRecyclerAdapter(@NonNull FragmentActivity activity, @Nullable OrderedRealmCollection<ChildSubGoalModel> childTaskList, boolean autoUpdate) {
+    public SubTaskRecyclerAdapter(@NonNull FragmentActivity activity, @Nullable OrderedRealmCollection<TaskModel> childTaskList, boolean autoUpdate) {
         super(childTaskList,autoUpdate);
         this.childTaskList = childTaskList;
         this.activity = activity;
@@ -79,7 +80,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
         public ImageButton buttonViewOption;
         public TextView dueDate;
         private CheckBox isTaskDone;
-        private ChildSubGoalModel childSubGoal;
+        private TaskModel childSubGoal;
         private ImageView dueDateIcon;
         Realm realm;
 
@@ -96,7 +97,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<ChildSubGoa
 
         public void bind() {
 
-        final ChildSubGoalModel mTaskModel = getData().get(getAdapterPosition());
+        final TaskModel mTaskModel = getData().get(getAdapterPosition());
         this.childSubGoal = mTaskModel;
 
         childSubGoalTextView.setText(childSubGoal.getName());

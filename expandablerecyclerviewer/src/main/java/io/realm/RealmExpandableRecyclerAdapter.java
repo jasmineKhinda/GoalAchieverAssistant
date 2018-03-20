@@ -19,7 +19,7 @@ import static android.support.v7.widget.RecyclerView.NO_POSITION;
  * RecyclerView.Adapter implementation that
  * adds the ability to expand and collapse list items.
  */
-public abstract class RealmExpandableRecyclerAdapter<P extends Parent<C>, C extends Child, PVH extends ParentViewHolder, CVH extends ChildViewHolder>
+public abstract class RealmExpandableRecyclerAdapter<P extends Parent<C>, C extends Parent, PVH extends ParentViewHolder, CVH extends ChildViewHolder>
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /**
@@ -275,7 +275,7 @@ public abstract class RealmExpandableRecyclerAdapter<P extends Parent<C>, C exte
      * that determines if the list item is a parent or a child and calls through
      * to the appropriate implementation of either
      * {@link #onBindParentViewHolder(ParentViewHolder, int, Parent)} or
-     * {@link #onBindChildViewHolder(ChildViewHolder, int, int, Child)}.
+     * {@link #onBindChildViewHolder(ChildViewHolder, int, int, Parent)}.
      *
      * @param holder The RecyclerView.ViewHolder to bind data to
      * @param flatPosition The index in the merged list of children and parents at which to bind
@@ -736,7 +736,7 @@ public abstract class RealmExpandableRecyclerAdapter<P extends Parent<C>, C exte
     }
 
     private void generateParentWrapper(RealmList<ExpandableWrapper<P, C>> flatItemList, P parent, boolean shouldExpand) {
-        ExpandableWrapper<P, C> parentWrapper = new ExpandableWrapper<>(parent);
+        ExpandableWrapper<P, C> parentWrapper = new ExpandableWrapper<>(parent, false);
         flatItemList.add(parentWrapper);
         if (shouldExpand) {
             generateExpandedChildren(flatItemList, parentWrapper);

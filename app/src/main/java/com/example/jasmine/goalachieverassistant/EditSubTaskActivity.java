@@ -33,6 +33,7 @@ import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskSubTask
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 
 import java.text.SimpleDateFormat;
 
@@ -76,17 +77,20 @@ public class EditSubTaskActivity extends AppCompatActivity {
 
 
         realm = Realm.getDefaultInstance();
-        final ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", taskKey).findFirst();
+        final TaskModel childSubGoalModel = realm.where(TaskModel.class).equalTo("id", taskKey).findFirst();
        // breadCrumb.setText("Subtask of "+ childSubGoalModel.getSubGoal().getName() );
-        breadCrumb.setText(Html.fromHtml("Subtask of  &#160;" +   "<font color=\"#0645AD\"<b>"+childSubGoalModel.getSubGoal().getName()+"</b></font>"));
+
+        String parentTaskUUID =childSubGoalModel.getParentTaskId();
+        final TaskModel parentTask = realm.where(TaskModel.class).equalTo("id", parentTaskUUID).findFirst();
+        breadCrumb.setText(Html.fromHtml("Subtask of  &#160;" +   "<font color=\"#0645AD\"<b>"+parentTask.getName()+"</b></font>"));
 
 
         breadCrumb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent viewTaskIntent = new Intent(EditSubTaskActivity.this, EditTaskActivity.class);
-                viewTaskIntent.putExtra("EDIT_TASKUUID", childSubGoalModel.getSubGoal().getId());
-                viewTaskIntent.putExtra("EDIT_TASKNAME", childSubGoalModel.getSubGoal().getName());
+                viewTaskIntent.putExtra("EDIT_TASKUUID", parentTask.getId());
+                viewTaskIntent.putExtra("EDIT_TASKNAME", parentTask.getName());
                 startActivity(viewTaskIntent);
             }
         });
@@ -110,7 +114,7 @@ public class EditSubTaskActivity extends AppCompatActivity {
                             @Override
                             public void execute(Realm realm) {
 
-                                ChildSubGoalModel childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", taskKey).findFirst();
+                                TaskModel childSubGoalModel = realm.where(TaskModel.class).equalTo("id", taskKey).findFirst();
                                 childSubGoalModel.setName(taskTitle.getText().toString());
 
                                 Log.d("GOALS", "adding goal name into realm");
@@ -224,7 +228,7 @@ public class EditSubTaskActivity extends AppCompatActivity {
                     public void execute(Realm realm) {
 //                        RealmResults<SubGoalModel> childSubGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskKey).findAll();
                         //                       childSubGoalModel.deleteFirstFromRealm();
-                        RealmResults<ChildSubGoalModel> subGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id",taskKey).findAll();
+                        RealmResults<TaskModel> subGoalModel = realm.where(TaskModel.class).equalTo("id",taskKey).findAll();
 
                         //delete the subtask
                         subGoalModel.deleteFirstFromRealm();

@@ -1,11 +1,8 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,11 +11,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.InputType;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -28,12 +22,15 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.android.colorpicker.ColorPickerDialog;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.GoalListActivity;
+import com.example.jasmine.goalachieverassistant.MainActivity;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
+import com.example.jasmine.goalachieverassistant.R;
+import com.example.jasmine.goalachieverassistant.Utilities;
 
 import io.realm.Realm;
 
@@ -78,7 +75,7 @@ public class AddGoalActivity extends AppCompatActivity  {
                             @Override
                             public void execute(Realm realm) {
 
-                                GoalModel goalModel = realm.where(GoalModel.class).equalTo("id", goalUUID).findFirst();
+                                TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", goalUUID).findFirst();
                                 goalModel.setName(goalTitle.getText().toString());
 
                                 Log.d("GOALS", "adding goal name into realm");
@@ -152,7 +149,7 @@ public class AddGoalActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
 
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(goalUUID,false, "");
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(goalUUID,false, "",false);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 
@@ -199,7 +196,7 @@ public class AddGoalActivity extends AppCompatActivity  {
                 goalName = goalTitle.getText().toString();
                 detailsFrag.addGoalDetailsToRealm(goalName);
 
-                Intent addGoalIntent = new Intent(AddGoalActivity.this, GoalListActivity.class);
+                Intent addGoalIntent = new Intent(AddGoalActivity.this, MainActivity.class);
                 startActivity(addGoalIntent);
             }
         } else if (item.getItemId() == R.id.action_settings_done) {
@@ -214,7 +211,7 @@ public class AddGoalActivity extends AppCompatActivity  {
                 goalName = goalTitle.getText().toString();
                 detailsFrag.addGoalDetailsToRealm(goalName);
 
-                Intent addGoalIntent = new Intent(AddGoalActivity.this, GoalListActivity.class);
+                Intent addGoalIntent = new Intent(AddGoalActivity.this, MainActivity.class);
                 startActivity(addGoalIntent);
             }
 

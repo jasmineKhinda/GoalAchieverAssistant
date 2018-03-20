@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -41,7 +43,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
     private CheckBox isTaskDone;
     private CardView card;
     private ImageView dueDateIcon;
-    private ChildSubGoalModel childSubGoal;
+    private TaskModel childSubGoal;
     Realm realm;
 
     public ChildSubGoalViewHolder(@NonNull View itemView) {
@@ -54,7 +56,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         itemView.setOnClickListener(this);
     }
 
-    public void bind(@NonNull ChildSubGoalModel r) {
+    public void bind(@NonNull TaskModel r) {
        this.childSubGoal = r;
         childSubGoalTextView.setText(childSubGoal.getName());
 
@@ -62,6 +64,9 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
 
 
         card = (CardView) itemView.findViewById(R.id.card_view);
+        FrameLayout frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
+
+        frameBorder.setBackgroundColor(childSubGoal.getLabelColor());
 
         card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +186,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
                                     @Override
                                     public void execute(Realm realm) {
 
-                                        RealmResults<ChildSubGoalModel> childSubGoalModel = realm.where(ChildSubGoalModel.class).equalTo("id", taskId).findAll();
+                                        RealmResults<TaskModel> childSubGoalModel = realm.where(TaskModel.class).equalTo("id", taskId).findAll();
                                         childSubGoalModel.deleteFirstFromRealm();
                                         Log.d("GOALS", "deleted item? ");
                                         // realm.close();

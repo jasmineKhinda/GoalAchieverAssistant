@@ -33,6 +33,7 @@ import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskSubTask
 import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -87,7 +88,7 @@ public class EditTaskActivity extends AppCompatActivity {
                             @Override
                             public void execute(Realm realm) {
 
-                                SubGoalModel subGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskKey).findFirst();
+                                TaskModel subGoalModel = realm.where(TaskModel.class).equalTo("id", taskKey).findFirst();
                                 subGoalModel.setName(taskTitle.getText().toString());
 
                                 Log.d("GOALS", "adding goal name into realm");
@@ -168,7 +169,7 @@ public class EditTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskKey,true,taskName);
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskKey,true,taskName,false);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 
@@ -227,17 +228,17 @@ public class EditTaskActivity extends AppCompatActivity {
                     public void execute(Realm realm) {
 //                        RealmResults<SubGoalModel> childSubGoalModel = realm.where(SubGoalModel.class).equalTo("id", taskKey).findAll();
  //                       childSubGoalModel.deleteFirstFromRealm();
-                        RealmResults<SubGoalModel> subGoalModel = realm.where(SubGoalModel.class).equalTo("id",taskKey).findAll();
+                        RealmResults<TaskModel> taskModel = realm.where(TaskModel.class).equalTo("id",taskKey).findAll();
 
-                        SubGoalModel subGoalModelChild = realm.where(SubGoalModel.class).equalTo("id",taskKey).findFirst();
+                        TaskModel subGoalModelChild = realm.where(TaskModel.class).equalTo("id",taskKey).findFirst();
 
                         //delete all children that belong to the Task first
-                        Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getChildSubGoalCount() );
+                        Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getSubTaskCount() );
                         if(subGoalModelChild.getChildList().size()>0){
                             subGoalModelChild.getChildList().deleteAllFromRealm();
                         }
                         //delete the task after children are deleted
-                        subGoalModel.deleteFirstFromRealm();
+                        taskModel.deleteFirstFromRealm();
                         Log.d("GOALS", "deleted item? ");
                         // realm.close();
 

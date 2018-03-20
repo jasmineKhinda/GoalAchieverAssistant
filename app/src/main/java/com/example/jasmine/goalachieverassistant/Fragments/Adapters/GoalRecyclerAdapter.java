@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -26,11 +27,13 @@ import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.GoalListActivity;
+import com.example.jasmine.goalachieverassistant.MainActivity;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
 import io.realm.Realm;
 
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
@@ -46,12 +49,12 @@ import io.realm.Sort;
  * Created by jasmine on 15/01/18.
  */
 
-public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, GoalRecyclerAdapter.TaskViewHolder>{
-    private GoalListActivity activity;
+public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, GoalRecyclerAdapter.TaskViewHolder>{
+    private FragmentActivity activity;
     private View itemView;
     private Realm realm;
 
-    public GoalRecyclerAdapter(@NonNull GoalListActivity activity, @Nullable OrderedRealmCollection<GoalModel> data, boolean autoUpdate) {
+    public GoalRecyclerAdapter(@NonNull FragmentActivity activity, @Nullable OrderedRealmCollection<TaskModel> data, boolean autoUpdate) {
         super(data, autoUpdate);
         this.activity = activity;
     }
@@ -66,22 +69,22 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
 
         Log.d("GOALS", "WHY AM I COMING IN HERE?");
 
-        final GoalModel mTaskModel = getData().get(position);
+        final TaskModel mTaskModel = getData().get(position);
 
         holder.taskName.setText(mTaskModel.getName());
         holder.frameBorder.setBackgroundColor(mTaskModel.getLabelColor());
 
 
-        if(mTaskModel.getSubGoalCount()>0) {
-            float totalSubGoalCount = mTaskModel.getSubGoalCount();
-            float doneSubGoals = mTaskModel.getSubgoalsComplete();
+        if(mTaskModel.getTaskCount()>0) {
+            float totalSubGoalCount = mTaskModel.getTaskCount();
+            float doneSubGoals = mTaskModel.getTotalTaskComplete();
 
             float totalChildSubGoals=0;
             float doneChildSubGoals =0;
-            for (SubGoalModel r : mTaskModel.getSubgoals()) {
-                if (r.getChildSubGoalCount()>0){
-                    totalChildSubGoals= totalChildSubGoals + r.getChildSubGoalCount();
-                    doneChildSubGoals = doneChildSubGoals + r.getChildSubgoalsComplete();
+            for (TaskModel r : mTaskModel.getTasks()) {
+                if (r.getSubTaskCount()>0){
+                    totalChildSubGoals= totalChildSubGoals + r.getSubTaskCount();
+                    doneChildSubGoals = doneChildSubGoals + r.getTotalSubTaskComplete();
                 }
             }
             float progress = ( ((doneChildSubGoals) +(doneSubGoals))/((totalSubGoalCount)+(totalChildSubGoals))) * 100;
@@ -186,7 +189,8 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
     public void sortGoalListWithSortOrder(String sortType, Sort sortOrder) {
         try{
             realm = Realm.getDefaultInstance();
-            OrderedRealmCollection<GoalModel> sorting = realm.where(GoalModel.class).findAll();
+            OrderedRealmCollection<TaskModel> sorting = realm.where(TaskModel.class).equalTo("isGoal", true).findAll();
+            //TODO add filtered of just Goals
             updateData(sorting.sort(sortType,sortOrder));
         }catch(Exception e) {
             Log.e("GOALS", "Not able to update the sorting of the goals list, see stack trace" );
@@ -211,10 +215,10 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
             //RealmQuery<GoalModel> sorting = getData().where();
             //RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
 
-
+            //TODO filter just goals after refactor
 
             realm = Realm.getDefaultInstance();
-            OrderedRealmCollection<GoalModel> sorting = realm.where(GoalModel.class).findAll();
+            OrderedRealmCollection<TaskModel> sorting = realm.where(TaskModel.class).equalTo("isGoal", true).findAll();
 
             Log.d("GOALS", "sort attributes  " + goalSpinnerSelectedFilter + "   " + sortOrder);
             if (null == containsValue && false == doesContain) {
@@ -285,7 +289,7 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             final int position = getAdapterPosition();
-                            final GoalModel mTaskModel = getData().get(position);
+                            final TaskModel mTaskModel = getData().get(position);
                             final String id = mTaskModel.getId();
 
 
@@ -296,8 +300,10 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<GoalModel, Goa
                                         @Override
                                         public void execute(Realm realm) {
 
-                                            GoalModel goalModel = realm.where(GoalModel.class).equalTo("id",id ).findFirst();
+                                            TaskModel goalModel = realm.where(TaskModel.class).equalTo("id",id ).findFirst();
                                             goalModel.deleteFromRealm();
+
+                                            //TODO delete tasks and subtasks too
                                             Log.d("GOALS", "deleted item? ");
                                       // realm.close();
                                         }

@@ -17,7 +17,7 @@ import static android.support.v7.widget.RecyclerView.NO_POSITION;
  * Keeps track of expanded state and holds callbacks which can be used to
  * trigger expansion-based events.
  */
-public class ParentViewHolder<P extends Parent<C>, C extends Child> extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ParentViewHolder<P extends Parent<C>, C extends Parent> extends RecyclerView.ViewHolder implements View.OnClickListener {
     @Nullable
     private ParentViewHolderExpandCollapseListener parentViewHolderExpandCollapseListener;
     private boolean expanded;

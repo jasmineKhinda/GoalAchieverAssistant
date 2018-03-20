@@ -1,38 +1,25 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-
 import java.util.Date;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Utilities;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
-
-import java.util.UUID;
 
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
@@ -56,7 +43,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     private String goalUUID;
     private Realm realm;
     private SubGoalAdapter adapter;
-    RealmResults<SubGoalModel> subgoalsForThisGoal;
+    RealmResults<TaskModel> tasksForThisGoal;
     public EditText addTaskDueDate;
     Date dueDate;
     private boolean dueDateEmpty;
@@ -236,18 +223,18 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         //recycler view of all the sub goals and child sub goals
         final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
-      //  subgoalsForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
+      //  tasksForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
         realm = Realm.getDefaultInstance();
-        subgoalsForThisGoal =realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).
+        tasksForThisGoal =realm.where(TaskModel.class).equalTo("parentGoalId", goalUUID).
                 findAllSortedAsync(
                         new String[] {"dueDateNotEmpty", "dueDate"},
                         new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
 
 
 
-        subgoalsForThisGoal.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SubGoalModel>>() {
+        tasksForThisGoal.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<TaskModel>>() {
             @Override
-            public void onChange(RealmResults<SubGoalModel> persons, OrderedCollectionChangeSet
+            public void onChange(RealmResults<TaskModel> persons, OrderedCollectionChangeSet
                     changeset) {
 
                 adapter = new SubGoalAdapter(persons, "id");
@@ -260,7 +247,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             }
         });
 
-        adapter = new SubGoalAdapter(subgoalsForThisGoal, "id");
+        adapter = new SubGoalAdapter(tasksForThisGoal, "id");
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -272,9 +259,9 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             @UiThread
             @Override
             public void onParentExpanded(int parentPosition) {
-                SubGoalModel expandedRecipe = adapter.getItem(parentPosition);
+                TaskModel expandedTask = adapter.getItem(parentPosition);
 
-                String toastMsg = getResources().getString(R.string.expanded, expandedRecipe.getName());
+                String toastMsg = getResources().getString(R.string.expanded, expandedTask.getName());
 //                Toast.makeText(AddGoal.this,
 //                        toastMsg,
 //                        Toast.LENGTH_SHORT)
@@ -284,9 +271,9 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             @UiThread
             @Override
             public void onParentCollapsed(int parentPosition) {
-                SubGoalModel collapsedRecipe = adapter.getItem(parentPosition);
+                TaskModel collapsedTask = adapter.getItem(parentPosition);
 
-                String toastMsg = getResources().getString(R.string.collapsed, collapsedRecipe.getName());
+                String toastMsg = getResources().getString(R.string.collapsed, collapsedTask.getName());
 //                Toast.makeText(AddGoal.this,
 //                        toastMsg,
 //                        Toast.LENGTH_SHORT)
@@ -304,7 +291,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         Log.d("GOALS", "onStop: ");
         if(!(realm.isClosed())){
-            subgoalsForThisGoal.removeAllChangeListeners();
+            tasksForThisGoal.removeAllChangeListeners();
             realm.close();
         }
 

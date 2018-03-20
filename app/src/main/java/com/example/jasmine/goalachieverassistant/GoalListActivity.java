@@ -1,8 +1,10 @@
 package com.example.jasmine.goalachieverassistant;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -11,15 +13,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomSpinnerAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.GoalRecyclerAdapter;
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.Models.ListCategory;
+import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -51,11 +59,11 @@ public class GoalListActivity extends AppCompatActivity {
 //        RealmResults<GoalModel> tasks = realm.where(GoalModel.class).findAll();
 //        tasks = tasks.sort("name", Sort.ASCENDING);
 
-        RealmResults<GoalModel> tasks =realm.where(GoalModel.class)
-                .findAllSortedAsync(
+        RealmResults<TaskModel> tasks =realm.where(TaskModel.class).equalTo("isGoal", true).findAllSortedAsync(
                         new String[] {"dueDateNotEmpty", "dueDate"},
                         new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
 
+        //TODO: filter only goals here
         final GoalRecyclerAdapter adapter = new GoalRecyclerAdapter(this, tasks, true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
@@ -63,6 +71,7 @@ public class GoalListActivity extends AppCompatActivity {
 
         String[] filterGoalsList;
         filterGoalsList= getResources().getStringArray(R.array.goalfilter);
+        NavigationView navigationView= findViewById(R.id.nav_view);
         List<String> mGoalFilterArrayList = Arrays.asList(filterGoalsList);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,8 +82,71 @@ public class GoalListActivity extends AppCompatActivity {
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
 
+        final Menu menu = navigationView.getMenu();
+        final SubMenu subMenu = menu.addSubMenu("Lists");
+        RealmResults<ListCategory> cat = realm.where(ListCategory.class).findAll();
+        for(ListCategory category: cat) {
+
+            if ((!(category.getName().trim().equalsIgnoreCase(getResources().getString(R.string.category_Inbox).trim()))) && (!(category.getName().trim().equalsIgnoreCase(getResources().getString(R.string.category_Project).trim()))))
+            {
+
+                subMenu.add(category.getName()).setIcon(R.drawable.ic_list_black_24dp);
+
+            }
 
 
+        }
+
+
+
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        //menuItem.setChecked(true);
+                        if (menuItem.isChecked()) {
+                            menuItem.setChecked(false);
+                            mDrawerLayout.closeDrawers();
+                        } else {
+                            menuItem.setChecked(true);
+                            mDrawerLayout.closeDrawers();
+                            switch (menuItem.getItemId()) {
+
+
+                                //Replacing the main content with ContentFragment Which is our Inbox View;
+                                case R.id.nav_project:
+                                    Toast.makeText(getApplicationContext(), "Project clicked", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(GoalListActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    // For rest of the options we just show a toast on click
+                                    //TODO
+                                    break;
+                                case R.id.nav_inbox:
+                                    Toast.makeText(getApplicationContext(), "Inbox clicked", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case R.id.nav_today:
+                                    Toast.makeText(getApplicationContext(), "Today clicked", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case R.id.nav_week:
+                                    Toast.makeText(getApplicationContext(), "Week Clicked", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case R.id.nav_all:
+                                    Toast.makeText(getApplicationContext(), "All Clicked", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default:
+                                    Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
+                                    break;
+
+                            }
+                        }
+
+
+
+
+                        return true;
+                    }
+                });
         CustomSpinnerAdapter customSpinnerAdapter = new CustomSpinnerAdapter (getSupportActionBar().getThemedContext(),android.R.layout.simple_spinner_item, mGoalFilterArrayList);
         customSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -89,11 +161,12 @@ public class GoalListActivity extends AppCompatActivity {
                 String[] filterGoalsList;
                 filterGoalsList = getResources().getStringArray(R.array.goalfilter);
 
+                //TODO: filter only goals here for the following selections
                 if (itemSelected.equals(filterGoalsList[0])) {
                     //default "All goals" sorts the goals with due dates ascending and puts the empty due dates at bottom
 
                     realm = Realm.getDefaultInstance();
-                    RealmResults<GoalModel> tasks = realm.where(GoalModel.class)
+                    RealmResults<TaskModel> tasks = realm.where(TaskModel.class).equalTo("isGoal", true)
                             .findAllSortedAsync(
                                     new String[]{"dueDateNotEmpty", "dueDate"},
                                     new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
@@ -132,23 +205,30 @@ public class GoalListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance("",false, "",true);
+                bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
-
-                final String uuId = UUID.randomUUID().toString();
-
-                realm = Realm.getDefaultInstance();
-                realm.executeTransactionAsync(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.createObject(GoalModel.class, uuId);
-                        Log.d("GOALS", " created the goal with UUID: " + uuId);
-                    }
-                });
-                Intent intent = new Intent(GoalListActivity.this, AddGoalActivity.class);
-                //pass in the unique UUI id key for the new goal to be added
-                intent.putExtra("GOAL_UUID",uuId);
-
-                startActivity(intent);
+//                final String uuId = UUID.randomUUID().toString();
+//
+//                realm = Realm.getDefaultInstance();
+//                realm.executeTransactionAsync(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//                        realm.createObject(TaskModel.class, uuId);
+//
+//                TaskModel goal = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
+//                ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+//                goal.setTaskCategory(cat);
+//                cat.getTaskList().add(goal);
+//                goal.setAsGoal(true);
+//                        Log.d("GOALS", " created the goal with UUID: " + uuId);
+//                    }
+//                });
+//                Intent intent = new Intent(GoalListActivity.this, AddGoalActivity.class);
+//                //pass in the unique UUI id key for the new goal to be added
+//                intent.putExtra("GOAL_UUID",uuId);
+//
+//                startActivity(intent);
             }
         });
 

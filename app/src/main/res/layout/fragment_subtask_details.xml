@@ -44,6 +44,94 @@
                     >
 
                     <ImageView
+                        android:id="@+id/add_category_list"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_list_black_24dp" />
+
+                    <Button
+                        android:id="@+id/category_list_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:hint="@string/add_category_list"
+                        android:textSize="12dp"
+                        android:textAppearance= "@id/addReason"
+                        android:textIsSelectable="true"
+                        android:singleLine="true"
+                        android:focusable="false"
+                        android:ellipsize="end"
+                        android:textAlignment="textStart"
+                        android:layout_gravity="start"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:background="@android:color/transparent"
+                        style="?android:attr/borderlessButtonStyle"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:id="@+id/linLayout"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="0dp"
+                    android:gravity="start"
+                    android:layout_alignParentLeft="true"
+
+
+                    android:layout_marginHorizontal="10dp">
+                    <ImageView
+                        android:id="@+id/project_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="15dp"
+
+
+                        android:src="@drawable/ic_assignment_trans_24dp"
+                        />
+
+                    <Button
+                        android:id="@+id/project_selection"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:hint="@string/add_project_hint"
+                        android:textSize="12dp"
+                        android:textAppearance= "@id/addReason"
+                        android:layout_marginBottom="10dp"
+
+                        android:textIsSelectable="true"
+                        android:singleLine="true"
+                        android:focusable="false"
+                        android:ellipsize="end"
+                        android:textAlignment="center"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"
+
+                        android:background="@android:color/transparent"
+                        style="?android:attr/borderlessButtonStyle"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:id="@+id/divider0"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider"
+                    android:layout_marginLeft="40dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="10dp"
+                    >
+
+                    <ImageView
                         android:id="@+id/add_task_notes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -205,57 +293,57 @@
 
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:id="@+id/divider3"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider"
-                    android:layout_marginLeft="40dp"/>
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:id="@+id/divider3"-->
+                    <!--android:layout_height="1dp"-->
+                    <!--android:background="?android:attr/listDivider"-->
+                    <!--android:layout_marginLeft="40dp"/>-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:id="@+id/linLayout"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="0dp"
-                        android:gravity="start"
-                        android:layout_alignParentLeft="true"
-                        android:layout_toLeftOf="@id/linlayout2"
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:id="@+id/linLayout"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginTop="10dp"-->
+                        <!--android:orientation="horizontal"-->
+                        <!--android:layout_marginLeft="0dp"-->
+                        <!--android:gravity="start"-->
+                        <!--android:layout_alignParentLeft="true"-->
+                        <!--android:layout_toLeftOf="@id/linlayout2"-->
 
-                        android:layout_marginHorizontal="10dp">
-                        <ImageView
-                            android:id="@+id/project_image"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="15dp"
-
-
-                            android:src="@drawable/ic_assignment_black_24dp"
-                            />
-
-                        <Button
-                            android:id="@+id/project_selection"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:hint="@string/add_project_hint"
-                            android:textSize="12dp"
-                            android:textAppearance= "@id/addReason"
+                        <!--android:layout_marginHorizontal="10dp">-->
+                        <!--<ImageView-->
+                            <!--android:id="@+id/project_image"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:layout_marginRight="15dp"-->
 
 
-                            android:textIsSelectable="true"
-                            android:singleLine="true"
-                            android:focusable="false"
-                            android:ellipsize="end"
-                            android:textAlignment="center"
-                            android:paddingRight="10dp"
-                            android:paddingLeft="10dp"
+                            <!--android:src="@drawable/ic_assignment_black_24dp"-->
+                            <!--/>-->
 
-                            android:background="@android:color/transparent"
-                            style="?android:attr/borderlessButtonStyle"/>
+                        <!--<Button-->
+                            <!--android:id="@+id/project_selection"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="30dp"-->
+                            <!--android:hint="@string/add_project_hint"-->
+                            <!--android:textSize="12dp"-->
+                            <!--android:textAppearance= "@id/addReason"-->
 
-                    </LinearLayout>
+
+                            <!--android:textIsSelectable="true"-->
+                            <!--android:singleLine="true"-->
+                            <!--android:focusable="false"-->
+                            <!--android:ellipsize="end"-->
+                            <!--android:textAlignment="center"-->
+                            <!--android:paddingRight="10dp"-->
+                            <!--android:paddingLeft="10dp"-->
+
+                            <!--android:background="@android:color/transparent"-->
+                            <!--style="?android:attr/borderlessButtonStyle"/>-->
+
+                    <!--</LinearLayout>-->
 
 
 
