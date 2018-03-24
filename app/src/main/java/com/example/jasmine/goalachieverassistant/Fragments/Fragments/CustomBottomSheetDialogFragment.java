@@ -1,21 +1,10 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.Transition;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,19 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.ListCategory;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
@@ -51,6 +33,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
 
     private static final String PARENT_UUID = "PARENT_UUID";
     private static final String PARENT_NAME = "PARENT_NAME";
+    private static final String LIST_CATEGORY = "LIST_CATEGORY";
     private static final String IS_CHILD_SUB_TASK = "IS_CHILD_SUB_TASK";
     private static final String IS_GOAL = "IS_GOAL";
 
@@ -59,6 +42,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
     private Realm realm;
     Dialog mDialog=null;
     private String parentUuId="";
+    private String listCategory="";
     private Boolean isChildSubTask=false;
     EditText addTask;
     private boolean isGoal=false;
@@ -81,16 +65,17 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
         dueDate = view;
     }
 
-    public static CustomBottomSheetDialogFragment newInstance(@Nullable String parentUUID , Boolean isChildSubTask, @Nullable String parentName,@Nullable Boolean isGoal) {
+    public static CustomBottomSheetDialogFragment newInstance(@Nullable String parentUUID , Boolean isChildSubTask, @Nullable String parentName,@Nullable Boolean isGoal, @Nullable String listCategory) {
         CustomBottomSheetDialogFragment frag = new CustomBottomSheetDialogFragment();
-        Bundle args1 = new Bundle();
+        Bundle args = new Bundle();
         Log.d("GOALS"," in new instance " +parentUUID+ isChildSubTask );
-        args1.putString(PARENT_UUID, parentUUID);
-        args1.putBoolean(IS_CHILD_SUB_TASK,isChildSubTask);
-        args1.putBoolean(IS_GOAL,isGoal);
-        args1.putString(PARENT_NAME,parentName );
-        frag.setArguments(args1);
-        Log.d("GOALS", "parent new instance " + args1.getString(PARENT_UUID));
+        args.putString(PARENT_UUID, parentUUID);
+        args.putBoolean(IS_CHILD_SUB_TASK,isChildSubTask);
+        args.putBoolean(IS_GOAL,isGoal);
+        args.putString(PARENT_NAME,parentName );
+        args.putString(LIST_CATEGORY,listCategory);
+        frag.setArguments(args);
+        Log.d("GOALS", "parent new instance " + args.getString(PARENT_UUID));
         return frag;
     }
 
@@ -116,6 +101,11 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
         isGoal= getArguments().getBoolean(IS_GOAL);
         isChildSubTask = getArguments().getBoolean(IS_CHILD_SUB_TASK);
         addTask = (EditText)view.findViewById(R.id.taskName);
+        Log.d("GOALS", "onViewCreated: list category???????????? "+ getArguments().get(LIST_CATEGORY) + "    ");
+
+        if(null != getArguments().get(LIST_CATEGORY)){
+            listCategory = getArguments().get(LIST_CATEGORY).toString();
+        }
 
 
         if(true ==isGoal){
@@ -137,7 +127,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 String editText = addTask.getText().toString();
                 if (!TextUtils.isEmpty(editText)) {
                     if(true ==isGoal){
-                        addGoalToRealm();
+                        addProjectToRealm();
                     }
                     else if(false ==isChildSubTask){
                         addParentTaskToRealm();
@@ -173,7 +163,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                                                          String editText = addTask.getText().toString();
                                                           if (!TextUtils.isEmpty(editText)) {
                                                               if(true ==isGoal){
-                                                                  addGoalToRealm();
+                                                                  addProjectToRealm();
                                                               }
                                                               else if (false == isChildSubTask) {
                                                                   addParentTaskToRealm();
@@ -233,25 +223,38 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
             public void execute(Realm realm) {
 
 
-                Log.d("GOALS", "goal UUID IS"+ parentUuId);
+                Log.d("GOALS", "goal UUID IS   "+ parentUuId.length());
                 realm.createObject(TaskModel.class, uuId)
                         .setName(addTask.getText().toString());
-                TaskModel sub = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
-                TaskModel parent = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
+                TaskModel task = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
 
-                if(parent.isGoal()){
-                    TaskModel goalModel = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
-                    goalModel.getTasks().add(sub);
-                    sub.setParentGoalId(goalModel.getId());
-                    ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
-                    sub.setTaskCategory(cat);
-                    cat.getTaskList().add(sub);
+                if(parentUuId.length()> 0){
+                    Log.d("GOALS", "in goal"+ uuId);
+                    TaskModel parent = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
+                    if(parent.isGoal()){
+                        task.setParentGoalId(parent.getId());
+                        parent.getTasks().add(task);
+                        ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+                        task.setTaskCategory(cat);
+                        cat.getTaskList().add(task);
+                    }
+                }else{
+                    Log.d("GOALS", "in task"+ listCategory);
+                    if(null!=listCategory){
+                        ListCategory cat = realm.where(ListCategory.class).equalTo("name", listCategory).findFirst();
+                        task.setTaskCategory(cat);
+                        cat.getTaskList().add(task);
+                    }else{
+                        Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+
                 }
 
                 if(null !=dueDate )
                 {
-                    sub.setDueDate(dueDate);
-                    sub.setDueDateNotEmpty(dueDate);
+                    task.setDueDate(dueDate);
+                    task.setDueDateNotEmpty(dueDate);
                     Log.d("GOALS", "Due dates matched! added subgoal due date");
                 }
 
@@ -280,6 +283,8 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 @Override
                 public void onError (Throwable error){
                     Log.d("GOALS", "onError: ");
+                    Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong.", Toast.LENGTH_SHORT);
+                    toast.show();
                     dueDate = null;
                     addTask.setText("");
                     realm.close();
@@ -293,7 +298,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
     /**
      * Triggered from Goal fragment. Adds a Task as a Goal
      */
-    public void addGoalToRealm(){
+    public void addProjectToRealm(){
 
         final String uuId = UUID.randomUUID().toString();
 

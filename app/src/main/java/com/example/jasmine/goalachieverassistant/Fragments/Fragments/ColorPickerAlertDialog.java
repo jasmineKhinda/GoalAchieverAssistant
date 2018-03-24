@@ -13,9 +13,6 @@ import com.android.colorpicker.ColorPickerSwatch;
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 

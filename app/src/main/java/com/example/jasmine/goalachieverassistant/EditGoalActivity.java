@@ -5,8 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -25,14 +23,10 @@ import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerF
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
+import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.GoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
-import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
-import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.EditGoal;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by jkhinda on 31/01/18.
@@ -171,7 +165,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 @Override
                 public void onClick(View view) {
 
-                    CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(task_key,false,"",false);
+                    CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(task_key,false,"",false,null);
                     bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 
@@ -244,8 +238,9 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 }else{
                     goalName = goalTitle.getText().toString();
                     detailsFrag.addGoalDetailsToRealm(goalName);
-                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
-                    startActivity(addGoalIntent);
+                    finish();
+//                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
+//                    startActivity(addGoalIntent);
 
                 }
 
@@ -258,8 +253,9 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 }else{
                     goalName = goalTitle.getText().toString();
                     detailsFrag.addGoalDetailsToRealm(goalName);
-                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
-                    startActivity(addGoalIntent);
+                    finish();
+//                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
+//                    startActivity(addGoalIntent);
                 }
 
             }else if (item.getItemId() == R.id.delete) {

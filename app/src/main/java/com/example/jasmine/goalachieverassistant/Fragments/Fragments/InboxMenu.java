@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,8 +15,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
+import com.example.jasmine.goalachieverassistant.Fragments.Adapters.AllTasksRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomSpinnerAdapter;
-import com.example.jasmine.goalachieverassistant.Fragments.Adapters.GoalRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.MainActivity;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -32,14 +31,14 @@ import io.realm.Sort;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProjectMenu extends Fragment {
+public class InboxMenu extends Fragment {
 
 
     private Realm realm;
     private RecyclerView recyclerView;
 
 
-    public ProjectMenu() {
+    public InboxMenu() {
         // Required empty public constructor
     }
 
@@ -55,7 +54,7 @@ public class ProjectMenu extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //returning our layout file
-        return inflater.inflate(R.layout.fragment_project_menu, container, false);
+        return inflater.inflate(R.layout.fragment_inbox_menu, container, false);
     }
 
     @Override
@@ -75,18 +74,18 @@ public class ProjectMenu extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         realm = Realm.getDefaultInstance();
-        RealmResults<TaskModel> tasks =realm.where(TaskModel.class).equalTo("isGoal", true).findAllSortedAsync(
+        RealmResults<TaskModel> tasks =realm.where(TaskModel.class).equalTo("taskCategory.name", getResources().getString(R.string.category_Inbox)).findAllSortedAsync(
                 new String[] {"dueDateNotEmpty", "dueDate"},
                 new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
 
 
-        final GoalRecyclerAdapter adapter = new GoalRecyclerAdapter(getActivity(), tasks, true);
+        final AllTasksRecyclerAdapter adapter = new AllTasksRecyclerAdapter(getActivity(), tasks, true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
 
         String[] filterGoalsList;
-        filterGoalsList= getResources().getStringArray(R.array.goalfilter);
+        filterGoalsList= getResources().getStringArray(R.array.inboxfilter);
         NavigationView navigationView= getView().findViewById(R.id.nav_view);
         List<String> mGoalFilterArrayList = Arrays.asList(filterGoalsList);
 
@@ -101,28 +100,29 @@ public class ProjectMenu extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String itemSelected = parent.getItemAtPosition(position).toString();
                 Log.d("GOALS", "onItemSelected: in toolbar for Goals. Item selected is " + itemSelected);
-                String[] filterGoalsList;
-                filterGoalsList = getResources().getStringArray(R.array.goalfilter);
+                String[] filterTaskList;
+                filterTaskList = getResources().getStringArray(R.array.inboxfilter);
 
 
-                if (itemSelected.equals(filterGoalsList[0])) {
+                if (itemSelected.equals(filterTaskList[0])) {
                     //default "All goals" sorts the goals with due dates ascending and puts the empty due dates at bottom
 
                     realm = Realm.getDefaultInstance();
-                    RealmResults<TaskModel> tasks = realm.where(TaskModel.class).equalTo("isGoal", true)
-                            .findAllSortedAsync(
-                                    new String[]{"dueDateNotEmpty", "dueDate"},
-                                    new Sort[]{Sort.DESCENDING, Sort.ASCENDING});
+                    RealmResults<TaskModel> tasks =realm.where(TaskModel.class).equalTo("taskCategory.name", getResources().getString(R.string.category_Inbox)).findAllSortedAsync(
+                            new String[] {"dueDateNotEmpty", "dueDate"},
+                            new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+
                     adapter.updateData(tasks);
 
-                } else if (itemSelected.equals(filterGoalsList[1])) {
+                } else if (itemSelected.equals(filterTaskList[1])) {
                     //By Name Ascending
-                    adapter.sortGoalListWithSortOrder("name", Sort.ASCENDING);
+                    adapter.filterAndSortList("taskCategory.name", getResources().getString(R.string.category_Inbox), null, null, true, Sort.ASCENDING, "name") ;
 
-                } else if (itemSelected.equals(filterGoalsList[2])) {
+                    //adapter.filterTaskListContainsTextAndReturnsSortedList("taskCategory", io.realm.Sort.ASCENDING,getResources().getString(R.string.category_Inbox),true,"name");
+
+                } else if (itemSelected.equals(filterTaskList[2])) {
                     //No Due Date
-                    adapter.sortGoalListContainsTextAndReturnsSortedList("dueDate", Sort.ASCENDING, null, true, "name");
-
+                    adapter.filterAndSortList("taskCategory.name", getResources().getString(R.string.category_Inbox), "dueDate", null, true, Sort.ASCENDING, "name") ;
 
                 } else {
                     Log.e("ERROR:", "onItemSelected: valid choice not selected");
@@ -142,7 +142,7 @@ public class ProjectMenu extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance("",false, "",true, null);
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance("",false, "",false,getResources().getString(R.string.category_Inbox));
                 bottomSheetDialogFragment.show(getFragmentManager(),"BottomSheet");
 
             }

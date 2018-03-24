@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.Toast;
 
+import com.example.jasmine.goalachieverassistant.Fragments.Fragments.InboxMenu;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.ProjectMenu;
 import com.example.jasmine.goalachieverassistant.Models.ListCategory;
 
@@ -35,49 +36,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-
-//
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_closed);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        toggle.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        //add this line to display menu1 when the activity is loaded
-
-
-
-//
-//        setSupportActionBar(toolbar);
-//        ActionBar actionbar =getSupportActionBar();
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-
-
-        final Menu menu = navigationView.getMenu();
-        final SubMenu subMenu = menu.addSubMenu("Lists");
-        Realm realm = Realm.getDefaultInstance();
-        RealmResults<ListCategory> cat = realm.where(ListCategory.class).findAll();
-        for(ListCategory category: cat) {
-
-            if ((!(category.getName().trim().equalsIgnoreCase(getResources().getString(R.string.category_Inbox).trim()))) && (!(category.getName().trim().equalsIgnoreCase(getResources().getString(R.string.category_Project).trim()))))
-            {
-
-                subMenu.add(category.getName()).setIcon(R.drawable.ic_list_black_24dp);
-
-            }
-
-
+        setToolbar(toolbar);
+        if(savedInstanceState==null){
+            displaySelectedScreen(R.id.nav_inbox);
         }
 
-        displaySelectedScreen(R.id.nav_project);
     }
 
     @Override
@@ -111,7 +75,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
                 fragment = new ProjectMenu();
                 break;
             case R.id.nav_inbox:
-                fragment = new ProjectMenu();
+                fragment = new InboxMenu();
                 break;
             case R.id.nav_today:
                 fragment = new ProjectMenu();
@@ -130,11 +94,42 @@ public boolean onCreateOptionsMenu(Menu menu) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.content_frame, fragment);
                 ft.commit();
+
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 
+    }
+
+    public void setToolbar(Toolbar toolbar){
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_closed);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        toggle.setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        final Menu menu = navigationView.getMenu();
+        final SubMenu subMenu = menu.addSubMenu("Lists");
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<ListCategory> cat = realm.where(ListCategory.class).findAll();
+        for(ListCategory category: cat) {
+
+            if ((!(category.getName().trim().equalsIgnoreCase(getResources().getString(R.string.category_Inbox).trim()))) && (!(category.getName().trim().equalsIgnoreCase(getResources().getString(R.string.category_Project).trim()))))
+            {
+
+                subMenu.add(category.getName()).setIcon(R.drawable.ic_list_black_24dp);
+
+            }
+
+
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

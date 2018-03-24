@@ -1,8 +1,6 @@
 package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -10,18 +8,19 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroupOverlay;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
+import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
-import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Utilities;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.R;
 
 import java.util.Calendar;
@@ -45,6 +44,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
     private ImageView dueDateIcon;
     private TaskModel childSubGoal;
     Realm realm;
+    FrameLayout frameBorder;
 
     public ChildSubGoalViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -61,7 +61,23 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         childSubGoalTextView.setText(childSubGoal.getName());
 
         final String taskId = childSubGoal.getId();
+        frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
+        frameBorder.setBackgroundColor(childSubGoal.getLabelColor());
 
+       RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+               RelativeLayout.LayoutParams.WRAP_CONTENT,
+               RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        final float scale = itemView.getResources().getDisplayMetrics().density;
+        int left = (int) (65 * scale + 0.5f);
+
+        int right = (int) (4 * scale + 0.5f);
+        int top=(int) (5 * scale + 0.5f);
+        int bottom = (int) (5 * scale + 0.5f);
+
+        params.setMargins(left, top, right, bottom);
+        isTaskDone.setLayoutParams(params);
 
         card = (CardView) itemView.findViewById(R.id.card_view);
         FrameLayout frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);

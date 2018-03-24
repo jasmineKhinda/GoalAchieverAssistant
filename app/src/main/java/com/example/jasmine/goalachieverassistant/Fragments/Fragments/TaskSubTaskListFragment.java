@@ -1,11 +1,8 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,13 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.SubTaskRecyclerAdapter;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
 import java.util.Date;
@@ -28,8 +21,6 @@ import java.util.Date;
 import io.realm.OrderedCollectionChangeSet;
 import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmExpandableRecyclerAdapter;
 import io.realm.RealmResults;
 import io.realm.Sort;
 

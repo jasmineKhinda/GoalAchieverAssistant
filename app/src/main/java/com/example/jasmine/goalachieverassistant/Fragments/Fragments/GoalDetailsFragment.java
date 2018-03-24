@@ -1,67 +1,31 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.app.Dialog;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.text.Html;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
-import com.android.colorpicker.ColorPickerDialog;
-import com.android.colorpicker.ColorPickerPalette;
-import com.android.colorpicker.ColorPickerSwatch;
-import com.example.jasmine.goalachieverassistant.Models.ListCategory;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
-import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.AddGoal;
 
 import io.realm.Realm;
-import io.realm.RealmList;
-import io.realm.RealmResults;
 
 
 /**

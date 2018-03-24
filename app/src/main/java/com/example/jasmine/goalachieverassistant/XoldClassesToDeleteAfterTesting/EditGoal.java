@@ -1,44 +1,6 @@
 package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.UiThread;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-
-
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
-import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.UUID;
-
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
-import io.realm.Realm;
-import io.realm.RealmExpandableRecyclerAdapter;
-import io.realm.RealmResults;
 
 /**
  * Created by jasmine on 21/12/17.

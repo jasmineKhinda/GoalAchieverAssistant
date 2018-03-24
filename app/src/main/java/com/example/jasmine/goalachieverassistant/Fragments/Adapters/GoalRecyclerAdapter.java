@@ -1,43 +1,32 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Adapters;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
-import com.example.jasmine.goalachieverassistant.MainActivity;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
 
 import io.realm.Realm;
 
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -84,16 +73,19 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, Goa
             for (TaskModel r : mTaskModel.getTasks()) {
                 if (r.getSubTaskCount()>0){
                     totalChildSubGoals= totalChildSubGoals + r.getSubTaskCount();
+                    Log.d("GOALS", "GOALS percentage count 0  subtask list "+ r.getChildList());
                     doneChildSubGoals = doneChildSubGoals + r.getTotalSubTaskComplete();
                 }
             }
             float progress = ( ((doneChildSubGoals) +(doneSubGoals))/((totalSubGoalCount)+(totalChildSubGoals))) * 100;
 
-            Log.d("GOALS", "1 subgoal count  "+ totalSubGoalCount );
-            Log.d("GOALS", "1 Child subgoal count  "+totalChildSubGoals);
+            Log.d("GOALS", "GOALS percentage count 1  "+ totalSubGoalCount + "     "+ mTaskModel.getTasks());
+            Log.d("GOALS", "GOALS percentage count 2  "+totalChildSubGoals);
 
-            Log.d("GOALS", "2 Child subgoal complete "+ doneSubGoals);
-            Log.d("GOALS", "2 subgoal complete "+ doneChildSubGoals);
+            Log.d("GOALS", "GOALS percentage count 3 "+ doneSubGoals);
+            Log.d("GOALS", "GOALS percentage count 4 "+ doneChildSubGoals);
+
+
             int totalTasks= (int) (totalSubGoalCount+totalChildSubGoals);
             int totalDoneTasks =(int) (doneSubGoals +doneChildSubGoals);
 

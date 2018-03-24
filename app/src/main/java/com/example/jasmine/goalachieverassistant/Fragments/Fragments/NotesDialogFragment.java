@@ -4,21 +4,16 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
 import com.example.jasmine.goalachieverassistant.EditSubTaskActivity;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 

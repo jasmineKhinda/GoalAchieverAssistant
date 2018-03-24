@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="3dp"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="2dp"
-        app:cardMaxElevation="3dp"
+        android:layout_marginBottom="0.7dp"
+        android:layout_marginTop="0.7dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0.18dp"
+        app:cardMaxElevation="0.18dp"
 
         >
         <FrameLayout
@@ -42,9 +43,10 @@
                 android:layout_toLeftOf="@id/imageButton"
                 android:layout_toStartOf="@id/imageButton"
                 android:text="Goal Name"
-                android:textSize="15dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:textSize="14dp"
+                android:textColor="@color/colorBlackText"
                 android:textStyle="bold"
 
 

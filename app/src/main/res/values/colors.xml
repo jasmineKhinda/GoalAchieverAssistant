@@ -74,8 +74,9 @@
     <color name="colorOrange">#ff9800</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorBlackText">#0f1440</color>
     <color name="colorTransparent">#00ff0000</color>
-
+    <color name="colorIcons">#85929E</color>
     <color name="colorprogress_center">#ef5350</color>
     <color name="color_past_due">#ee5253</color>
     <color name="color_icons">#85929E</color>

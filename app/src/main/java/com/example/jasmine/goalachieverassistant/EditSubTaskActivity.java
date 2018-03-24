@@ -1,16 +1,12 @@
 package com.example.jasmine.goalachieverassistant;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -25,17 +21,9 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapterTask;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.ChildTaskDetailsFragment;
-import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
-import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskSubTaskListFragment;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
-
-import java.text.SimpleDateFormat;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -81,19 +69,23 @@ public class EditSubTaskActivity extends AppCompatActivity {
        // breadCrumb.setText("Subtask of "+ childSubGoalModel.getSubGoal().getName() );
 
         String parentTaskUUID =childSubGoalModel.getParentTaskId();
+
         final TaskModel parentTask = realm.where(TaskModel.class).equalTo("id", parentTaskUUID).findFirst();
-        breadCrumb.setText(Html.fromHtml("Subtask of  &#160;" +   "<font color=\"#0645AD\"<b>"+parentTask.getName()+"</b></font>"));
+            breadCrumb.setText(Html.fromHtml("Subtask of  &#160;" +   "<font color=\"#0645AD\"<b>"+parentTask.getName()+"</b></font>"));
+            breadCrumb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent viewTaskIntent = new Intent(EditSubTaskActivity.this, EditTaskActivity.class);
+                    viewTaskIntent.putExtra("EDIT_TASKUUID", parentTask.getId());
+                    viewTaskIntent.putExtra("EDIT_TASKNAME", parentTask.getName());
+                    startActivity(viewTaskIntent);
+                }
+            });
 
 
-        breadCrumb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent viewTaskIntent = new Intent(EditSubTaskActivity.this, EditTaskActivity.class);
-                viewTaskIntent.putExtra("EDIT_TASKUUID", parentTask.getId());
-                viewTaskIntent.putExtra("EDIT_TASKNAME", parentTask.getName());
-                startActivity(viewTaskIntent);
-            }
-        });
+
+
+
 
         taskTitle.setImeOptions(EditorInfo.IME_ACTION_DONE);
         taskTitle.setRawInputType(InputType.TYPE_CLASS_TEXT);

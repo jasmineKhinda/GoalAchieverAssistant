@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@android:id/background">
+        <shape>android:shape="rectangle">
+            <corners android:radius="1.5dp" />
+
+            <gradient
+
+                android:centerColor="@color/colorPrimary"
+                android:centerY="@color/colorPrimary"
+                android:endColor="@color/colorPrimary"
+                android:startColor="@color/colorPrimary" />
+        </shape>
+    </item>
+
+    <item
+        android:shape="rectangle"
+        android:radius="1.5dp"
+        android:drawable="@drawable/ic_check_white19dp_checkbox">
+
+
+    </item>
+
+</layer-list>

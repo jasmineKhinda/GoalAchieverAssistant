@@ -1,17 +1,8 @@
-package com.example.jasmine.goalachieverassistant.Models;
-
-import android.support.annotation.Nullable;
-import android.util.Log;
-
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
-
-import java.util.Date;
+package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
 import io.realm.RealmModel;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.RealmClass;
-import io.realm.annotations.Required;
-import io.realm.model.Child;
 
 /**
  * Created by jasmine on 17/01/18.

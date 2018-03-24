@@ -6,7 +6,7 @@
     android:id="@+id/add_goal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jasmine.goalachieverassistant.GoalListActivity"
+    tools:context="com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.GoalListActivity"
     android:background="#F2F4F4"
     >
 
@@ -26,7 +26,7 @@
     android:layout_height="match_parent"
 
 
-    tools:context="com.example.jasmine.goalachieverassistant.GoalListActivity">
+    tools:context="com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.GoalListActivity">
 
 
 

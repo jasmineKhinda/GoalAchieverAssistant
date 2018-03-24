@@ -18,7 +18,6 @@ import android.widget.EditText;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
 
 import io.realm.OrderedCollectionChangeSet;

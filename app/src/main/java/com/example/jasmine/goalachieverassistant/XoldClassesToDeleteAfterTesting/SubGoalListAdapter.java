@@ -1,20 +1,5 @@
 package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ListAdapter;
-import android.widget.TextView;
-
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.TaskModel;
-import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.AddGoal;
-
-import io.realm.OrderedRealmCollection;
-import io.realm.RealmBaseAdapter;
-
 /**
  * Created by jasmine on 17/01/18.
  */

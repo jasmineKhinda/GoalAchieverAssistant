@@ -1,7 +1,6 @@
-package com.example.jasmine.goalachieverassistant;
+package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -24,14 +23,13 @@ import android.widget.Toast;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomSpinnerAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.GoalRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
+import com.example.jasmine.goalachieverassistant.MainActivity;
 import com.example.jasmine.goalachieverassistant.Models.ListCategory;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
+import com.example.jasmine.goalachieverassistant.R;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -205,7 +203,7 @@ public class GoalListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance("",false, "",true);
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance("",false, "",true, null);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 //                final String uuId = UUID.randomUUID().toString();

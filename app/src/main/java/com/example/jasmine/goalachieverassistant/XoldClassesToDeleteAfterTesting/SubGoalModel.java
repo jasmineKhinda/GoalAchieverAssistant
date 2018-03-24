@@ -1,4 +1,4 @@
-package com.example.jasmine.goalachieverassistant.Models;
+package com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting;
 
 import android.support.annotation.Nullable;
 import android.util.Log;

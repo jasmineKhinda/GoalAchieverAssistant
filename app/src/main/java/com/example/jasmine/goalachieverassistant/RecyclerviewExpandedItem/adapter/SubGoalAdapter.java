@@ -1,6 +1,5 @@
 package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.util.Log;
@@ -8,12 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.EditTaskActivity;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.ChildSubGoalViewHolder;
 import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders.SubGoalViewHolder;
 
@@ -21,7 +16,6 @@ import java.util.List;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmExpandableRecyclerAdapter;
-import io.realm.RealmExpandableSearchRecyclerAdapter;
 
 /**
  * Created by jasmine on 18/01/18.

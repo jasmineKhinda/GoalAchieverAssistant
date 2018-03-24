@@ -1,30 +1,22 @@
 package com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHolders;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.RotateAnimation;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -35,14 +27,11 @@ import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Utilities;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerFragment;
 import com.example.jasmine.goalachieverassistant.R;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 import io.realm.ParentViewHolder;
 import io.realm.Realm;
@@ -90,12 +79,12 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     public SubGoalViewHolder(@NonNull View itemView)  {
         super(itemView);
 
-        subGoalTextView = (TextView) itemView.findViewById(R.id.subGoal_textview);
+        subGoalTextView = (TextView) itemView.findViewById(R.id.task_title);
         arrowExpandImageView = (ImageView) itemView.findViewById(R.id.chevron_Ne);
         starredIngredientCount = (TextView) itemView.findViewById(R.id.done_count);
         dueDateIcon =(ImageView) itemView.findViewById(R.id.due_date_icon);
         starredIngredientCountIcon = (ImageView) itemView.findViewById(R.id.number_tasks_complete_icon);
-        dueDate = (TextView) itemView.findViewById(R.id.goalDueDate);
+        dueDate = (TextView) itemView.findViewById(R.id.task_duedate);
         buttonViewOption = (ImageButton) itemView.findViewById(R.id.overFlow);
         isTaskDone = (CheckBox) itemView.findViewById(R.id.task_item_done);
 
@@ -300,7 +289,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 //                                    public void onClick(View view) {
 
                                         FragmentManager manager = ((AppCompatActivity) scanForActivity(v.getContext())).getSupportFragmentManager();
-                                        CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskId,true, taskName,false);
+                                        CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskId,true, taskName,false,null);
                                         bottomSheetDialogFragment.show(manager,"BottomSheet");
 
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
@@ -119,6 +116,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
         final NotesDialogFragment fragmentNotes =NotesDialogFragment.newInstance(getResources().getString(R.string.notes_dialog_title),uuId,this);
         final ImageView clearDueDateButton =(ImageView) view.findViewById(R.id.remove_date);
         final Button projectSelection =(Button) view.findViewById(R.id.project_selection);
+        final ImageView projectIcon =(ImageView) view.findViewById(R.id.project_image);
         taskReason = (TextView) view.findViewById(R.id.addReason);
         Log.d("GOALS", "onViewCreated: SUBTASKDETAILSFRAGMENT.java");
 
@@ -129,8 +127,12 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
             realm = Realm.getDefaultInstance();
             TaskModel subt = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             Log.d("GOALS", " this is the category ");
-            categoryListSelection.setText(getResources().getString(R.string.category_list_prefix_in)+" " + subt.getTaskCategory().getName());
-        }finally{
+
+            if(null!=subt.getTaskCategory()){
+                categoryListSelection.setText(Html.fromHtml(getResources().getString(R.string.category_list_prefix_in_list)+"&#160;" +"<font color=\"#0645AD\"<b>"+subt.getTaskCategory().getName()+"</b></font>"));
+
+            }
+            }finally{
             realm.close();
         }
 
@@ -212,6 +214,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
             if(null!=parentTask.getParentGoalId()) {
                 final TaskModel goal = realm.where(TaskModel.class).equalTo("id", parentTask.getParentGoalId()).findFirst();
                 projectSelection.setVisibility(View.VISIBLE);
+                projectIcon.setVisibility(View.VISIBLE);
                 projectSelection.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {
@@ -230,6 +233,7 @@ public class ChildTaskDetailsFragment extends Fragment implements DatePickerFrag
                 );
             }else{
                 projectSelection.setVisibility(View.GONE);
+                projectIcon.setVisibility(View.GONE);
             }
         }finally {
             realm.close();

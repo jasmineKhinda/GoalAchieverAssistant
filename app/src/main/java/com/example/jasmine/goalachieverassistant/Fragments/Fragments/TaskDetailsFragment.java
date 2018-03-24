@@ -1,7 +1,5 @@
 package com.example.jasmine.goalachieverassistant.Fragments.Fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -10,25 +8,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.jasmine.goalachieverassistant.EditGoalActivity;
-import com.example.jasmine.goalachieverassistant.EditTaskActivity;
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
 
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
 import com.example.jasmine.goalachieverassistant.Utilities;
@@ -39,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 /**
@@ -133,6 +124,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
         final NotesDialogFragment fragmentNotes =NotesDialogFragment.newInstance(getResources().getString(R.string.notes_dialog_title),uuId,this);
         Log.d("GOALS", "onViewCreated: TASKDETAILSFRAGMENT.java");
         final Button projectSelection =(Button) view.findViewById(R.id.project_selection);
+        final ImageView projectIcon =(ImageView) view.findViewById(R.id.project_image);
     //    final ImageView clearProjectButton =(ImageView) view.findViewById(R.id.delete_project);
         final ImageView clearDueDateButton =(ImageView) view.findViewById(R.id.remove_date);
         //final TextInputLayout textInputLayout = (TextInputLayout)view.findViewById(R.id.lNameLayout);
@@ -146,7 +138,8 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
             realm = Realm.getDefaultInstance();
             TaskModel subt = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             Log.d("GOALS", " this is the category ");
-            categoryListSelection.setText(getResources().getString(R.string.category_list_prefix_in) +" " + subt.getTaskCategory().getName());
+
+            categoryListSelection.setText(Html.fromHtml(getResources().getString(R.string.category_list_prefix_in_list)+"&#160;" +"<font color=\"#0645AD\"<b>"+subt.getTaskCategory().getName()+"</b></font>"));
         }finally{
             realm.close();
         }
@@ -215,6 +208,8 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
 
 
             if(null != sub.getParentGoalId()){
+                projectSelection.setVisibility(View.VISIBLE);
+                projectIcon.setVisibility(View.VISIBLE);
                 TaskModel goal = realm.where(TaskModel.class).equalTo("id", sub.getParentGoalId()).findFirst();
                 if ((0 == goal.getLabelColor()||-1 == goal.getLabelColor()) ) {
 
@@ -235,11 +230,14 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
 //                    clearProjectButton.setVisibility(View.VISIBLE);
                 }
             }else{
-                projectSelection.setText(getResources().getString(R.string.add_project_hint));
-                Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
-                projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
-                projectSelection.setTypeface(null,Typeface.NORMAL);
- //               clearProjectButton.setVisibility(View.INVISIBLE);
+                Log.d("GOALS", "No project" );
+                projectSelection.setVisibility(View.GONE);
+                projectIcon.setVisibility(View.GONE);
+//                projectSelection.setText(getResources().getString(R.string.add_project_hint));
+//                Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
+//                projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
+//                projectSelection.setTypeface(null,Typeface.NORMAL);
+// //               clearProjectButton.setVisibility(View.INVISIBLE);
             }
 
         }finally{

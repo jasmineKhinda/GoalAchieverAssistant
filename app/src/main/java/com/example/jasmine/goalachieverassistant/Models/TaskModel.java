@@ -3,6 +3,8 @@ package com.example.jasmine.goalachieverassistant.Models;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.jasmine.goalachieverassistant.XoldClassesToDeleteAfterTesting.SubGoalModel;
+
 import java.util.Date;
 
 import io.realm.RealmList;
@@ -47,6 +49,13 @@ public class TaskModel  extends RealmObject implements RealmModel, Parent<TaskMo
         return taskCategory;
     }
 
+    //only set for project Tasks, and Parent Tasks. For Subtasks, do not set a category. The category
+    //for a subtask will be inherited from the parent task.
+
+    /**
+     *
+     * @param goal
+     */
     public void setTaskCategory(ListCategory goal) {
         this.taskCategory = goal;
     }

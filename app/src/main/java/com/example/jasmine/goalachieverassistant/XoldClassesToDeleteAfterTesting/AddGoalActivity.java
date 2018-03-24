@@ -26,7 +26,6 @@ import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerF
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
-import com.example.jasmine.goalachieverassistant.GoalListActivity;
 import com.example.jasmine.goalachieverassistant.MainActivity;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -149,7 +148,7 @@ public class AddGoalActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
 
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(goalUUID,false, "",false);
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(goalUUID,false, "",false,null);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 

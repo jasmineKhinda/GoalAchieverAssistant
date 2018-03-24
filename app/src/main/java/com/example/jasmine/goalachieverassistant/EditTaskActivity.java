@@ -1,7 +1,5 @@
 package com.example.jasmine.goalachieverassistant;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -19,20 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.CustomPagerFragmentAdapterTask;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
-import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalDetailsFragment;
-import com.example.jasmine.goalachieverassistant.Fragments.Fragments.GoalTasksFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskDetailsFragment;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.TaskSubTaskListFragment;
-import com.example.jasmine.goalachieverassistant.Models.ChildSubGoalModel;
-import com.example.jasmine.goalachieverassistant.Models.GoalModel;
-import com.example.jasmine.goalachieverassistant.Models.SubGoalModel;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 
 import io.realm.Realm;
@@ -169,7 +159,7 @@ public class EditTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskKey,true,taskName,false);
+                CustomBottomSheetDialogFragment bottomSheetDialogFragment = CustomBottomSheetDialogFragment.newInstance(taskKey,true,taskName,false,null);
                 bottomSheetDialogFragment.show(getSupportFragmentManager(),"BottomSheet");
 
 
