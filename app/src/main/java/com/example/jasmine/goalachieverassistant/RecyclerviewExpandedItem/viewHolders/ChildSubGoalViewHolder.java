@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +44,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
     private CardView card;
     private ImageView dueDateIcon;
     private TaskModel childSubGoal;
+
     Realm realm;
     FrameLayout frameBorder;
 
@@ -53,6 +55,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         dueDate = (TextView) itemView.findViewById(R.id.childDueDueDate);
         isTaskDone = (CheckBox) itemView.findViewById(R.id.task_item_done);
         dueDateIcon =(ImageView) itemView.findViewById(R.id.due_date_icon);
+
         itemView.setOnClickListener(this);
     }
 
@@ -63,6 +66,7 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         final String taskId = childSubGoal.getId();
         frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
         frameBorder.setBackgroundColor(childSubGoal.getLabelColor());
+       LinearLayout layoutChecked = (LinearLayout)itemView.findViewById(R.id.layout_checked);
 
        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -70,14 +74,14 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         );
 
         final float scale = itemView.getResources().getDisplayMetrics().density;
-        int left = (int) (65 * scale + 0.5f);
+        int left = (int) (45 * scale + 0.5f);
 
-        int right = (int) (4 * scale + 0.5f);
-        int top=(int) (5 * scale + 0.5f);
-        int bottom = (int) (5 * scale + 0.5f);
+//        int right = (int) (4 * scale + 0.5f);
+//        int top=(int) (5 * scale + 0.5f);
+//        int bottom = (int) (5 * scale + 0.5f);
 
-        params.setMargins(left, top, right, bottom);
-        isTaskDone.setLayoutParams(params);
+        params.setMargins(left, 0, 0, 0);
+        layoutChecked.setLayoutParams(params);
 
         card = (CardView) itemView.findViewById(R.id.card_view);
         FrameLayout frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
@@ -124,8 +128,8 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
             dueDate.setText(dateToDisplay);
             dueDateIcon.setVisibility(View.VISIBLE);
         }else{
-            dueDate.setVisibility(View.INVISIBLE);
-            dueDateIcon.setVisibility(View.INVISIBLE);
+            dueDate.setVisibility(View.GONE);
+            dueDateIcon.setVisibility(View.GONE);
         }
 
 
@@ -144,44 +148,23 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         Log.d("GOALS", "true or false? " + childSubGoal.getDone());
 
 
-        isTaskDone.setOnClickListener(new View.OnClickListener() {
+        layoutChecked.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(final View v) {
-
-                if (childSubGoal.getDone()) {
-
-//                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
-//                    checkBox.setChecked(!checkBox.isChecked());
-
-
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            childSubGoal.setDone(false);
-                            Log.d("GOALS", "IN TRUEEEEEE");
-                        }
-                    });
-                    realm.close();
-
-                } else {
-
-//                    CheckBox checkBox = (CheckBox) v.findViewById(R.id.task_item_done);
-//                    checkBox.setChecked(!checkBox.isChecked());
-
-
-                    Realm realm2 = Realm.getDefaultInstance();
-                    realm2.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            childSubGoal.setDone(true);
-                            Log.d("GOALS", "IN FALSE");
-                        }
-                    });
-                    realm2.close();
-                }
+            public void onClick(View v) {
+                onClickedCheckBox();
             }
         });
+
+        isTaskDone.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onClickedCheckBox();
+            }
+        });
+
+
 
 
         buttonViewOption.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +207,35 @@ public class ChildSubGoalViewHolder extends ChildViewHolder implements View.OnCl
         });
 
 
+    }
+
+    public void onClickedCheckBox(){
+        //Do whatever you want to do here
+        if (childSubGoal.getDone()) {
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    childSubGoal.setDone(false);
+                    Log.d("GOALS", "IN TRUEEEEEE");
+                }
+            });
+            realm.close();
+
+        } else {
+
+
+            Realm realm2 = Realm.getDefaultInstance();
+            realm2.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    childSubGoal.setDone(true);
+                    Log.d("GOALS", "IN FALSE");
+                }
+            });
+            realm2.close();
+        }
     }
 
     @Override

@@ -16,8 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-
-
         android:layout_marginBottom="0.7dp"
         android:layout_marginTop="0.7dp"
         app:cardCornerRadius="0dp"
@@ -34,87 +32,84 @@
             android:background="@drawable/card_edge"/>
 
 
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
             android:padding="4dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+
             >
 
+            <LinearLayout
+            android:id="@+id/layout_checked"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+                android:layout_marginRight="3dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:orientation="horizontal"
+            >
 
+                >
             <CheckBox
                 android:id="@+id/task_item_done"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:button="@drawable/custom_checkbox"
+                android:focusable="false"
                 android:layout_alignBottom="@id/task_title"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="4dp"
-                android:focusable="false"
-                android:button="@drawable/custom_checkbox"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="5dp"
+                android:paddingBottom="20dp"
+
 
 
                 />
+            <!--</LinearLayout>-->
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/task_title"
                 android:layout_width="wrap_content"
-                android:layout_height="24dp"
-
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:paddingTop="10dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="8dp"
-                android:layout_toEndOf="@id/task_item_done"
-                android:layout_toRightOf="@id/task_item_done"
+                android:layout_toEndOf="@id/layout_checked"
+                android:layout_toLeftOf="@id/overFlow"
+                android:layout_toRightOf="@id/layout_checked"
+                android:layout_toStartOf="@id/overFlow"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:textSize="14dp"
+                android:maxLines="2"
+                android:visibility="visible"
                 android:textColor="@color/colorBlackText"
-                android:textStyle="bold"
+                android:textSize="@dimen/text_size"
 
-                 />
-
-
+                android:textStyle="bold" />
 
 
-
-
-            <ImageView
-                android:id="@+id/project_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:visibility="invisible"
-                android:layout_toRightOf="@id/done_count"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/bottom_options"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignLeft="@id/task_title"
+                android:layout_alignStart="@id/task_title"
                 android:layout_below="@id/task_title"
-                android:src="@drawable/ic_assignment_black_small_24dp"
+                android:gravity="left|center_vertical"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp"
+
                 >
-            </ImageView>
-            <TextView
-                android:id="@+id/project_text"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_alignParentEnd="true"
-                android:visibility="invisible"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/task_title"
-
-                android:layout_marginLeft="5dp"
-
-                android:layout_toRightOf="@id/project_icon"
-                android:textSize="9dp"
-                tools:text="@string/category_Project"
 
 
-                />
-            <!--&lt;!&ndash;android:visibility="invisible"&ndash;&gt;-->
-            <!--<TextView-->
+                <!--&lt;!&ndash;android:visibility="invisible"&ndash;&gt;-->
+                <!--<TextView-->
                 <!--android:id="@+id/space"-->
                 <!--android:layout_width="20dp"-->
                 <!--android:layout_height="20dp"-->
@@ -124,68 +119,105 @@
                 <!--android:layout_below="@id/task_item_done"-->
                 <!--android:text="hgj"/>-->
 
-            <ImageView
-                android:id="@+id/due_date_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="5dp"
-                android:layout_alignLeft="@id/task_title"
-                android:layout_below="@id/task_title"
-                android:src="@drawable/ic_date_range_black_small">
-            </ImageView>
+                <ImageView
+                    android:id="@+id/due_date_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/task_title"
+                    android:layout_below="@id/task_title"
 
-            <TextView
-                android:id="@+id/task_duedate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
 
-                android:layout_toRightOf="@+id/due_date_icon"
+                    android:src="@drawable/ic_date_range_black_small"></ImageView>
 
-                android:layout_below="@id/task_title"
+                <TextView
+                    android:id="@+id/task_duedate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
 
-                android:text="No Due Date"
-                android:textSize="9dp">
+                    android:layout_below="@id/task_title"
+                    android:layout_toRightOf="@+id/due_date_icon"
 
-            </TextView>
+                    android:text="No Due Date"
+                    android:textSize="10dp">
 
-            <ImageView
-                android:id="@+id/number_tasks_complete_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/task_duedate"
-                android:layout_below="@id/task_title"
-                android:src="@drawable/ic_check_box_black_24dp"
-                >
-            </ImageView>
-            <TextView
-                android:id="@+id/done_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/task_title"
-                android:layout_marginLeft="5dp"
-                android:layout_toRightOf="@id/number_tasks_complete_icon"
-                android:textSize="9dp"
-                tools:text="5 / 8"
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/number_tasks_complete_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/task_title"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/task_duedate"
+
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:src="@drawable/ic_check_box_black_24dp"></ImageView>
+
+                <TextView
+                    android:id="@+id/done_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/task_title"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/number_tasks_complete_icon"
+                    android:textSize="10dp"
+                    tools:text="5 / 8"></TextView>
+
+                <ImageView
+                    android:id="@+id/project_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/task_title"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/done_count"
+
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="0dp"
+                    android:src="@drawable/ic_assignment_black_small_24dp"
+                    android:visibility="gone"></ImageView>
+
+                <TextView
+                    android:id="@+id/project_text"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+
+                    android:layout_marginLeft="5dp"
+
+
+                    android:layout_toRightOf="@id/project_icon"
+
+                    android:textSize="10dp"
+                    android:visibility="gone"
+                    tools:text="@string/category_Project"
+
+
+                    />
 
 
                 />
 
 
-
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/overFlow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/task_item_done"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:background="@null"
+                android:layout_centerInParent="true"
                 android:src="@drawable/ic_action_navigation_more_vert" />
 
         </RelativeLayout>

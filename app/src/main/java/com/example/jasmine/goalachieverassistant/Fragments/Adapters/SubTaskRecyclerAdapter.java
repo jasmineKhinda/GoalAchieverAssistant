@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -72,6 +73,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, 
         private CheckBox isTaskDone;
         private TaskModel childSubGoal;
         private ImageView dueDateIcon;
+        private LinearLayout layoutChecked;
         Realm realm;
 
         public TaskViewHolder(@NonNull View itemView) {
@@ -81,6 +83,7 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, 
             dueDate = (TextView) itemView.findViewById(R.id.childDueDueDate);
             isTaskDone = (CheckBox) itemView.findViewById(R.id.task_item_done);
             dueDateIcon =(ImageView) itemView.findViewById(R.id.due_date_icon);
+            layoutChecked = (LinearLayout)itemView.findViewById(R.id.layout_checked);
             itemView.setOnClickListener(this);
         }
 
@@ -138,8 +141,8 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, 
                 dueDate.setText(dateToDisplay);
                 dueDateIcon.setVisibility(View.VISIBLE);
             }else{
-                dueDate.setVisibility(View.INVISIBLE);
-                dueDateIcon.setVisibility(View.INVISIBLE);
+                dueDate.setVisibility(View.GONE);
+                dueDateIcon.setVisibility(View.GONE);
             }
 
 
@@ -158,40 +161,26 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, 
         Log.d("GOALS", "true or false? " + childSubGoal.getDone());
 
 
-        isTaskDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
+            layoutChecked.setOnClickListener(new View.OnClickListener() {
 
-                if (childSubGoal.getDone()) {
-
-                    Realm realm = Realm.getDefaultInstance();
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            childSubGoal.setDone(false);
-                            Log.d("GOALS", "IN TRUEEEEEE");
-                        }
-                    });
-                    realm.close();
-
-                } else {
-
-
-                    Realm realm2 = Realm.getDefaultInstance();
-                    realm2.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            childSubGoal.setDone(true);
-                            Log.d("GOALS", "IN FALSE");
-                        }
-                    });
-                    realm2.close();
+                @Override
+                public void onClick(View v) {
+                    onClickedCheckBox();
                 }
-            }
-        });
+            });
+
+            isTaskDone.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onClickedCheckBox();
+                }
+            });
 
 
-        buttonViewOption.setOnClickListener(new View.OnClickListener() {
+
+
+            buttonViewOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 PopupMenu popup = new PopupMenu(v.getContext(), v);
@@ -233,6 +222,34 @@ public class SubTaskRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, 
 
     }
 
+        public void onClickedCheckBox(){
+            //Do whatever you want to do here
+            if (childSubGoal.getDone()) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        childSubGoal.setDone(false);
+                        Log.d("GOALS", "IN TRUEEEEEE");
+                    }
+                });
+                realm.close();
+
+            } else {
+
+
+                Realm realm2 = Realm.getDefaultInstance();
+                realm2.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        childSubGoal.setDone(true);
+                        Log.d("GOALS", "IN FALSE");
+                    }
+                });
+                realm2.close();
+            }
+        }
     @Override
     public void onClick(View v) {
         Log.i("Realm", "onColorSet: childSubGoal");

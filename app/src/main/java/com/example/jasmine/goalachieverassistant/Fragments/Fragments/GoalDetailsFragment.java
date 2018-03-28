@@ -138,7 +138,7 @@ public class GoalDetailsFragment extends Fragment implements  DatePickerFragment
             realm = Realm.getDefaultInstance();
             TaskModel subt = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
             Log.d("GOALS", "category of goal is"+ subt.getTaskCategory());
-            categoryListSelection.setText(Html.fromHtml(getResources().getString(R.string.category_list_prefix_in_list)+"&#160;" +"<font color=\"#0645AD\"<b>"+subt.getTaskCategory().getName()+"s"+"</b></font>") );
+            categoryListSelection.setText(Html.fromHtml(getResources().getString(R.string.category_list_prefix_in_list)+"&#160;" +"<font color=\"#0645AD\"<b>"+subt.getTaskCategory().getName()+"</b></font>") );
         }finally{
               realm.close();
         }

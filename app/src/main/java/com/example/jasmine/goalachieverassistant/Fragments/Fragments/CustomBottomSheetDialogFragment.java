@@ -245,8 +245,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                         task.setTaskCategory(cat);
                         cat.getTaskList().add(task);
                     }else{
-                        Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong!", Toast.LENGTH_SHORT);
-                        toast.show();
+                        if(getView().getContext()!=null) {
+                            Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
                     }
 
                 }
@@ -271,8 +273,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 @Override
                 public void onSuccess() {
                     Log.d("GOALS", "onSuccess: ");
-                    Toast toast = Toast.makeText(getView().getContext(), "Your task \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
-                    toast.show();
+                    if (getContext()!=null) {
+                        Toast toast = Toast.makeText(getView().getContext(), "Your task \"" + addTask.getText().toString() + "\" was created successfully!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                     addTask.setText("");
                     dueDate =null;
                     realm.close();
@@ -283,8 +287,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 @Override
                 public void onError (Throwable error){
                     Log.d("GOALS", "onError: ");
-                    Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong.", Toast.LENGTH_SHORT);
-                    toast.show();
+                    if (getContext()!=null) {
+                        Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong.", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                     dueDate = null;
                     addTask.setText("");
                     realm.close();
@@ -315,12 +321,15 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                                           public void execute(Realm realm) {
 
 
-                                              Log.d("GOALS", "goal UUID IS"+ parentUuId);
+                                              Log.d("GOALS", "goal UUID IS"+ uuId);
                                               realm.createObject(TaskModel.class, uuId)
                                                       .setName(addTask.getText().toString());
                                               TaskModel goal = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
                                               goal.setAsGoal(true);
+
                                               ListCategory cat = realm.where(ListCategory.class).equalTo("name", getResources().getString(R.string.category_Project)).findFirst();
+                                              Log.d("GOALS", "goal cat IS "+ cat);
+
                                               cat.getTaskList().add(goal);
                                               goal.setTaskCategory(cat);
                                               if(null !=dueDate )
@@ -343,8 +352,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                     @Override
                     public void onSuccess() {
                         Log.d("GOALS", "onSuccess: ");
-                        Toast toast = Toast.makeText(getView().getContext(), "Your goal \""+ addTask.getText().toString()+ "\" was created successfully!", Toast.LENGTH_SHORT);
-                        toast.show();
+                        if (getContext()!=null) {
+                            Toast toast = Toast.makeText(getView().getContext(), "Your goal \"" + addTask.getText().toString() + "\" was created successfully!", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
                         addTask.setText("");
                         dueDate =null;
                         realm.close();
@@ -355,6 +366,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                     @Override
                     public void onError (Throwable error){
                         Log.d("GOALS", "onError: add goal");
+                        if (getContext()!=null) {
+                            Toast toast = Toast.makeText(getView().getContext(), "Oops, something went wrong.", Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
                         dueDate = null;
                         addTask.setText("");
                         realm.close();
@@ -432,6 +447,10 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 @Override
                 public void onError (Throwable error){
                     Log.d("GOALS", "onError: ");
+                    if (getContext()!=null){
+                        Toast toast = Toast.makeText(getContext(), "Oops, something went wrong!", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                     dueDate = null;
                     addTask.setText("");
             }

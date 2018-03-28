@@ -275,8 +275,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
                 }finally{
                     realm.close();
                 }
-                Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
-                startActivity(addGoalIntent);
+                finish();
             }
             return super.onOptionsItemSelected(item);
 

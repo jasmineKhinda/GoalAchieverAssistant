@@ -120,8 +120,8 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, Goa
             holder.progressBar.setProgress(0);
             Log.d("GOALS", "progres is else statement "+ mTaskModel.getName()+ "  "+ 0);
             holder.progressbar_percentage.setText(String.valueOf(0) + "%");
-            holder.numberTasksComplete.setVisibility(View.INVISIBLE);
-            holder.numberTasksCompleteIcon.setVisibility(View.INVISIBLE);
+            holder.numberTasksComplete.setVisibility(View.GONE);
+            holder.numberTasksCompleteIcon.setVisibility(View.GONE);
 
         }
         Log.d("GOALS", "getName "+  mTaskModel.getName());
@@ -136,8 +136,8 @@ public class GoalRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel, Goa
 
         }else{
 
-            holder.taskDate.setVisibility(View.INVISIBLE);
-            holder.dueDateIcon.setVisibility(View.INVISIBLE);
+            holder.taskDate.setVisibility(View.GONE);
+            holder.dueDateIcon.setVisibility(View.GONE);
         }
 
         Date currentTime = Calendar.getInstance().getTime();

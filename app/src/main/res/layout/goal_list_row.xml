@@ -28,25 +28,28 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:padding="7dp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp">
             />
-
 
 
             <TextView
                 android:id="@+id/goalName"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_toRightOf="@id/progress_layout"
-                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/progress_layout"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="15dp"
                 android:layout_toEndOf="@id/progress_layout"
                 android:layout_toLeftOf="@id/imageButton"
+                android:layout_toRightOf="@id/progress_layout"
                 android:layout_toStartOf="@id/imageButton"
-                android:text="Goal Name"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:textSize="14dp"
+                android:maxLines="2"
+                android:text="Goal Name"
                 android:textColor="@color/colorBlackText"
+                android:textSize="@dimen/text_size"
                 android:textStyle="bold"
 
 
@@ -63,11 +66,11 @@
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:background="@drawable/progressbar_background"
                     android:indeterminate="false"
                     android:layoutDirection="ltr"
                     android:max="100"
                     android:progress="0"
-                    android:background="@drawable/progressbar_background"
                     android:progressDrawable="@drawable/progressbar_circle" />
 
                 <TextView
@@ -81,67 +84,70 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="10dp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:text="0%" />
+                    android:text="0%"
+                    android:textColor="@color/colorPrimaryDark" />
 
             </RelativeLayout>
 
             <!--
                             style="?android:attr/progressBarStyleHorizontal" !-->
 
-            <ImageView
-                android:id="@+id/due_date_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignLeft="@id/goalName"
+                android:layout_alignStart="@id/goalName"
+                android:layout_below="@id/goalName"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@+id/number_tasks_complete"
-                android:layout_below="@+id/goalName"
-                android:src="@drawable/ic_date_range_black_small">
-            </ImageView>
+                android:gravity="left"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/goalTimeAdded"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="2dp"
-                android:layout_below="@+id/goalName"
-                android:layout_toRightOf="@+id/due_date_icon"
-                android:text="8 April 4:30pm"
-                android:textSize="10dp"
-               >
+                <ImageView
+                    android:id="@+id/due_date_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/goalName"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/number_tasks_complete"
+                    android:src="@drawable/ic_date_range_black_small"></ImageView>
 
-            </TextView>
-            <ImageView
-                android:id="@+id/number_tasks_complete_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="0dp"
-                android:layout_alignLeft="@+id/goalName"
-                android:layout_alignStart="@+id/goalName"
-                android:layout_below="@+id/goalName"
+                <TextView
+                    android:id="@+id/goalTimeAdded"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/goalName"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@+id/due_date_icon"
+                    android:text="8 April 4:30pm"
+                    android:textSize="10dp">
 
-                android:src="@drawable/ic_check_box_black_24dp"
-                >
+                </TextView>
 
-            </ImageView>
+                <ImageView
+                    android:id="@+id/number_tasks_complete_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/goalName"
+                    android:layout_alignStart="@+id/goalName"
+                    android:layout_below="@+id/goalName"
+                    android:layout_marginLeft="10dp"
 
-            <TextView
-                android:id="@+id/number_tasks_complete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="2dp"
-                android:layout_toRightOf="@+id/number_tasks_complete_icon"
-                android:layout_below="@+id/goalName"
-                android:text="0 / 0"
-                android:textSize="10dp"
-                >
+                    android:src="@drawable/ic_check_box_black_24dp">
 
-            </TextView>
+                </ImageView>
 
+                <TextView
+                    android:id="@+id/number_tasks_complete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/goalName"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@+id/number_tasks_complete_icon"
+                    android:text="0 / 0"
+                    android:textSize="10dp">
+
+                </TextView>
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/imageButton"
@@ -149,12 +155,12 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
                 android:background="@null"
                 android:onClick="showPopup"
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
-                android:src="@drawable/ic_action_navigation_more_vert" />
+                android:src="@drawable/ic_action_navigation_more_vert"
+                android:layout_centerInParent="true"/>
 
 
         </RelativeLayout>

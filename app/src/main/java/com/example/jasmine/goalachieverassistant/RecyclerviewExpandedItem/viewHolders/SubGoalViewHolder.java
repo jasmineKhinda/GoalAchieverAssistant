@@ -20,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -61,6 +62,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
     Realm realm;
     FrameLayout frameBorder;
     Date taskDueDate;
+    LinearLayout layoutChecked;
  //   private TextView ingredientCount;
     SubGoalStateChanged changed;
     private TaskModel subGoal;
@@ -87,6 +89,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         dueDate = (TextView) itemView.findViewById(R.id.task_duedate);
         buttonViewOption = (ImageButton) itemView.findViewById(R.id.overFlow);
         isTaskDone = (CheckBox) itemView.findViewById(R.id.task_item_done);
+
 
 
 
@@ -127,6 +130,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         final String taskId = subgoal.getId();
         final String taskName = subgoal.getName();
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
+        layoutChecked = (LinearLayout)itemView.findViewById(R.id.layout_checked);
         frameBorder =(FrameLayout) itemView.findViewById(R.id.card_frame);
 
         frameBorder.setBackgroundColor(subgoal.getLabelColor());
@@ -155,8 +159,8 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
             starredIngredientCountIcon.setVisibility(View.VISIBLE);
             starredIngredientCount.setText(subgoal.getTotalSubTaskComplete()+" / " +subgoal.getSubTaskCount() );
         }else{
-            starredIngredientCount.setVisibility(View.INVISIBLE);
-            starredIngredientCountIcon.setVisibility(View.INVISIBLE);
+            starredIngredientCount.setVisibility(View.GONE);
+            starredIngredientCountIcon.setVisibility(View.GONE);
             starredIngredientCount.setText("");
         }
 
@@ -181,8 +185,8 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
             dueDate.setText(dateToDisplay);
             dueDateIcon.setVisibility(View.VISIBLE);
         }else{
-            dueDate.setVisibility(View.INVISIBLE);
-            dueDateIcon.setVisibility(View.INVISIBLE);
+            dueDate.setVisibility(View.GONE);
+            dueDateIcon.setVisibility(View.GONE);
         }
 
 
@@ -211,39 +215,21 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
             Log.d("GOALS", "true or false? " +subgoal.getDone());
 
 
-            isTaskDone.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(final View v) {
+        layoutChecked.setOnClickListener(new View.OnClickListener() {
 
-//                                                  changed.subGoalChanged();
-                                                  if (subgoal.getDone()) {
+            @Override
+            public void onClick(View v) {
+                onClickedCheckBox();
+            }
+        });
 
-//
-                                                      Realm realm = Realm.getDefaultInstance();
-                                                      realm.executeTransaction(new Realm.Transaction() {
-                                                          @Override
-                                                          public void execute(Realm realm) {
-                                                              subgoal.setDone(false);
-                                                              Log.d("GOALS", "IN NOT DONE");
-                                                          }
-                                                      });
-                                                      realm.close();
+        isTaskDone.setOnClickListener(new View.OnClickListener() {
 
-                                                  } else {
-
-
-                                                      Realm realm2 = Realm.getDefaultInstance();
-                                                      realm2.executeTransaction(new Realm.Transaction() {
-                                                          @Override
-                                                          public void execute(Realm realm) {
-                                                              subgoal.setDone(true);
-                                                              Log.d("GOALS", "IN DONE");
-                                                          }
-                                                      });
-                                                      realm2.close();
-                                                  }
-                                              }
-                                          });
+            @Override
+            public void onClick(View v) {
+                onClickedCheckBox();
+            }
+        });
 
 
         buttonViewOption.setOnClickListener(new View.OnClickListener() {
@@ -395,6 +381,34 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
 
 
+    }
+    public void onClickedCheckBox(){
+        //Do whatever you want to do here
+        if (subGoal.getDone()) {
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    subGoal.setDone(false);
+                    Log.d("GOALS", "IN TRUEEEEEE");
+                }
+            });
+            realm.close();
+
+        } else {
+
+
+            Realm realm2 = Realm.getDefaultInstance();
+            realm2.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    subGoal.setDone(true);
+                    Log.d("GOALS", "IN FALSE");
+                }
+            });
+            realm2.close();
+        }
     }
 
     private static Activity scanForActivity(Context cont) {

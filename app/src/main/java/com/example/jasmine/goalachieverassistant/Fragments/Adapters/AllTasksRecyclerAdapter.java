@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -76,7 +77,7 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
 
         private TextView taskTitle;
         public ImageButton buttonViewOption;
-        public TextView dueDate;
+        private TextView dueDate;
         private ImageView projectIcon;
         private TextView projectText;
         private CheckBox isTaskDone;
@@ -84,10 +85,13 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
         private ImageView dueDateIcon;
         private TextView starredIngredientCount;
         private ImageView starredIngredientCountIcon;
+        private LinearLayout layoutChecked;
         Realm realm;
+        View view;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.view = itemView;
             taskTitle = (TextView) itemView.findViewById(R.id.task_title);
             buttonViewOption = (ImageButton) itemView.findViewById(R.id.overFlow);
             dueDate = (TextView) itemView.findViewById(R.id.task_duedate);
@@ -97,6 +101,7 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
             projectText = (TextView) itemView.findViewById(R.id.project_text);
             starredIngredientCount = (TextView) itemView.findViewById(R.id.done_count);
             starredIngredientCountIcon = (ImageView) itemView.findViewById(R.id.number_tasks_complete_icon);
+            layoutChecked = (LinearLayout)itemView.findViewById(R.id.layout_checked);
 
             itemView.setOnClickListener(this);
         }
@@ -140,42 +145,8 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
                 }
             });
 
-
-
-            Log.d("GOALS", "how many subtasks? "+mTask.getName() + "   " + mTask.getSubTaskCount());
-            //if no subgoals to this goal, dont display the subgoal count done item
-            if(0==mTask.getSubTaskCount()){
-                starredIngredientCount.setVisibility(View.INVISIBLE);
-                starredIngredientCountIcon.setVisibility(View.INVISIBLE);
-                starredIngredientCount.setText("");
-
-            }else{
-
-//                if(View.GONE==dueDateIcon.getVisibility()){
-//
-//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)starredIngredientCountIcon.getLayoutParams();
-//                    params.addRule(RelativeLayout.BELOW,R.id.task_title);
-//                    params.addRule(RelativeLayout.ALIGN_START, R.id.task_title);
-//                    params.addRule(RelativeLayout.ALIGN_LEFT, R.id.task_title);
-//
-//
-//                    starredIngredientCountIcon.setLayoutParams(params);
-//                }else{
-//
-//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)starredIngredientCountIcon.getLayoutParams();
-//                    params.addRule(RelativeLayout.BELOW,R.id.task_title);
-//                    params.addRule(RelativeLayout.RIGHT_OF, R.id.task_duedate);
-//
-//                    starredIngredientCountIcon.setLayoutParams(params);
-//
-//                }
-                starredIngredientCount.setVisibility(View.VISIBLE);
-                starredIngredientCountIcon.setVisibility(View.VISIBLE);
-                starredIngredientCount.setText(mTask.getTotalSubTaskComplete()+" / " +mTask.getSubTaskCount() );
-                Log.d("GOALS", "how many subtasks? VISIBLE " + getAdapterPosition());
-            }
-
             if(null!= mTask.getDueDate()){
+
 
                 Date currentTime = Calendar.getInstance().getTime();
                 if(null!= mTask.getDueDate()&& ((currentTime.getTime() - mTask.getDueDate().getTime()))>0){
@@ -191,11 +162,35 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
                 dueDate.setVisibility(View.VISIBLE);
                 dueDate.setText(dateToDisplay);
                 dueDateIcon.setVisibility(View.VISIBLE);
+
+
             }else{
                 dueDate.setVisibility(View.GONE);
                 dueDateIcon.setVisibility(View.GONE);
 
+
             }
+
+
+            Log.d("GOALS", "how many subtasks? "+mTask.getName() + "   " + mTask.getSubTaskCount());
+            //if no subgoals to this goal, dont display the subgoal count done item
+            if(0==mTask.getSubTaskCount()){
+                starredIngredientCount.setVisibility(View.GONE);
+                starredIngredientCountIcon.setVisibility(View.GONE);
+                starredIngredientCount.setText("");
+
+
+
+            }else{
+
+
+                starredIngredientCount.setVisibility(View.VISIBLE);
+                starredIngredientCountIcon.setVisibility(View.VISIBLE);
+                starredIngredientCount.setText(mTask.getTotalSubTaskComplete()+" / " +mTask.getSubTaskCount() );
+
+                Log.d("GOALS", "how many subtasks? VISIBLE " + getAdapterPosition());
+            }
+
 
 
             isTaskDone.setChecked(mTask.getDone());
@@ -212,38 +207,24 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
 
             Log.d("GOALS", "true or false? " + mTask.getDone());
 
+            layoutChecked.setOnClickListener(new View.OnClickListener() {
 
-            isTaskDone.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(final View v) {
-
-                    if (mTask.getDone()) {
-
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                mTask.setDone(false);
-                                Log.d("GOALS", "IN TRUEEEEEE");
-                            }
-                        });
-                        realm.close();
-
-                    } else {
-
-
-                        Realm realm2 = Realm.getDefaultInstance();
-                        realm2.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                mTask.setDone(true);
-                                Log.d("GOALS", "IN FALSE");
-                            }
-                        });
-                        realm2.close();
-                    }
+                public void onClick(View v) {
+                    onClickedCheckBox();
                 }
             });
+
+            isTaskDone.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    onClickedCheckBox();
+                }
+            });
+
+
+
 
 
             buttonViewOption.setOnClickListener(new View.OnClickListener() {
@@ -301,6 +282,84 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
             realm.close();
         }
 
+//        private void setSubItemsPosition(){
+//
+//            if(null==mTask.getDueDate()){
+//
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)starredIngredientCountIcon.getLayoutParams();
+//                params.addRule(RelativeLayout.BELOW,R.id.task_title);
+//                params.addRule(RelativeLayout.ALIGN_START, R.id.task_title);
+//                params.addRule(RelativeLayout.ALIGN_LEFT, R.id.task_title);
+//
+//                Log.d("GOALS", "due date gone "+ mTask.getName());
+//                starredIngredientCountIcon.setLayoutParams(params);
+//            }else{
+//
+//                Log.d("GOALS", "due date VISIBLE " + mTask.getName());
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)starredIngredientCountIcon.getLayoutParams();
+//                params.addRule(RelativeLayout.BELOW,R.id.task_title);
+//                params.addRule(RelativeLayout.RIGHT_OF, R.id.task_duedate);
+//
+//                starredIngredientCountIcon.setLayoutParams(params);
+//
+//            }
+//        }
+//
+//        private void setSubItemsPositionFromDueDate(boolean isDueDateVisible){
+//
+//            if(isDueDateVisible!=true){
+//
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)starredIngredientCountIcon.getLayoutParams();
+//                params.addRule(RelativeLayout.BELOW,R.id.task_title);
+//                params.addRule(RelativeLayout.ALIGN_START, R.id.task_title);
+//                params.addRule(RelativeLayout.ALIGN_LEFT, R.id.task_title);
+//
+//                Log.d("GOALS", "due date gone set"+ mTask.getName());
+//                starredIngredientCountIcon.setLayoutParams(params);
+//            }else{
+//
+//                Log.d("GOALS", "due date VISIBLE set" + mTask.getName());
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)starredIngredientCountIcon.getLayoutParams();
+//                params.addRule(RelativeLayout.BELOW,R.id.task_title);
+//                params.addRule(RelativeLayout.RIGHT_OF, R.id.task_duedate);
+//
+//                starredIngredientCountIcon.setLayoutParams(params);
+//
+//            }
+//        }
+
+
+
+
+
+        public void onClickedCheckBox(){
+            //Do whatever you want to do here
+            if (mTask.getDone()) {
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        mTask.setDone(false);
+                        Log.d("GOALS", "IN TRUEEEEEE");
+                    }
+                });
+                realm.close();
+
+            } else {
+
+
+                Realm realm2 = Realm.getDefaultInstance();
+                realm2.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        mTask.setDone(true);
+                        Log.d("GOALS", "IN FALSE");
+                    }
+                });
+                realm2.close();
+            }
+        }
     }
 
     /**
@@ -341,10 +400,10 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
         try {
 
             realm = Realm.getDefaultInstance();
-            OrderedRealmCollection<TaskModel> sorting = realm.where(TaskModel.class).equalTo(primaryFilterColumn,primaryFilterValue).findAll();
+            OrderedRealmCollection<TaskModel> sorting = realm.where(TaskModel.class).equalTo(primaryFilterColumn, primaryFilterValue).findAll();
 
             Log.d("GOALS", "sort attributes  " + secondaryFilterColumn + "   " + sortOrder);
-            if(null==secondaryFilterColumn && null !=sortingField){
+            if (null == secondaryFilterColumn && null != sortingField) {
                 //no secondary sort is needed, just filter the primary filtered list "sorting"
                 sorting = sorting.sort(sortingField, sortOrder);
 
@@ -360,7 +419,7 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
                 //filtering "sorting" list where final list contains all entries where the value of "secondaryFilterColumn" is NOT equal to "secondaryFilterValue", then finally sort list
                 Log.d("GOALS", "onItemSelected:  sort 3");
                 sorting = sorting.where().notEqualTo(secondaryFilterColumn, secondaryFilterValue).findAllSorted(sortingField, sortOrder);
-            } else if(null != secondaryFilterValue && true == secondaryFilterValueDoesContain)  {
+            } else if (null != secondaryFilterValue && true == secondaryFilterValueDoesContain) {
                 //filtering "sorting" list where final list contains all entries where the value of "secondaryFilterColumn" is "secondaryFilterValue", then finally sort list
                 Log.d("GOALS", "onItemSelected:  sort 4");
                 sorting = sorting.where().equalTo(secondaryFilterColumn, secondaryFilterValue).findAllSorted(sortingField, sortOrder);
@@ -369,18 +428,19 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
             updateData(sorting);
 
 
-        }catch(Exception e) {
-            Log.e("GOALS", "Not able to update the sorting of the task list, see stack trace" +e.toString() );
+        } catch (Exception e) {
+            Log.e("GOALS", "Not able to update the sorting of the task list, see stack trace" + e.toString());
             Toast toast = Toast.makeText(itemView.getContext(), "Oops, something went wrong!", Toast.LENGTH_SHORT);
             toast.show();
             e.printStackTrace();
-        }finally {
+        } finally {
             realm.close();
         }
-
-
-
     }
+
+
+
+
     /**
      * filtering the task with a primary text search filter (searches the column in db for text), then finally a sorted list is returned
      * @param goalSpinnerSelectedFilter : Spinner drop down menu item which was selected by the user from the Goals List
@@ -418,17 +478,16 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
             updateData(sorting);
 
 
-        }catch(Exception e) {
-            Log.e("GOALS", "Not able to update the sorting of the task list see stack trace" +e.toString() );
+        } catch (Exception e) {
+            Log.e("GOALS", "Not able to update the sorting of the task list see stack trace" + e.toString());
             Toast toast = Toast.makeText(itemView.getContext(), "Oops, something went wrong!", Toast.LENGTH_SHORT);
             toast.show();
             e.printStackTrace();
-        }finally {
+        } finally {
             realm.close();
         }
-
-
     }
+
 
 
 }
