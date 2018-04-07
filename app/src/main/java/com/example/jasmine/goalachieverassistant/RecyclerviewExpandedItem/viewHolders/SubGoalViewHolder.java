@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.example.jasmine.goalachieverassistant.EditTaskActivity;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.CustomBottomSheetDialogFragment;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
+import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.adapter.SubGoalAdapter;
 import com.example.jasmine.goalachieverassistant.Utilities;
 import com.example.jasmine.goalachieverassistant.Fragments.Fragments.DatePickerFragment;
 import com.example.jasmine.goalachieverassistant.R;
@@ -157,7 +159,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
         if(subgoal.getSubTaskCount()>0){
             starredIngredientCount.setVisibility(View.VISIBLE);
             starredIngredientCountIcon.setVisibility(View.VISIBLE);
-            starredIngredientCount.setText(subgoal.getTotalSubTaskComplete()+" / " +subgoal.getSubTaskCount() );
+            starredIngredientCount.setText(subgoal.getTotalSubTaskComplete()+"/" +subgoal.getSubTaskCount() );
         }else{
             starredIngredientCount.setVisibility(View.GONE);
             starredIngredientCountIcon.setVisibility(View.GONE);
@@ -246,26 +248,34 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
                         switch (item.getItemId()) {
                             case R.id.delete_task:
-                                realm = Realm.getDefaultInstance();
-                                realm.executeTransactionAsync(new Realm.Transaction() {
-                                    @Override
-                                    public void execute(Realm realm) {
+                                try{
+                                    realm = Realm.getDefaultInstance();
+                                    realm.executeTransaction(new Realm.Transaction() {
+                                        @Override
+                                        public void execute(Realm realm) {
 
-                                        RealmResults<TaskModel> subGoalModel = realm.where(TaskModel.class).equalTo("id",taskId).findAll();
+                                            RealmResults<TaskModel> subGoalModel = realm.where(TaskModel.class).equalTo("id",taskId).findAll();
 
-                                        TaskModel subGoalModelChild = realm.where(TaskModel.class).equalTo("id",taskId).findFirst();
+                                            TaskModel subGoalModelChild = realm.where(TaskModel.class).equalTo("id",taskId).findFirst();
 
-                                        Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getSubTaskCount());
-                                       if(subGoalModelChild.getChildList().size()>0){
-                                           subGoalModelChild.getChildList().deleteAllFromRealm();
-                                       }
-                                        subGoalModel.deleteFirstFromRealm();
-                                        Log.d("GOALS", "deleted item? ");
-                                        // realm.close();
-                                    }
+                                            Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getSubTaskCount());
+                                            if(subGoalModelChild.getChildList().size()>0){
+                                                subGoalModelChild.getChildList().deleteAllFromRealm();
+                                            }
+                                            subGoalModel.deleteFirstFromRealm();
 
-                                });
-                                realm.close();
+
+                                            Log.d("GOALS", "deleted item? ");
+                                            // realm.close();
+                                        }
+
+                                    });
+                                }finally{
+                                    realm.close();
+
+                                }
+
+
                                 break;
                             case R.id.add_subtask:
 

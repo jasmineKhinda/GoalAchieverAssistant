@@ -58,6 +58,7 @@ public class ParentViewHolder<P extends Parent<C>, C extends Parent> extends Rec
         expanded = false;
     }
 
+
     /**
      * @return the Parent associated with this ViewHolder
      */
@@ -113,6 +114,7 @@ public class ParentViewHolder<P extends Parent<C>, C extends Parent> extends Rec
     @UiThread
     public void setExpanded(boolean expanded) {
         this.expanded = expanded;
+
     }
 
     /**
@@ -153,6 +155,7 @@ public class ParentViewHolder<P extends Parent<C>, C extends Parent> extends Rec
     public void onClick(View v) {
         if (expanded) {
             collapseView();
+
         } else {
             expandView();
         }
@@ -202,4 +205,6 @@ public class ParentViewHolder<P extends Parent<C>, C extends Parent> extends Rec
         setExpanded(false);
         onExpansionToggled(true);
     }
+
+
 }

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.jasmine.goalachieverassistant.Fragments.Adapters.AllTasksRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Fragments.Adapters.SubTaskRecyclerAdapter;
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -29,7 +30,7 @@ import io.realm.Sort;
  */
 
 public class TaskSubTaskListFragment extends Fragment implements DatePickerFragment.DatePickerFragmentListener{
-
+    //inbox
     private String taskUUID;
     private Realm realm;
     private SubTaskRecyclerAdapter adapter;
@@ -108,37 +109,49 @@ public class TaskSubTaskListFragment extends Fragment implements DatePickerFragm
 
 
 //TODO : add the sorting filter
+//        subTasks =realm.where(TaskModel.class).equalTo("parentTaskId", taskUUID).
+//                findAllSortedAsync(
+//                        new String[] {"dueDateNotEmpty", "dueDate"},
+//                        new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
+//
+//        Log.d("GOALS", "any subtasks???" + subTasks.size());
+//        Log.d("GOALS", "task id " + taskUUID);
+//
+//
+//        subTasks.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<TaskModel>>() {
+//            @Override
+//            public void onChange(RealmResults<TaskModel> persons, OrderedCollectionChangeSet
+//                    changeset) {
+//
+//                adapter = new SubTaskRecyclerAdapter(getActivity(),persons,true);
+//
+//
+//                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//                recyclerView.setHasFixedSize(true);
+//                recyclerView.setAdapter(adapter);
+//                Log.d("GOALS", "onChange Tasks Sub tasks!!!");
+//
+//            }
+//        });
+//
+//        adapter = new SubTaskRecyclerAdapter(getActivity(),subTasks,true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setAdapter(adapter);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        realm = Realm.getDefaultInstance();
         subTasks =realm.where(TaskModel.class).equalTo("parentTaskId", taskUUID).
                 findAllSortedAsync(
                         new String[] {"dueDateNotEmpty", "dueDate"},
                         new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
 
-        Log.d("GOALS", "any subtasks???" + subTasks.size());
-        Log.d("GOALS", "task id " + taskUUID);
-//        subTasks.addChangeListener(new RealmChangeListener<RealmResults<ChildSubGoalModel>>() {
-//            @Override
-//            public void onChange(RealmResults<ChildSubGoalModel> childSubGoalModels) {
-//
-//            }
-//        });
 
-        subTasks.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<TaskModel>>() {
-            @Override
-            public void onChange(RealmResults<TaskModel> persons, OrderedCollectionChangeSet
-                    changeset) {
-
-                adapter = new SubTaskRecyclerAdapter(getActivity(),persons,true);
-
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                Log.d("GOALS", "onChange Tasks Sub tasks!!!");
-
-            }
-        });
-
-        adapter = new SubTaskRecyclerAdapter(getActivity(),subTasks,true);
+        final AllTasksRecyclerAdapter adapter = new AllTasksRecyclerAdapter(getActivity(), subTasks, true);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 

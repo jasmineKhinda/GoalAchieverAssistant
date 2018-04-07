@@ -32,7 +32,7 @@ import io.realm.Sort;
  * A simple {@link Fragment} subclass.
  */
 public class InboxMenu extends Fragment {
-
+//inbox
 
     private Realm realm;
     private RecyclerView recyclerView;

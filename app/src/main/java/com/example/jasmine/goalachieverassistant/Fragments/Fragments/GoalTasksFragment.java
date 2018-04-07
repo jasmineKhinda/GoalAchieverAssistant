@@ -4,6 +4,7 @@ import java.util.Date;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
@@ -45,6 +46,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     RealmResults<TaskModel> tasksForThisGoal;
     public EditText addTaskDueDate;
     Date dueDate;
+    private int mScrollY;
     private boolean dueDateEmpty;
 
     // TODO: Rename and change types of parameters
@@ -95,6 +97,8 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         // Inflate the layout for this fragment
         Log.d("GOALS", "onCreateView: goal ");
         View v = inflater.inflate(R.layout.fragment_goal_tasks, container, false);
+        Log.d("GOALS", "GOALS1 SAVED INSTANCE STATE");
+
         return v;
     }
 
@@ -102,8 +106,8 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
+        Log.d("GOALS", "GOALS1 onViewCreated");
+       recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
         goalUUID = getArguments().getString(GOAL_UUID);
         Log.d("GOALS", "onViewCreated:  for GoalTasksFragment goal UUID" + goalUUID);
         final DatePickerFragment fragment =DatePickerFragment.newInstance(this);
@@ -219,13 +223,20 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 //            }
 //        });
 
+         RecyclerView.OnScrollListener mTotalScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                mScrollY += dy;
+            }
+        };
 
         //recycler view of all the sub goals and child sub goals
-        final RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
+     //  final RecyclerView recyclerViewInside = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
       //  tasksForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
         realm = Realm.getDefaultInstance();
         tasksForThisGoal =realm.where(TaskModel.class).equalTo("parentGoalId", goalUUID).
-                findAllSortedAsync(
+                findAllSorted(
                         new String[] {"dueDateNotEmpty", "dueDate"},
                         new Sort[] { Sort.DESCENDING, Sort.ASCENDING });
 
@@ -235,12 +246,20 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             @Override
             public void onChange(RealmResults<TaskModel> persons, OrderedCollectionChangeSet
                     changeset) {
+//
+//                adapter = new SubGoalAdapter(persons, "id");
+//                adapter.notifyParentDataSetChanged();
+//                adapter.notifyDataSetChanged();
 
-                adapter = new SubGoalAdapter(persons, "id");
 
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                Log.d("GOALS", "onChange!!!");
+                //recyclerView.setAdapter(adapter);
+
+                adapter.updateData(persons);
+
+//  recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+              //  recyclerView.scrollToPosition(10);
+
+
 
 
             }
@@ -248,7 +267,12 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         adapter = new SubGoalAdapter(tasksForThisGoal, "id");
         recyclerView.setAdapter(adapter);
+       // recyclerView.setHasFixedSize(false);
+
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
 
 
@@ -258,13 +282,12 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             @UiThread
             @Override
             public void onParentExpanded(int parentPosition) {
-                TaskModel expandedTask = adapter.getItem(parentPosition);
+               TaskModel expandedTask = adapter.getItem(parentPosition);
+                Log.d("GOALS", "GOALS1 exp");
 
-                String toastMsg = getResources().getString(R.string.expanded, expandedTask.getName());
-//                Toast.makeText(AddGoal.this,
-//                        toastMsg,
-//                        Toast.LENGTH_SHORT)
-//                        .show();
+
+
+
             }
 
             @UiThread
@@ -272,11 +295,7 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             public void onParentCollapsed(int parentPosition) {
                 TaskModel collapsedTask = adapter.getItem(parentPosition);
 
-                String toastMsg = getResources().getString(R.string.collapsed, collapsedTask.getName());
-//                Toast.makeText(AddGoal.this,
-//                        toastMsg,
-//                        Toast.LENGTH_SHORT)
-//                        .show();
+                Log.d("GOALS", "GOALS1 col");
             }
 
 
@@ -297,4 +316,29 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         super.onStop();
 
     }
+
+    private static final String BUNDLE_RECYCLER_LAYOUT = "classname.recycler.layout";
+
+    /**
+     * This is a method for Fragment.
+     * You can do the same in onCreate or onRestoreInstanceState
+     */
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        Log.d("GOALS", "GOALS1 RESTORED");
+        if(savedInstanceState != null)
+        {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            recyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("GOALS", "GOALS1 SAVED INSTANT STATE");
+        outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
 }

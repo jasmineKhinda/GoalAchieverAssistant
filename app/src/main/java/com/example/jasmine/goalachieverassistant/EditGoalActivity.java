@@ -244,21 +244,7 @@ public class EditGoalActivity extends AppCompatActivity implements GoalDetailsFr
 
                 }
 
-            } else if (item.getItemId() == R.id.action_settings_done) {
-                //validate the goal Name is entered and not blank
-                if(TextUtils.isEmpty(goalTitle.getText())){
-                    goalTitle.requestFocus();
-                    goalTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Goal Name", Color.WHITE));
-
-                }else{
-                    goalName = goalTitle.getText().toString();
-                    detailsFrag.addGoalDetailsToRealm(goalName);
-                    finish();
-//                    Intent addGoalIntent = new Intent(EditGoalActivity.this, MainActivity.class);
-//                    startActivity(addGoalIntent);
-                }
-
-            }else if (item.getItemId() == R.id.delete) {
+            } else if (item.getItemId() == R.id.delete) {
 
 
                 Realm realm = Realm.getDefaultInstance();

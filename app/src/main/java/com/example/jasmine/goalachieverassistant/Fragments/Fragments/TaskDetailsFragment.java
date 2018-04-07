@@ -218,9 +218,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                     projectSelection.setText(goal.getName().toString());
                     Utilities.setRoundedDrawable(getContext(),projectSelection, Color.LTGRAY, Color.LTGRAY);
                     projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
-//                projectSelection.setTextAppearance(getContext(),
-//                        R.style.AudioFileInfoOverlayText);
- //                   clearProjectButton.setVisibility(View.VISIBLE);
+
 
                 }else if( (0 != goal.getLabelColor() && -1 != goal.getLabelColor() )){
                     projectSelection.setText(goal.getName().toString());
@@ -233,11 +231,7 @@ public class TaskDetailsFragment extends Fragment implements DatePickerFragment.
                 Log.d("GOALS", "No project" );
                 projectSelection.setVisibility(View.GONE);
                 projectIcon.setVisibility(View.GONE);
-//                projectSelection.setText(getResources().getString(R.string.add_project_hint));
-//                Utilities.setRoundedDrawableDottedLine(getContext(), projectSelection, Color.TRANSPARENT, Color.LTGRAY);
-//                projectSelection.setTextColor(taskDueDates.getTextColors().getDefaultColor());
-//                projectSelection.setTypeface(null,Typeface.NORMAL);
-// //               clearProjectButton.setVisibility(View.INVISIBLE);
+
             }
 
         }finally{

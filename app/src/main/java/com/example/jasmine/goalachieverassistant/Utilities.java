@@ -57,6 +57,7 @@ public class Utilities {
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(90f);
         shape.setColor(backgroundColor);
+        shape.setGradientRadius(30f);
         if (borderColor != 0){
             shape.setStroke(2, borderColor);
         }
@@ -74,6 +75,7 @@ public class Utilities {
         GradientDrawable shape = new GradientDrawable();
         shape.setShape(GradientDrawable.RECTANGLE);
         shape.setCornerRadius(90f);
+        shape.setGradientRadius(30f);
         Log.d("GOALS", "in dotted line");
         shape.setColor(backgroundColor);
         if (borderColor != 0){

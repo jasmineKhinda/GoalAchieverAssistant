@@ -186,7 +186,7 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
 
                 starredIngredientCount.setVisibility(View.VISIBLE);
                 starredIngredientCountIcon.setVisibility(View.VISIBLE);
-                starredIngredientCount.setText(mTask.getTotalSubTaskComplete()+" / " +mTask.getSubTaskCount() );
+                starredIngredientCount.setText(mTask.getTotalSubTaskComplete()+"/" +mTask.getSubTaskCount() );
 
                 Log.d("GOALS", "how many subtasks? VISIBLE " + getAdapterPosition());
             }
@@ -247,6 +247,7 @@ public class AllTasksRecyclerAdapter extends RealmRecyclerViewAdapter<TaskModel,
 
                                             RealmResults<TaskModel> task = realm.where(TaskModel.class).equalTo("id", taskId).findAll();
                                             task.deleteFirstFromRealm();
+
                                             Log.d("GOALS", "deleted item? ");
                                             // realm.close();
                                         }

@@ -15,12 +15,6 @@
         android:title="@string/share"></item>
 
 
-    <item
-        android:id="@+id/action_settings_done"
-        android:icon="@drawable/ic_done_white_24dp"
-        android:title="@string/goal_done_icon"
-        app:showAsAction="always"
-        />
 
 
 

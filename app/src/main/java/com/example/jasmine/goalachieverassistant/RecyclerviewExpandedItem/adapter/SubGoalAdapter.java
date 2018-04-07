@@ -4,8 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 
 import com.example.jasmine.goalachieverassistant.Models.TaskModel;
 import com.example.jasmine.goalachieverassistant.R;
@@ -15,7 +19,9 @@ import com.example.jasmine.goalachieverassistant.RecyclerviewExpandedItem.viewHo
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
+import io.realm.Realm;
 import io.realm.RealmExpandableRecyclerAdapter;
+import io.realm.RealmResults;
 
 /**
  * Created by jasmine on 18/01/18.
@@ -42,6 +48,7 @@ public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<TaskModel, Ta
         Log.d("GOALS", "onCreateParentViewHolder 1");
 
         return new SubGoalViewHolder(recipeView);
+
     }
 
     @UiThread
@@ -73,7 +80,6 @@ public class SubGoalAdapter extends RealmExpandableRecyclerAdapter<TaskModel, Ta
 
 
     }
-
 
 
 }

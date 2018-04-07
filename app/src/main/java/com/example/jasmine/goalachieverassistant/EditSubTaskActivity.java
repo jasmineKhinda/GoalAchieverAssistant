@@ -194,23 +194,7 @@ public class EditSubTaskActivity extends AppCompatActivity {
 
             }
 
-        } else if (item.getItemId() == R.id.action_settings_done) {
-            //validate the goal Name is entered and not blank
-            if(TextUtils.isEmpty(taskTitle.getText())){
-                taskTitle.requestFocus();
-                taskTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Sub Task Name", Color.WHITE));
-
-            }else{
-                childTaskName = taskTitle.getText().toString();
-                detailsFrag.addSubTaskDetailsToRealm(childTaskName);
-                try{
-                    startIntentAfterUserCompletesActivityFromSubTask();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }else if (item.getItemId() == R.id.delete) {
+        } else if (item.getItemId() == R.id.delete) {
 
 
             Realm realm = Realm.getDefaultInstance();

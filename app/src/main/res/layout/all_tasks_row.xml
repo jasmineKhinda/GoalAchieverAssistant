@@ -18,7 +18,7 @@
         android:layout_gravity="center"
         android:layout_marginBottom="0.7dp"
         android:layout_marginTop="0.7dp"
-        app:cardCornerRadius="0dp"
+        app:cardCornerRadius="1dp"
         app:cardElevation="0.18dp"
         app:cardMaxElevation="0.18dp"
         >
@@ -128,7 +128,6 @@
 
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
                     android:layout_marginTop="0dp"
 
                     android:src="@drawable/ic_date_range_black_small"></ImageView>
@@ -137,7 +136,7 @@
                     android:id="@+id/task_duedate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_marginLeft="2dp"
                     android:layout_below="@id/task_title"
                     android:layout_toRightOf="@+id/due_date_icon"
 
@@ -155,7 +154,7 @@
                     android:layout_toRightOf="@id/task_duedate"
 
                     android:layout_marginBottom="0dp"
-                    android:layout_marginRight="5dp"
+
                     android:layout_marginTop="0dp"
                     android:src="@drawable/ic_check_box_black_24dp"></ImageView>
 
@@ -164,7 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/task_title"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="2dp"
                     android:layout_toRightOf="@id/number_tasks_complete_icon"
                     android:textSize="10dp"
                     tools:text="5 / 8"></TextView>
@@ -174,11 +173,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/task_title"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/done_count"
 
+                    android:layout_toRightOf="@id/done_count"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginBottom="0dp"
-                    android:layout_marginRight="5dp"
+
                     android:layout_marginTop="0dp"
                     android:src="@drawable/ic_assignment_black_small_24dp"
                     android:visibility="gone"></ImageView>
@@ -189,8 +188,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
+                    android:layout_marginLeft="2dp"
 
-                    android:layout_marginLeft="5dp"
 
 
                     android:layout_toRightOf="@id/project_icon"

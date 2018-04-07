@@ -196,19 +196,7 @@ public class EditTaskActivity extends AppCompatActivity {
                 startIntentAfterUserCompletesActivity();
             }
 
-        } else if (item.getItemId() == R.id.action_settings_done) {
-            //validate the goal Name is entered and not blank
-            if(TextUtils.isEmpty(taskTitle.getText())){
-                taskTitle.requestFocus();
-                taskTitle.setError(Utilities.getSpannableStringForErrorOutput("Enter Task Name", Color.WHITE));
-
-            }else{
-                childTaskName = taskTitle.getText().toString();
-                detailsFrag.addTaskDetailsToRealm(childTaskName);
-                startIntentAfterUserCompletesActivity();
-            }
-
-        }else if (item.getItemId() == R.id.delete) {
+        } else if (item.getItemId() == R.id.delete) {
 
 
             Realm realm = Realm.getDefaultInstance();
