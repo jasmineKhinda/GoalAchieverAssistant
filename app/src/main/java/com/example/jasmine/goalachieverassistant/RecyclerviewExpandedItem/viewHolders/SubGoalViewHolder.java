@@ -258,7 +258,7 @@ public class SubGoalViewHolder extends ParentViewHolder implements DatePickerFra
 
                                             TaskModel subGoalModelChild = realm.where(TaskModel.class).equalTo("id",taskId).findFirst();
 
-                                            Log.d("GOALS", "child subgoal list is size  "+ subGoalModelChild.getSubTaskCount());
+                                            Log.d("GOALS", "child subgoal list is size  "+ subGoalModel.size());
                                             if(subGoalModelChild.getChildList().size()>0){
                                                 subGoalModelChild.getChildList().deleteAllFromRealm();
                                             }

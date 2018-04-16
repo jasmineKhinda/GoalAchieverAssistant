@@ -233,8 +233,8 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
 
         //recycler view of all the sub goals and child sub goals
      //  final RecyclerView recyclerViewInside = (RecyclerView) view.findViewById(R.id.recyclerview_task_list);
-      //  tasksForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
-        realm = Realm.getDefaultInstance();
+       //tasksForThisGoal = realm.where(SubGoalModel.class).equalTo("goal.id", goalUUID).findAllSorted("name", Sort.ASCENDING);
+
         tasksForThisGoal =realm.where(TaskModel.class).equalTo("parentGoalId", goalUUID).
                 findAllSorted(
                         new String[] {"dueDateNotEmpty", "dueDate"},
@@ -246,14 +246,15 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
             @Override
             public void onChange(RealmResults<TaskModel> persons, OrderedCollectionChangeSet
                     changeset) {
-//
-//                adapter = new SubGoalAdapter(persons, "id");
+//new below ****
+ //              adapter = new SubGoalAdapter(persons, "id");
 //                adapter.notifyParentDataSetChanged();
 //                adapter.notifyDataSetChanged();
 
 
                 //recyclerView.setAdapter(adapter);
 
+                Log.d("GOALS", "in change listener goal tasks");
                 adapter.updateData(persons);
 
 //  recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -268,7 +269,6 @@ public class GoalTasksFragment extends Fragment implements DatePickerFragment.Da
         adapter = new SubGoalAdapter(tasksForThisGoal, "id");
         recyclerView.setAdapter(adapter);
        // recyclerView.setHasFixedSize(false);
-
 //        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 //        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

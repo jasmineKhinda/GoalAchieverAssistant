@@ -256,6 +256,7 @@ public class EditTaskActivity extends AppCompatActivity {
 //        }finally{
 //            realm.close();
 //        }
+
         finish();
     }
 
@@ -263,7 +264,6 @@ public class EditTaskActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         Log.d("GOALS", "onDestroy: ");
-
         super.onDestroy();
     }
     @Override

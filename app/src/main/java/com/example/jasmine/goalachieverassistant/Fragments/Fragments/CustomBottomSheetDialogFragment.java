@@ -102,6 +102,8 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
         isChildSubTask = getArguments().getBoolean(IS_CHILD_SUB_TASK);
         addTask = (EditText)view.findViewById(R.id.taskName);
         Log.d("GOALS", "onViewCreated: list category???????????? "+ getArguments().get(LIST_CATEGORY) + "    ");
+        Log.d("GOALS", "is child sub task "+ isChildSubTask);
+
 
         if(null != getArguments().get(LIST_CATEGORY)){
             listCategory = getArguments().get(LIST_CATEGORY).toString();
@@ -128,10 +130,13 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 if (!TextUtils.isEmpty(editText)) {
                     if(true ==isGoal){
                         addProjectToRealm();
+                        Log.d("GOALS", "is if else 1"+ isChildSubTask);
                     }
                     else if(false ==isChildSubTask){
+                        Log.d("GOALS", "is if else 2"+ isChildSubTask);
                         addParentTaskToRealm();
                     }else{
+                        Log.d("GOALS", "is if else 3"+ isChildSubTask);
                         addChildSubTaskToRealm();
                     }
                     mDialog.dismiss();
@@ -229,7 +234,8 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment i
                 TaskModel task = realm.where(TaskModel.class).equalTo("id", uuId).findFirst();
 
                 if(parentUuId.length()> 0){
-                    Log.d("GOALS", "in goal"+ uuId);
+                    Log.d("GOALS", "parent goal is "+ parentUuId);
+
                     TaskModel parent = realm.where(TaskModel.class).equalTo("id", parentUuId).findFirst();
                     if(parent.isGoal()){
                         task.setParentGoalId(parent.getId());
