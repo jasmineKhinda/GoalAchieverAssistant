@@ -2,6 +2,8 @@ package com.example.jasmine.goalachieverassistant;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -31,16 +34,21 @@ import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Realm realm;
+    android.support.v4.app.Fragment fragment;
+    Bundle saved;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        saved = savedInstanceState;
+
+        Log.d("GOALS", "onCreate: inside MainActivity ");
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setToolbar(toolbar);
-        if(savedInstanceState==null){
-            displaySelectedScreen(R.id.nav_inbox);
-        }
+//        if(savedInstanceState==null){
+//            displaySelectedScreen(R.id.nav_inbox);
+//        }
 
     }
 
@@ -67,7 +75,7 @@ public boolean onCreateOptionsMenu(Menu menu) {
     private void displaySelectedScreen(int itemId) {
 
         //creating fragment object
-        android.support.v4.app.Fragment fragment = null;
+         fragment = null;
 
         //initializing the fragment object which is selected
         switch (itemId) {
@@ -172,9 +180,55 @@ public boolean onCreateOptionsMenu(Menu menu) {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("GOALS", "onDestroy: inside MainActivity ");
         if(null != realm){
             realm.close();
         }
 
-    }}
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        Log.d("GOALS", "onPause: inside MainActivity ");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (null == fragment){
+            displaySelectedScreen(R.id.nav_inbox);
+        }else if(fragment.getClass().equals(InboxMenu.class)){
+            displaySelectedScreen(R.id.nav_inbox);
+        }else if(fragment.getClass().equals(ProjectMenu.class)){
+            displaySelectedScreen(R.id.nav_project);
+        }else if(fragment.getClass().equals(InboxMenu.class)){
+            displaySelectedScreen(R.id.nav_all);
+        }else if(fragment.getClass().equals(InboxMenu.class)){
+            displaySelectedScreen(R.id.nav_today);
+        }else if(fragment.getClass().equals(InboxMenu.class)){
+            displaySelectedScreen(R.id.nav_week);
+        }
+
+
+
+        Log.d("GOALS", "fragment in OnResume");
+//        if (true== fragment.getClass().equals(InboxMenu.class)) {
+//            InboxMenu ref = (InboxMenu) fragment;
+//            ref.refreshDataset();
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.content_frame, fragment);
+//            ft.commit();
+//
+//        }
+
+
+    }
+
+
+
+
+}
 

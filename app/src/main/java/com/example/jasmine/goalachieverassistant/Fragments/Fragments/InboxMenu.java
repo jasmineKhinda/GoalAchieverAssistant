@@ -288,4 +288,6 @@ public class InboxMenu extends Fragment {
         outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
+
+
 }
